@@ -83,9 +83,11 @@ VALUES (2, 2, '2014-01-29 10:30:00', '12 rue de la pétanque 33170 Gradignan', '
 INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
 VALUES (3, 2, '2014-02-20 18:00:00', '12 rue de la voile 33500 Arcachon', 'Raccord choeur');
 INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (4, 2, '2014-05-24 10:00:00', '12 rue de la pétanque 33170 Gradignan', 'Répétition générale concert 1 de 19h à  21h30');
+VALUES (4, 2, '2014-05-24 10:00:00', '12 rue de la pétanque 33170 Gradignan', 'Répétition générale concert 1');
 INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
 VALUES (5, 1, '2014-01-25 11:00:00', '12 rue du surf 33850 Lacanau', 'Messe de requiem');
+INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
+VALUES (6, 3, '2014-01-25 11:00:00', 'Salle de la cour', 'Saison 2014-2015');
 
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 1, 1);
@@ -99,10 +101,6 @@ INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (2, 3, 1);
-INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (1, 4, 0);
-INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (2, 4, 0);
 INSERT INTO participe(idChoriste, idEvenement)
 VALUES (1, 5);
 INSERT INTO participe(idChoriste, idEvenement)
@@ -111,7 +109,7 @@ VALUES (2, 5);
 INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
 VALUES (1, '51 je taime', 'René Pastis', 'http://', '60', 'chanson à boire');
 INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
-VALUES (2, 'Passion selon jéjé', 'Bébert Dupuis', 'http://', '60', 'chanson à boire');
+VALUES (2, 'Passion selon jéjé', 'Bébert Dupuis', 'http://', '60', 'baroque');
 INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
 VALUES (3, 'Cantate de la mare', 'BACH Jérome', 'http://', '60', 'chanson à boire');
 INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
@@ -149,4 +147,15 @@ INSERT INTO est_au_programme(idOeuvre, idEvenement)
 VALUES (2, 5);
 INSERT INTO est_au_programme(idOeuvre, idEvenement)
 VALUES (3, 5);
+--Saison
+INSERT INTO est_au_programme(idOeuvre, idEvenement)
+VALUES (1, 6);
+INSERT INTO est_au_programme(idOeuvre, idEvenement)
+VALUES (2, 6);
+INSERT INTO est_au_programme(idOeuvre, idEvenement)
+VALUES (3, 6);
+INSERT INTO est_au_programme(idOeuvre, idEvenement)
+VALUES (4, 6);
+INSERT INTO est_au_programme(idOeuvre, idEvenement)
+VALUES (5, 6);
 
