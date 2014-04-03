@@ -18,14 +18,20 @@ create table Utilisateur (
 );
 
 create table Responsabilite (
+    id smallint,
     titre varchar(30),
-    login varchar(45) NOT NULL,
-    constraint pk_titre PRIMARY KEY(titre),
-    constraint fk_responsabilite_user foreign key (login) references Utilisateur (login)
+    constraint pk_id PRIMARY KEY(id),
+);
+
+create table endosse (
+    login varchar(45) unique,
+    id_inscr smallint unique,
+    constraint fk_responsabilite foreign key (id_inscr) references Utilisateur (id_inscr) ON DELETE CASCADE,
+    constraint fk_utilisateur foreign key (login) references Utilisateur (login) ON DELETE CASCADE
 );
 
 create table Inscription (
-    idInscription smallint,
+    id_inscr smallint,
     type_inscr varchar(10) NOT NULL,
     montant decimal NOT NULL,
     annee varchar(10) NOT NULL,
