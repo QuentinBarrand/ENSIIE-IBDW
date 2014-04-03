@@ -53,8 +53,8 @@ VALUES ('ssabatier', 2);
 INSERT INTO endosse(login, id)
 VALUES ('qbarrand', 3);
 
-INSERT INTO Inscription(idInscription, type_inscr, montant, annee)
-VALUES (1, 'etudiant', '200', '2014');
+INSERT INTO Inscription(idInscription, type_inscr, montant, annee, validation)
+VALUES (1, 'etudiant', '200', '2014', 3);
 
 INSERT INTO Voix(idVoix, typeVoix)
 VALUES (1, 'alto');
