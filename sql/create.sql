@@ -35,6 +35,7 @@ create table Inscription (
     type_inscr varchar(10) NOT NULL,
     montant decimal NOT NULL,
     annee varchar(10) NOT NULL,
+    validation smallint DEFAULT 0,
     constraint pk_idInscription PRIMARY KEY(idInscription)
 );
 
