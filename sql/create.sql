@@ -32,8 +32,8 @@ create table endosse (
 );
 
 create table Inscription (
-    id_inscr smallint,
-    type_inscr varchar(10) NOT NULL,
+    idInscription smallint,
+    typeInscription varchar(10) NOT NULL,
     montant decimal NOT NULL,
     annee varchar(10) NOT NULL,
     validation smallint DEFAULT 0,
