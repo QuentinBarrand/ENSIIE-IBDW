@@ -25,8 +25,8 @@ create table Responsabilite (
 
 create table endosse (
     login varchar(45) unique,
-    id_inscr smallint unique,
-    constraint fk_responsabilite foreign key (id_inscr) references Utilisateur (id_inscr) ON DELETE CASCADE,
+    id smallint unique,
+    constraint fk_responsabilite foreign key (id) references Utilisateur (id) ON DELETE CASCADE,
     constraint fk_utilisateur foreign key (login) references Utilisateur (login) ON DELETE CASCADE
 );
 
