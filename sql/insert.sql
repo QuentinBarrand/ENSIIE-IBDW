@@ -39,12 +39,19 @@ VALUES ('tsarboni', md5('tsarboni'));
 INSERT INTO Utilisateur(login, motdepasse)
 VALUES ('ddiallo', md5('ddiallo'));
 
-INSERT INTO Responsabilite(titre, login)
-VALUES ('Chef de coeur', 'ddiallo');
-INSERT INTO Responsabilite(titre, login)
-VALUES ('Tresorier', 'ssabatier');
-INSERT INTO Responsabilite(titre, login)
-VALUES ('Webmaster', 'qbarrand');
+INSERT INTO Responsabilite(id, titre)
+VALUES (1, 'Chef de coeur');
+INSERT INTO Responsabilite(id, titre)
+VALUES (2, 'Tresorier');
+INSERT INTO Responsabilite(id, titre)
+VALUES (3, 'Webmaster');
+
+INSERT INTO endosse(login, id)
+VALUES ('ddiallo', 1);
+INSERT INTO endosse(login, id)
+VALUES ('ssabatier', 2);
+INSERT INTO endosse(login, id)
+VALUES ('qbarrand', 3);
 
 INSERT INTO Inscription(idInscription, type_inscr, montant, annee)
 VALUES (1, 'etudiant', '200', '2014');
