@@ -67,14 +67,14 @@ VALUES (4, 'bass');
 
 INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login ,idInscription)
 VALUES (1, 'sarboni', 'thomas', 1, 'angers', '0601020304', 'tsarboni', 1);
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login ,idInscription)
-VALUES (2, 'sabatier', 'sébastien', 4, 'bordeaux', '0602030405', 'ssabatier', 1);
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login ,idInscription)
-VALUES (3, 'paume', 'mylène', 2, 'sarcelles', '0603040506', 'mpaume', 1);
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login ,idInscription)
-VALUES (4, 'barrand', 'quentin', 3, 'taverny', '0604050607', 'qbarrand', 1);
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login ,idInscription)
-VALUES (5, 'briquet', 'gaétan', 1, 'amiens', '0605060708', 'gbriquet', 1);
+INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
+VALUES (2, 'sabatier', 'sébastien', 4, 'bordeaux', '0602030405', 'ssabatier');
+INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
+VALUES (3, 'paume', 'mylène', 2, 'sarcelles', '0603040506', 'mpaume');
+INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
+VALUES (4, 'barrand', 'quentin', 3, 'taverny', '0604050607', 'qbarrand');
+INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
+VALUES (5, 'briquet', 'gaétan', 1, 'amiens', '0605060708', 'gbriquet');
 
 INSERT INTO TypeEvt(idType, typeEvt)
 VALUES (1, 'Concert');
