@@ -32,31 +32,55 @@ Flight::route('/', function(){
 });
 
 
-// Choristes
+/*
+ * Choristes
+ */
+
+// Affichage de la liste des choristes
 Flight::route('/choristes', function() {
 	Choristes::get();
 });
 
-Flight::route('/choristes/new', function() {
+// Affichage du formulaire d'ajout d'un choriste
+Flight::route('GET /choristes/new', function() {
     echo "Formulaire d'ajout d'un choriste";
 });
 
-// Events
+// Traitement de la requête issue du formulaire
+Flight::route('POST /choristes/new', function() {
+    echo "Traitement de la requête issue du formulaire";
+});
+
+/*
+ * Evènements
+ */
+
+// Affichage de la liste des évènements
 Flight::route('/evenements', function() {
     Evenements::get();
 });
 
-Flight::route('/evenements/new', function() {
+// Affichage du formulaire d'ajout d'un évènement
+Flight::route('GET /evenements/new', function() {
     echo "Formulaire d'ajout d'un évènement";
 });
 
+// Traitement de la requête issue du formulaire
+Flight::route('POST /evenements/new', function() {
+    echo "Traitement de la requête issue du formulaire";
+});
+
+
+/*
+ * Login
+ */
 
 // Affichage de la page de contact
 Flight::route('GET /login', function() {
     Authentification::displayLoginPage();
 });
 
-// En post, cette route permet d'authentifier un utilisateur
+// En post, cette route permet d'authentifier un utilisateur à partir des données du formulaire de login
 Flight::route('POST /login', function() {
     Authentification::authenticate();
 });
