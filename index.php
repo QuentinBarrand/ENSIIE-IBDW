@@ -3,6 +3,9 @@ require '../flight/Flight.php';
 
 include_once 'config.php';
 
+include_once 'lib/Choristes.php';
+include_once 'lib/Evenements.php';
+
 // Accueil
 Flight::route('/', function(){
     echo "Bienvenue dans l'application !";
@@ -10,20 +13,20 @@ Flight::route('/', function(){
 
 
 // Choristes
-Flight::route('/choristes', function(){
+Flight::route('/choristes', function() {
     echo 'Liste des choristes';
 });
 
-Flight::route('/choristes/new', function(){
+Flight::route('/choristes/new', function() {
     echo "Formulaire d'ajout d'un choriste";
 });
 
 // Events
-Flight::route('/evenements', function(){
-    echo 'Liste des evenements';
+Flight::route('/evenements', function() {
+    Evenements::get();
 });
 
-Flight::route('/evenements/new', function(){
+Flight::route('/evenements/new', function() {
     echo "Formulaire d'ajout d'un évènement";
 });
 
