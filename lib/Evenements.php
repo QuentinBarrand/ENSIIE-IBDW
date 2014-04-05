@@ -33,6 +33,24 @@ class Evenements {
 			}
 		}
 
-		Flight::render('events.php', array('data' => $data['content']));
+		// Header
+		Flight::render('header.php',
+			array(
+				'title' => 'Liste des évènements'
+				), 
+			'header');
+
+		// Navbar
+		Flight::render('navbar.php',
+			array(), 
+			'navbar');
+
+		// Footer
+		Flight::render('footer.php',
+			array(), 
+			'footer');		
+
+		// Finalement on rend le layout
+		Flight::render('EvenementsView.php', array('data' => $data['content']));
 	}
 }

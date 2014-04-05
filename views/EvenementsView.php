@@ -1,4 +1,37 @@
-<h1>Hello World !</h1>
+<?php echo($header); ?>
+<?php echo($navbar); ?>
 
-<?php print_r($data); ?>
+<div class="container">
 
+<h1>Liste des évènements</h1>
+
+<table class="table table-striped">
+<?php
+
+	echo '<thead>';
+
+	echo '<tr>';
+	echo '<th>Nom</th>';
+	echo '<th>Lieu</th>';
+	echo '</tr>';
+
+	echo '</thead>';
+	echo '<tbody>';
+
+	foreach($data as $row) {
+		echo '<tr>';
+		
+		echo '<td>' . $row['nom'] . '</td>';
+		echo '<td>' . $row['lieu'] . '</td>';
+
+		echo '</tr>';
+	}
+
+	echo '</tbody>';
+
+?>
+</table>
+
+</div><!-- /.container -->
+
+<?php echo($footer); ?>
