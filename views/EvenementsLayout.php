@@ -1,8 +1,6 @@
 <?php echo($header); ?>
 <?php echo($navbar); ?>
 
-<div class="container">
-
 <h1>Liste des évènements</h1>
 
 <table class="table table-striped">
@@ -31,7 +29,5 @@
 
 ?>
 </table>
-
-</div><!-- /.container -->
 
 <?php echo($footer); ?>

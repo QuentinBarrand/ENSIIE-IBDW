@@ -41,7 +41,9 @@ class Evenements {
 
 		// Navbar
 		Flight::render('navbar.php',
-			array(), 
+			array(
+				'activePage' => 'evenements'
+				), 
 			'navbar');
 
 		// Footer

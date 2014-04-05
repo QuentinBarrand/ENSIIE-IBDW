@@ -1,8 +1,6 @@
 <?php echo($header); ?>
 <?php echo($navbar); ?>
 
-<div class="container">
-
 <h1>Liste des évènements</h1>
 
 <div class="panel panel-danger">
@@ -13,7 +11,5 @@
     <?php echo $data['error']; ?>
   </div>
 </div>
-
-</div><!-- /.container -->
 
 <?php echo($footer); ?>

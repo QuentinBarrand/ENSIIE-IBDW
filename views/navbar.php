@@ -11,10 +11,35 @@
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
-        <li class="active"><a href="/">Accueil</a></li>
-        <li><a href="choristes">Choristes</a></li>
-        <li><a href="evenements">Evènements</a></li>
+        <?php
+        if($activePage == 'home')
+          echo '<li class="active"><a href="">Accueil</a></li>';
+        else
+          echo '<li><a href="/">Accueil</a></li>';
+
+        if($activePage == 'choristes')
+          echo '<li class="active"><a href="choristes">Choristes</a></li>';
+        else
+          echo '<li><a href="choristes">Choristes</a></li>';
+
+        if($activePage == 'evenements')
+          echo '<li class="active"><a href="evenements">Evènements</a></li>';
+        else
+          echo '<li><a href="evenements">Evènements</a></li>';
+        ?>
       </ul>
+      <div class="navbar-form navbar-right">
+        <?php
+        if(isset($session)) {
+          echo '<h4>Bienvenue, ' . $session['username'] . '</h4>';
+        }
+        else {
+          echo '<a href="login" class="btn btn-default" role="button">Connexion</a>';
+        }
+        ?>
+      </div>
     </div><!--/.nav-collapse -->
   </div>
 </div>
+
+<div class="container">

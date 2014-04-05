@@ -31,4 +31,9 @@ Flight::route('/evenements/new', function() {
 });
 
 
+// Login
+Flight::route('/login', function(){
+    echo "Ici une page de login";
+});
+
 Flight::start();
