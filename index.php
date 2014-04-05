@@ -3,12 +3,32 @@ require '../flight/Flight.php';
 
 include_once 'config.php';
 
+include_once 'lib/Authentification.php';
 include_once 'lib/Choristes.php';
 include_once 'lib/Evenements.php';
 
 // Accueil
 Flight::route('/', function(){
-    echo "Bienvenue dans l'application !";
+	Flight::render('header.php',
+		array(
+			'title' => 'Accueil'
+			), 
+		'header');
+
+	// Navbar
+	Flight::render('navbar.php',
+		array(
+			'activePage' => 'home'
+			), 
+		'navbar');
+
+	// Footer
+	Flight::render('footer.php',
+		array(), 
+		'footer');		
+
+	// Finalement on rend le layout
+	Flight::render('HomeLayout.php', array());
 });
 
 
@@ -31,9 +51,15 @@ Flight::route('/evenements/new', function() {
 });
 
 
-// Login
-Flight::route('/login', function(){
-    echo "Ici une page de login";
+// Affichage de la page de contact
+Flight::route('GET /login', function() {
+    Authentification::displayLoginPage();
 });
+
+// En post, cette route permet d'authentifier un utilisateur
+Flight::route('POST /login', function() {
+    Authentification::authenticate();
+});
+
 
 Flight::start();
