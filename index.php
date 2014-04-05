@@ -14,7 +14,7 @@ Flight::route('/', function(){
 
 // Choristes
 Flight::route('/choristes', function() {
-    echo 'Liste des choristes';
+	Choristes::get();
 });
 
 Flight::route('/choristes/new', function() {

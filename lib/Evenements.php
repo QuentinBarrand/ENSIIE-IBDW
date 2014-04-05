@@ -23,9 +23,8 @@ class Evenements {
 				
 				$query->execute();
 
-				$data['content'] = $query->fetchAll();
-
 				$data['success'] = true;
+				$data['content'] = $query->fetchAll();
 			}
 			catch(PDOException $e) {
 				$data['success'] = false;
@@ -51,6 +50,9 @@ class Evenements {
 			'footer');		
 
 		// Finalement on rend le layout
-		Flight::render('EvenementsView.php', array('data' => $data['content']));
+		if($data['success'])
+			Flight::render('EvenementsLayout.php', array('data' => $data));
+		else
+			Flight::render('ErrorLayout.php', array('data' => $data));
 	}
 }

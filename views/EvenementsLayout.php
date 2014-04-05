@@ -18,7 +18,7 @@
 	echo '</thead>';
 	echo '<tbody>';
 
-	foreach($data as $row) {
+	foreach($data['content'] as $row) {
 		echo '<tr>';
 		
 		echo '<td>' . $row['nom'] . '</td>';
