@@ -1,9 +1,9 @@
 <?php
 
-$app['debug'] = true;
+// $app['debug'] = true;
 
-$app['postgres.host']     = '';
-$app['postgres.database'] = '';
-$app['postgres.user']     = '';
-$app['postgres.password'] = '';
+Flight::set('postgres.host', '');
+Flight::set('postgres.database', '');
+Flight::set('postgres.user', '');
+Flight::set('postgres.password', '');
 
