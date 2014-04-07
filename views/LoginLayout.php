@@ -46,10 +46,10 @@
         }
         ?>
 
-        <input type="email" class="form-control" placeholder="Email" required autofocus>
-        <input type="password" class="form-control" placeholder="Mot de passe" required>
+        <input name="login" type="text" class="form-control" placeholder="Email" required autofocus>
+        <input name="password" type="password" class="form-control" placeholder="Mot de passe" required>
         <label class="checkbox">
-          <input type="checkbox" value="remember-me"> Se souvenir de moi
+          <input name="remember" type="checkbox" value="true"> Se souvenir de moi
         </label>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Connexion</button>
       </form>
