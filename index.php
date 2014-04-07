@@ -7,9 +7,8 @@ include_once 'lib/Authentification.php';
 include_once 'lib/Choristes.php';
 include_once 'lib/Evenements.php';
 
-
+// On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
-
 
 // Accueil
 Flight::route('/', function(){

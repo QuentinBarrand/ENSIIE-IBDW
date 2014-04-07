@@ -3,6 +3,10 @@
 
 <h1>Liste des évènements</h1>
 
+<?php
+	// TODO : si l'utilisateur est le chef de choeur, afficher un bouton d'ajout d'un évènement.
+?>
+
 <table class="table table-striped">
 <?php
 

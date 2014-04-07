@@ -2,7 +2,7 @@
 
 class Authentification {
 	function authenticate() {
-		// TODO 
+		// TODO : si l'authentification est réussie, set un cookie (avec l'userid ?)
 		Flight::render('LoginLayout.php', 
 			array(
 				'fail' => true
