@@ -6,8 +6,8 @@ body {
   text-align: center;
 }
 
-.subscribe {
-	text-align: right;
+#subscribe {
+	float: right;
 }
 
 .navbar-right h4 {
