@@ -2,7 +2,7 @@
 
 class Evenements {
 
-
+	// GET /evenements
 	function get() {
 		try {
 			$db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
@@ -42,6 +42,7 @@ class Evenements {
 		// Navbar
 		Flight::render('navbar.php',
 			array(
+				'user' => Flight::get('user'),
 				'activePage' => 'evenements'
 				), 
 			'navbar');

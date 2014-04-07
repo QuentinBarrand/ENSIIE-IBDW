@@ -3,8 +3,6 @@
 class Authentification {
     // POST /login
     function authenticate() {
-        // TODO : si l'authentification est réussie, set un cookie (avec l'userid ?)
-        
         $login = Flight::request()->data->login;
         $password = Flight::request()->data->password;
         $remember = Flight::request()->data->remember;
@@ -100,11 +98,46 @@ class Authentification {
         // TODO : retourner les détails utilisateur (login + role) depuis le cookie.
         $user = array();
 
-        // $cookieLogin = Flight::request()->query;
-        // print_r($cookieLogin);
-        // die();
+        $login = Flight::request()->cookies->login;
 
-        $user['autenticated'] = false;
+        try {
+            $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
+                Flight::get('postgres.user'), 
+                Flight::get('postgres.password'));
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        // TODO : remplacer par une requête préparée
+        $sql = "SELECT c.nom, c.prenom
+            FROM Utilisateur u
+            NATURAL JOIN Choriste c 
+            WHERE u.login LIKE '" . $login  . "';";
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $query->execute();
+
+                $data['success'] = true;
+                $data['content'] = $query->fetch();
+
+                $user['authenticated'] = true;
+                $user['nom'] = $data['content']['nom'];
+                $user['prenom'] = $data['content']['prenom'];
+
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                
+                $user['authenticated'] = false;
+            }
+        }
 
         return $user;
     }

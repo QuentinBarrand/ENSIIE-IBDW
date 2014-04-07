@@ -30,8 +30,8 @@
       </ul>
       <div class="navbar-form navbar-right">
         <?php
-        if(isset($session)) {
-          echo '<h4>Bienvenue, ' . $session['username'] . '</h4>';
+        if($user['authenticated']) {
+          echo '<h4>Bienvenue, ' . $user['prenom'] . ' ' . $user['nom'] . '</h4>';
         }
         else {
           echo '<a href="login" class="btn btn-default" role="button">Connexion</a>';

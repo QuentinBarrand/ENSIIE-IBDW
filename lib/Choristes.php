@@ -2,6 +2,7 @@
 
 class Choristes {
 
+    // GET /choristes
     function get() {
         try {
             $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
@@ -48,6 +49,7 @@ class Choristes {
         // Navbar
         Flight::render('navbar.php',
             array(
+                'user' => Flight::get('user'),
                 'activePage' => 'choristes'
                 ), 
             'navbar');

@@ -21,6 +21,7 @@ Flight::route('/', function(){
 	// Navbar
 	Flight::render('navbar.php',
 		array(
+			'user' => Flight::get('user'),
 			'activePage' => 'home'
 			), 
 		'navbar');

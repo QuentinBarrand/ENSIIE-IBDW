@@ -9,3 +9,7 @@ body {
 .subscribe {
 	text-align: right;
 }
+
+.navbar-right h4 {
+	color: white;
+}
