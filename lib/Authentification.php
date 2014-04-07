@@ -1,7 +1,16 @@
 <?php 
 
 class Authentification {
-	
+	function authenticate() {
+		// TODO 
+		Flight::render('LoginLayout.php', 
+			array(
+				'fail' => true
+			)
+		);
+	}
+
+
 	function displayLoginPage() {
 		// Header
 		Flight::render('header.php',
@@ -23,13 +32,12 @@ class Authentification {
 		);
 	}
 
+	function getUserDetails()
+	{
+		$user = array();
 
-	function authenticate() {
-		// TODO 
-		Flight::render('LoginLayout.php', 
-			array(
-				'fail' => true
-			)
-		);
+		$user['autenticated'] = false;
+
+		return $user;
 	}
 }

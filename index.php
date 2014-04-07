@@ -7,6 +7,10 @@ include_once 'lib/Authentification.php';
 include_once 'lib/Choristes.php';
 include_once 'lib/Evenements.php';
 
+
+Flight::set('user', Authentification::getUserDetails());
+
+
 // Accueil
 Flight::route('/', function(){
 	Flight::render('header.php',
