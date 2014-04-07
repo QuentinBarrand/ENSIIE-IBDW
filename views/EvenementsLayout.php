@@ -4,7 +4,11 @@
 <h1>Liste des évènements</h1>
 
 <?php
-	// TODO : si l'utilisateur est le chef de choeur, afficher un bouton d'ajout d'un évènement.
+	$user = Flight::get('user');
+
+	if($user['responsabilite'] == 2) {
+		echo '<a id="subscribe" href="' . Flight::request()->base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> Nouvel évènement</a>';
+	}
 ?>
 
 <table class="table table-striped">

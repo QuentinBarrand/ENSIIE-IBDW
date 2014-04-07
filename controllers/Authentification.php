@@ -93,6 +93,7 @@ class Authentification {
         );
     }
 
+    // Appelée à chaque requête. Si un cookie est présent, s'en sert pour récupérer les données utilisateur.
     function getUserDetails()
     {
         // TODO : retourner les détails utilisateur (login + role) depuis le cookie.
@@ -112,9 +113,11 @@ class Authentification {
         }
 
         // TODO : remplacer par une requête préparée
-        $sql = "SELECT c.nom, c.prenom
+        $sql = "SELECT c.nom, c.prenom, r.id
             FROM Utilisateur u
-            NATURAL JOIN Choriste c 
+            NATURAL JOIN Choriste c
+            NATURAL JOIN endosse
+            NATURAL JOIN Responsabilite r
             WHERE u.login LIKE '" . $login  . "';";
 
         if($db) {
@@ -129,6 +132,7 @@ class Authentification {
                 $user['authenticated'] = true;
                 $user['nom'] = $data['content']['nom'];
                 $user['prenom'] = $data['content']['prenom'];
+                $user['responsabilite'] = $data['content']['id'];
 
             }
             catch(PDOException $e) {
@@ -139,6 +143,7 @@ class Authentification {
             }
         }
 
+        var_dump($user);
         return $user;
     }
 }

@@ -3,7 +3,13 @@
 
 <h1>Liste des choristes</h1>
 
-<a id="subscribe" href="choristes/new" class="btn btn-success" role="button"><b>+</b> M'inscrire</a>
+<?php
+	$user = Flight::get('user');
+
+	if(! $user['authenticated']) {
+		echo '<a id="subscribe" href="' . Flight::request()->base . 'choristes/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
+	}
+?>
 
 <table class="table table-striped">
 <?php
