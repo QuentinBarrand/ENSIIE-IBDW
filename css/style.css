@@ -11,5 +11,6 @@ body {
 }
 
 .navbar-right h4 {
+	font-size: 14px;
 	color: white;
 }
