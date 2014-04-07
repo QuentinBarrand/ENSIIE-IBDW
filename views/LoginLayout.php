@@ -11,7 +11,7 @@
     <title>Connexion</title>
 
     <!-- Bootstrap core CSS -->
-    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     
     <!-- Custom styles for this template -->
     <link href="css/login.css" rel="stylesheet">
@@ -32,19 +32,19 @@
 
       <form class="form-signin" role="form" action="login" method="post">
         <h2 class="form-signin-heading">Se connecter</h2>
-		
+    
         <?php
         if($fail) {
-    			echo '<div class="panel panel-danger">';
-    			echo '<div class="panel-heading">';
-    			echo '<h3 class="panel-title">Erreur d\'authentification</h3>';
-    			echo '</div>';
-    			echo '<div class="panel-body">';
-    			echo 'Les informations transmises n\'ont pas permis de vous authentifier (identifiant ou mot de passe incorrect).';
-    			echo '</div>';
-    			echo '</div>';
-    		}
-    		?>
+          echo '<div class="panel panel-danger">';
+          echo '<div class="panel-heading">';
+          echo '<h3 class="panel-title">Erreur d\'authentification</h3>';
+          echo '</div>';
+          echo '<div class="panel-body">';
+          echo 'Les informations transmises n\'ont pas permis de vous authentifier (identifiant ou mot de passe incorrect).';
+          echo '</div>';
+          echo '</div>';
+        }
+        ?>
 
         <input type="email" class="form-control" placeholder="Email" required autofocus>
         <input type="password" class="form-control" placeholder="Mot de passe" required>
