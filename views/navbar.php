@@ -33,13 +33,20 @@
       </ul>
       <div class="navbar-form navbar-right">
         <?php
+
         $user = Flight::get('user');
+        $base = Flight::request()->base;
 
         if($user['authenticated']) {
-          echo '<h4>Bienvenue, ' . $user['prenom'] . ' ' . $user['nom'] . '</h4>';
+          echo '<div id="welcome" class="form-group">';
+          echo '<h4>Bienvenue, ' . $user['prenom'] . ' ' . $user['nom'] . '   </h4>';
+          echo '</div>';
+          echo '<div class="form-group">';
+          echo '<a href="' . $base . '/logout" class="btn btn-warning" role="button">Déconnexion</a>';
+          echo '</div>';
         }
         else {
-          echo '<a href="login" class="btn btn-default" role="button">Connexion</a>';
+          echo '<a href="' . $base . '/login" class="btn btn-default" role="button">Connexion</a>';
         }
         ?>
       </div>

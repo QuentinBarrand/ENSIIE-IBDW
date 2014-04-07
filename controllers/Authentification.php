@@ -55,7 +55,7 @@ class Authentification {
                     // La session expire dans un mois
                     $expires = time() + 60 * 60 * 24 * 30;
 
-                setcookie('login', $login);
+                setcookie('login', $login, $expires);
                 Flight::redirect(Flight::request()->base);
             }  
             else
@@ -94,56 +94,66 @@ class Authentification {
     }
 
     // Appelée à chaque requête. Si un cookie est présent, s'en sert pour récupérer les données utilisateur.
-    function getUserDetails()
-    {
+    function getUserDetails() {
         // TODO : retourner les détails utilisateur (login + role) depuis le cookie.
         $user = array();
 
         $login = Flight::request()->cookies->login;
 
-        try {
-            $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
-                Flight::get('postgres.user'), 
-                Flight::get('postgres.password'));
+        if($login == NULL) {
+            $user['authenticated'] = false;
         }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        // TODO : remplacer par une requête préparée
-        $sql = "SELECT c.nom, c.prenom, r.id
-            FROM Utilisateur u
-            NATURAL JOIN Choriste c
-            NATURAL JOIN endosse
-            NATURAL JOIN Responsabilite r
-            WHERE u.login LIKE '" . $login  . "';";
-
-        if($db) {
+        else {
             try {
-                $query = $db->prepare($sql);
-                
-                $query->execute();
-
-                $data['success'] = true;
-                $data['content'] = $query->fetch();
-
-                $user['authenticated'] = true;
-                $user['nom'] = $data['content']['nom'];
-                $user['prenom'] = $data['content']['prenom'];
-                $user['responsabilite'] = $data['content']['id'];
-
+                $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
+                    Flight::get('postgres.user'), 
+                    Flight::get('postgres.password'));
             }
             catch(PDOException $e) {
+                $db = null;
                 $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-                
-                $user['authenticated'] = false;
+                $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+            }
+
+            // TODO : remplacer par une requête préparée
+            $sql = "SELECT c.nom, c.prenom, r.id
+                FROM Utilisateur u
+                NATURAL JOIN Choriste c
+                NATURAL JOIN endosse
+                NATURAL JOIN Responsabilite r
+                WHERE u.login LIKE '" . $login  . "';";
+
+            if($db) {
+                try {
+                    $query = $db->prepare($sql);
+                    
+                    $query->execute();
+
+                    $data['success'] = true;
+                    $data['content'] = $query->fetch();
+
+                    $user['authenticated'] = true;
+                    $user['nom'] = $data['content']['nom'];
+                    $user['prenom'] = $data['content']['prenom'];
+                    $user['responsabilite'] = $data['content']['id'];
+
+                }
+                catch(PDOException $e) {
+                    $data['success'] = false;
+                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                    
+                    $user['authenticated'] = false;
+                }
             }
         }
 
-        var_dump($user);
         return $user;
+    }
+
+    // GET /logout
+    // Déconnecte l'utilisateur courant.
+    function logout() {
+        setcookie('login', NULL);
+        Flight::redirect(Flight::request()->base);
     }
 }

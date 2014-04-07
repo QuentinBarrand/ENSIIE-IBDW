@@ -89,5 +89,8 @@ Flight::route('POST /login', function() {
     Authentification::authenticate();
 });
 
+Flight::route('/logout', function() {
+	Authentification::logout();
+});
 
 Flight::start();

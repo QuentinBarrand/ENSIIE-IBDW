@@ -6,11 +6,15 @@ body {
   text-align: center;
 }
 
-#subscribe {
-	float: right;
+#welcome {
+	margin-right: 10px;
 }
 
-.navbar-right h4 {
+#welcome h4 {
 	font-size: 14px;
 	color: white;
+}
+
+#subscribe {
+	float: right;
 }
