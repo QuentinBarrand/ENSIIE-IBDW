@@ -12,24 +12,29 @@
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <?php
+
+        $base = Flight::request()->base;
+
         if($activePage == 'home')
-          echo '<li class="active"><a href="">Accueil</a></li>';
+          echo '<li class="active"><a href="' . $base . '">Accueil</a></li>';
         else
-          echo '<li><a href="/">Accueil</a></li>';
+          echo '<li><a href="' . $base . '">Accueil</a></li>';
 
         if($activePage == 'choristes')
-          echo '<li class="active"><a href="choristes">Choristes</a></li>';
+          echo '<li class="active"><a href="' . $base . '/choristes">Choristes</a></li>';
         else
-          echo '<li><a href="choristes">Choristes</a></li>';
+          echo '<li><a href="' . $base . '/choristes">Choristes</a></li>';
 
         if($activePage == 'evenements')
-          echo '<li class="active"><a href="evenements">Evènements</a></li>';
+          echo '<li class="active"><a href="' . $base . '/evenements">Evènements</a></li>';
         else
-          echo '<li><a href="evenements">Evènements</a></li>';
+          echo '<li><a href="' . $base . '/evenements">Evènements</a></li>';
         ?>
       </ul>
       <div class="navbar-form navbar-right">
         <?php
+        $user = Flight::get('user');
+
         if($user['authenticated']) {
           echo '<h4>Bienvenue, ' . $user['prenom'] . ' ' . $user['nom'] . '</h4>';
         }

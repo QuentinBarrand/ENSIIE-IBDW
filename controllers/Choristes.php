@@ -49,7 +49,6 @@ class Choristes {
         // Navbar
         Flight::render('navbar.php',
             array(
-                'user' => Flight::get('user'),
                 'activePage' => 'choristes'
                 ), 
             'navbar');
