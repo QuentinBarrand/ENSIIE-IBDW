@@ -8,7 +8,7 @@
     <meta name="author" content="">
     <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
 
-    <title>Signin Template for Bootstrap</title>
+    <title>Connexion</title>
 
     <!-- Bootstrap core CSS -->
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
@@ -30,21 +30,21 @@
 
     <div class="container">
 
-      <form class="form-signin" role="form">
+      <form class="form-signin" role="form" action="login" method="post">
         <h2 class="form-signin-heading">Se connecter</h2>
 		
         <?php
         if($fail) {
-			echo '<div class="panel panel-danger">';
-			echo '<div class="panel-heading">';
-			echo '<h3 class="panel-title">Erreur d\'authentification</h3>';
-			echo '</div>';
-			echo '<div class="panel-body">';
-			echo 'Les informations transmises n\'ont pas permis de vous authentifier (identifiant ou mot de passe incorrect).';
-			echo '</div>';
-			echo '</div>';
-		}
-		?>
+    			echo '<div class="panel panel-danger">';
+    			echo '<div class="panel-heading">';
+    			echo '<h3 class="panel-title">Erreur d\'authentification</h3>';
+    			echo '</div>';
+    			echo '<div class="panel-body">';
+    			echo 'Les informations transmises n\'ont pas permis de vous authentifier (identifiant ou mot de passe incorrect).';
+    			echo '</div>';
+    			echo '</div>';
+    		}
+    		?>
 
         <input type="email" class="form-control" placeholder="Email" required autofocus>
         <input type="password" class="form-control" placeholder="Mot de passe" required>
