@@ -3,9 +3,9 @@ require '../flight/Flight.php';
 
 include_once 'config.php';
 
-include_once 'lib/Authentification.php';
-include_once 'lib/Choristes.php';
-include_once 'lib/Evenements.php';
+include_once 'controllers/Authentification.php';
+include_once 'controllers/Choristes.php';
+include_once 'controllers/Evenements.php';
 
 // On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
