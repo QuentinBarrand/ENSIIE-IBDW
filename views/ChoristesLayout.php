@@ -7,7 +7,7 @@
 	$user = Flight::get('user');
 
 	if(! $user['authenticated']) {
-		echo '<a id="subscribe" href="' . Flight::request()->base . 'choristes/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
+		echo '<a id="subscribe" href="' . Flight::request()->base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
 	}
 ?>
 
