@@ -6,6 +6,7 @@ include_once 'config.php';
 include_once 'controllers/Authentification.php';
 include_once 'controllers/Choristes.php';
 include_once 'controllers/Evenements.php';
+include_once 'controllers/Programme.php';
 
 // On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
@@ -74,6 +75,19 @@ Flight::route('POST /evenements/new', function() {
     echo "Traitement de la requête issue du formulaire";
 });
 
+/*
+ * Programme
+ */
+
+// Affichage de la liste des oeuvres
+Flight::route('/programme', function() {
+    Programme::get();
+});
+
+// Affichage de la liste des oeuvres
+Flight::route('/programme/new', function() {
+    echo "Formulaire d'ajout d'une oeuvre";
+});
 
 /*
  * Login
