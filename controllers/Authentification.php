@@ -116,12 +116,12 @@ class Authentification {
             }
 
             // TODO : remplacer par une requête préparée
-            $sql = "SELECT c.nom, c.prenom, r.id
+            $sql = "SELECT u.login, c.nom, c.prenom, r.id
                 FROM Utilisateur u
-                NATURAL JOIN Choriste c
-                NATURAL JOIN endosse
-                NATURAL JOIN Responsabilite r
-                WHERE u.login LIKE '" . $login  . "';";
+                LEFT JOIN Choriste c ON u.login = c.login
+                LEFT JOIN endosse e ON u.login = e.login
+                LEFT JOIN Responsabilite r ON e.id = r.id
+                WHERE u.login LIKE '" . $login . "';";
 
             if($db) {
                 try {
