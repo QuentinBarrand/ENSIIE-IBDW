@@ -6,7 +6,7 @@
 <?php
 	$user = Flight::get('user');
 
-	if($user['authenticated'] && $user['responsabilite'] == 2) {
+	if($user['authenticated'] && $user['responsabilite'] == 1) {
 		echo '<a id="subscribe" href="' . Flight::request()->base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> Nouvel évènement</a>';
 	}
 ?>
