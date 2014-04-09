@@ -15,7 +15,10 @@ class Evenements {
 			$data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
 		}
 
-		$sql = "SELECT * FROM Evenement WHERE idType=2;";
+		$sql = "SELECT idEvenement, heureDate, lieu, nom 
+            FROM evenement
+            NATURAL JOIN TypeEvt
+            ORDER BY heureDate;";
 
 		if($db) {
 			try {
