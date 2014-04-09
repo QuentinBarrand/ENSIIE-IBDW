@@ -57,4 +57,37 @@ class Evenements {
 		else
 			Flight::render('ErrorLayout.php', array('data' => $data));
 	}
+
+
+	/* Retourne le nombre total d'évènements du type passé en paramètre
+	 * (par défaut 2 = répétitions) dans la base de données.
+	 */
+	function getCount($type = 2) {
+        try {
+            $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'),
+                Flight::get('postgres.user'),
+                Flight::get('postgres.password'));
+        }
+        catch(PDOException $e) {
+            $db = null;
+        }
+
+        $sql = 'SELECT count(idEvenement) as TotalRepetitions
+                    FROM evenement
+                    WHERE idType = ' . $type . ';';
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                $query->execute();
+
+                $count = $query->fetch()[0];
+            }
+            catch(PDOException $e) {
+                $count = NULL;
+            }
+        }
+
+        return $count;
+	}
 }

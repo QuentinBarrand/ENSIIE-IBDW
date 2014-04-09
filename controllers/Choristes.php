@@ -25,6 +25,9 @@ class Choristes {
             GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
             ORDER BY typeVoix;';
 
+        // On récupère le nombre d'évènements
+        $data['repets_count'] = Evenements::getCount();
+
         if($db) {
             try {
                 $query = $db->prepare($sql);

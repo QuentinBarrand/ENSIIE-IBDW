@@ -13,7 +13,6 @@
 
 <table class="table table-striped">
 <?php
-
 	if(count($data['content']) > 0) {
 		echo '<thead>';
 
@@ -25,6 +24,7 @@
 		{
 			echo '<th>Téléphone</th>';		
 			echo '<th>Ville</th>';
+			echo '<th>Présence aux répétitions</th>';
 		}
 
 		echo '</tr>';
@@ -49,6 +49,11 @@
 			{
 				echo '<td>' . $row['telephone'] . '</td>';
 				echo '<td>' . $row['ville'] . '</td>';
+
+				// Taux de présence
+				$p = (int)$row['participations'];
+				$r = $data['repets_count'];
+				echo '<td>' . $p . ' / ' . $r . ' (' . ($p / $r) * 100 . ' %)</td>';
 			}
 
 			echo '</tr>';
