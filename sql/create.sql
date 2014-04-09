@@ -19,7 +19,7 @@ create table Utilisateur (
 );
 
 create table Responsabilite (
-    id smallint,
+    id serial,
     titre varchar(30),
     constraint pk_id PRIMARY KEY(id)
 );
@@ -33,7 +33,7 @@ create table endosse (
 );
 
 create table Inscription (
-    idInscription smallint,
+    idInscription serial,
     typeInscription varchar(10) NOT NULL,
     montant decimal NOT NULL,
     annee varchar(10) NOT NULL,
@@ -42,13 +42,13 @@ create table Inscription (
 );
 
 create table Voix (
-    idVoix smallint,
+    idVoix serial,
     typeVoix varchar(45) NOT NULL,
     constraint pk_idVoix PRIMARY KEY(idVoix)
 );
 
 create table Choriste (
-    idChoriste smallint,
+    idChoriste serial,
     nom varchar(45) NOT NULL,
     prenom varchar(45) NOT NULL,
     idVoix smallint NOT NULL,
@@ -63,13 +63,13 @@ create table Choriste (
 );
 
 create table TypeEvt (
-    idType smallint,
+    idType serial,
     typeEvt varchar(45) NOT NULL,
     constraint pk_idType PRIMARY KEY(idType)
 );
 
 create table Evenement (
-    idEvenement smallint,
+    idEvenement serial,
     idType smallint NOT NULL,
     heureDate timestamp NOT NULL,
     lieu varchar(45) NOT NULL,
@@ -79,7 +79,7 @@ create table Evenement (
 );
 
 create table participe (
-    idChoriste smallint NOT NULL,
+    idChoriste serial,
     idEvenement smallint NOT NULL,
     confirmation smallint DEFAULT NULL,
     constraint pk_participe PRIMARY KEY (idChoriste, idEvenement),
@@ -88,7 +88,7 @@ create table participe (
 );
 
 create table Oeuvre (
-    idOeuvre smallint,
+    idOeuvre serial,
     titre varchar(45),
     auteur varchar(45),
     partition varchar(45),

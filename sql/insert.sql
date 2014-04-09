@@ -39,12 +39,12 @@ VALUES ('tsarboni', md5('tsarboni'));
 INSERT INTO Utilisateur(login, motdepasse)
 VALUES ('ddiallo', md5('ddiallo'));
 
-INSERT INTO Responsabilite(id, titre)
-VALUES (1, 'Chef de coeur');
-INSERT INTO Responsabilite(id, titre)
-VALUES (2, 'Tresorier');
-INSERT INTO Responsabilite(id, titre)
-VALUES (3, 'Webmaster');
+INSERT INTO Responsabilite(titre)
+VALUES ('Chef de coeur');
+INSERT INTO Responsabilite(titre)
+VALUES ('Tresorier');
+INSERT INTO Responsabilite(titre)
+VALUES ('Webmaster');
 
 INSERT INTO endosse(login, id)
 VALUES ('ddiallo', 1);
@@ -56,45 +56,45 @@ VALUES ('qbarrand', 3);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
 VALUES (1, 'etudiant', '200', '2014', 3);
 
-INSERT INTO Voix(idVoix, typeVoix)
-VALUES (1, 'alto');
-INSERT INTO Voix(idVoix, typeVoix)
-VALUES (2, 'soprano');
-INSERT INTO Voix(idVoix, typeVoix)
-VALUES (3, 'tenor');
-INSERT INTO Voix(idVoix, typeVoix)
-VALUES (4, 'bass');
+INSERT INTO Voix(typeVoix)
+VALUES ('alto');
+INSERT INTO Voix(typeVoix)
+VALUES ('soprano');
+INSERT INTO Voix(typeVoix)
+VALUES ('tenor');
+INSERT INTO Voix(typeVoix)
+VALUES ('bass');
 
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login ,idInscription)
-VALUES (1, 'sarboni', 'thomas', 1, 'angers', '0601020304', 'tsarboni', 1);
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
-VALUES (2, 'sabatier', 'sébastien', 4, 'bordeaux', '0602030405', 'ssabatier');
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
-VALUES (3, 'paume', 'mylène', 2, 'sarcelles', '0603040506', 'mpaume');
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
-VALUES (4, 'barrand', 'quentin', 3, 'taverny', '0604050607', 'qbarrand');
-INSERT INTO Choriste(idChoriste ,nom ,prenom ,idVoix ,ville ,telephone ,login)
-VALUES (5, 'briquet', 'gaétan', 1, 'amiens', '0605060708', 'gbriquet');
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login ,idInscription)
+VALUES ('sarboni', 'thomas', 1, 'angers', '0601020304', 'tsarboni', 1);
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login)
+VALUES ('sabatier', 'sébastien', 4, 'bordeaux', '0602030405', 'ssabatier');
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login)
+VALUES ('paume', 'mylène', 2, 'sarcelles', '0603040506', 'mpaume');
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login)
+VALUES ('barrand', 'quentin', 3, 'taverny', '0604050607', 'qbarrand');
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login)
+VALUES ('briquet', 'gaétan', 1, 'amiens', '0605060708', 'gbriquet');
 
-INSERT INTO TypeEvt(idType, typeEvt)
-VALUES (1, 'Concert');
-INSERT INTO TypeEvt(idType, typeEvt)
-VALUES (2, 'Répétition');
-INSERT INTO TypeEvt(idType, typeEvt)
-VALUES (3, 'Saison');
+INSERT INTO TypeEvt(typeEvt)
+VALUES ('Concert');
+INSERT INTO TypeEvt(typeEvt)
+VALUES ('Répétition');
+INSERT INTO TypeEvt(typeEvt)
+VALUES ('Saison');
 
-INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (1, 2, '2014-01-09 14:00:00', '12 rue de la pétanque 33170 Gradignan', 'Préparation au concert du 6 avril');
-INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (2, 2, '2014-01-29 10:30:00', '12 rue de la pétanque 33170 Gradignan', 'Sychronisation intruments/choeur');
-INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (3, 2, '2014-02-20 18:00:00', '12 rue de la voile 33500 Arcachon', 'Raccord choeur');
-INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (4, 2, '2014-05-24 10:00:00', '12 rue de la pétanque 33170 Gradignan', 'Répétition générale concert 1');
-INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (5, 1, '2014-01-25 11:00:00', '12 rue du surf 33850 Lacanau', 'Messe de requiem');
-INSERT INTO Evenement(idEvenement, idType, heuredate, lieu, nom)
-VALUES (6, 3, '2014-01-25 11:00:00', 'Salle de la cour', 'Saison 2014-2015');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (2, '2014-01-09 14:00:00', '12 rue de la pétanque 33170 Gradignan', 'Préparation au concert du 6 avril');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (2, '2014-01-29 10:30:00', '12 rue de la pétanque 33170 Gradignan', 'Sychronisation intruments/choeur');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (2, '2014-02-20 18:00:00', '12 rue de la voile 33500 Arcachon', 'Raccord choeur');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (2, '2014-05-24 10:00:00', '12 rue de la pétanque 33170 Gradignan', 'Répétition générale concert 1');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-01-25 11:00:00', '12 rue du surf 33850 Lacanau', 'Messe de requiem');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (3, '2014-01-25 11:00:00', 'Salle de la cour', 'Saison 2014-2015');
 
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 1, 1);
@@ -113,16 +113,16 @@ VALUES (1, 5);
 INSERT INTO participe(idChoriste, idEvenement)
 VALUES (2, 5);
 
-INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
-VALUES (1, '51 je taime', 'René Pastis', 'http://', '60', 'chanson à boire');
-INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
-VALUES (2, 'Passion selon jéjé', 'Bébert Dupuis', 'http://', '60', 'baroque');
-INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
-VALUES (3, 'Cantate de la mare', 'BACH Jérome', 'http://', '60', 'chanson à boire');
-INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
-VALUES (4, 'Requiem pour un con', 'Gainsbourg Serge', 'http://', '75', 'chanson à boire');
-INSERT INTO oeuvre(idoeuvre, titre, auteur, partition, duree, style)
-VALUES (5, 'Requiem de ouf', 'Wolfgang Amadeus', 'http://', '60', 'chanson à boire');
+INSERT INTO oeuvre(titre, auteur, partition, duree, style)
+VALUES ('51 je taime', 'René Pastis', 'http://', '60', 'chanson à boire');
+INSERT INTO oeuvre(titre, auteur, partition, duree, style)
+VALUES ('Passion selon jéjé', 'Bébert Dupuis', 'http://', '60', 'baroque');
+INSERT INTO oeuvre(titre, auteur, partition, duree, style)
+VALUES ('Cantate de la mare', 'BACH Jérome', 'http://', '60', 'chanson à boire');
+INSERT INTO oeuvre(titre, auteur, partition, duree, style)
+VALUES ('Requiem pour un con', 'Gainsbourg Serge', 'http://', '75', 'chanson à boire');
+INSERT INTO oeuvre(titre, auteur, partition, duree, style)
+VALUES ('Requiem de ouf', 'Wolfgang Amadeus', 'http://', '60', 'chanson à boire');
 
 INSERT INTO est_au_programme(idOeuvre, idEvenement)
 VALUES (1, 1);
