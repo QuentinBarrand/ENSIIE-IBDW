@@ -20,6 +20,7 @@
 		echo '<th>Prénom Nom</th>';		
 		echo '<th>Voix</th>';
 
+		// Détails supplémentaires si l'utilisateur est authentifié
 		if($user['authenticated'])
 		{
 			echo '<th>Téléphone</th>';		
@@ -35,7 +36,7 @@
 		foreach($data['content'] as $row) {
 			echo '<tr>';
 
-			echo '<td>' . $row['prenom'] . ' ' .$row['nom'];
+			echo '<td>' . ucfirst($row['prenom']) . ' ' . ucfirst($row['nom']);
 			
 			// Un label pour la responsabilité ou rien
 			if($row['responsabilite'] != NULL)
@@ -45,6 +46,7 @@
 
 			echo '<td>' . $row['typevoix'] . '</td>';
 
+			// Détails supplémentaires si l'utilisateur est authentifié
 			if($user['authenticated'])
 			{
 				echo '<td>' . $row['telephone'] . '</td>';
