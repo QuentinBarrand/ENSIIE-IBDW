@@ -13,9 +13,7 @@ class Authentification {
             $remember = false;
 
         try {
-            $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
-                Flight::get('postgres.user'), 
-                Flight::get('postgres.password'));
+            $db = Flight::db();
         }
         catch(PDOException $e) {
             $db = null;

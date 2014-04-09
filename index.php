@@ -11,6 +11,10 @@ include_once 'controllers/Programme.php';
 // On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
 
+Flight::register('db', 'PDO', array('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
+                Flight::get('postgres.user'), 
+                Flight::get('postgres.password')));
+
 // Accueil
 Flight::route('/', function(){
 	Flight::render('header.php',
