@@ -14,7 +14,8 @@ class Programme {
         }
 
         $sql = 'SELECT titre, auteur, partition, duree, style
-            FROM oeuvre;';
+            FROM oeuvre
+            ORDER BY style;';
 
         if($db) {
             try {
