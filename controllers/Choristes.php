@@ -15,12 +15,13 @@ class Choristes {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        $sql = 'SELECT nom, prenom, typeVoix, ville, telephone, titre as responsabilite
+        $sql = 'SELECT nom, prenom, typeVoix, ville, telephone, titre as responsabilite, AVG(participe.confirmation) as participations
             FROM Choriste
-            NATURAL JOIN Voix
-            NATURAL JOIN Utilisateur
-            LEFT JOIN Responsabilite
-            ON Utilisateur.login = Responsabilite.login
+            LEFT JOIN participe ON Choriste.idChoriste = participe.idChoriste
+            LEFT JOIN Voix ON Choriste.idVoix = Voix.idVoix 
+            LEFT JOIN Utilisateur ON Choriste.login = Utilisateur.login 
+            LEFT JOIN Endosse ON Utilisateur.login = Endosse.login
+            LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id 
             GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
             ORDER BY typeVoix;';
 

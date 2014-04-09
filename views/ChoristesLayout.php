@@ -18,9 +18,15 @@
 		echo '<thead>';
 
 		echo '<tr>';
-		echo '<th>Prénom</th>';		
-		echo '<th>Nom</th>';
-		echo '<th>Lieu</th>';
+		echo '<th>Prénom Nom</th>';		
+		echo '<th>Voix</th>';
+
+		if($user['authenticated'])
+		{
+			echo '<th>Téléphone</th>';		
+			echo '<th>Ville</th>';
+		}
+
 		echo '</tr>';
 
 		echo '</thead>';
@@ -29,9 +35,21 @@
 		foreach($data['content'] as $row) {
 			echo '<tr>';
 
-			echo '<td>' . $row['prenom'] . '</td>';
-			echo '<td>' . $row['nom'] . '</td>';
-			echo '<td>' . $row['typeVoix'] . '</td>';
+			echo '<td>' . $row['prenom'] . ' ' .$row['nom'];
+			
+			// Un label pour la responsabilité ou rien
+			if($row['responsabilite'] != NULL)
+				echo '&nbsp;&nbsp;<span class="label label-info">' . $row['responsabilite'] . '</span>';
+			else
+				echo '</td>';
+
+			echo '<td>' . $row['typevoix'] . '</td>';
+
+			if($user['authenticated'])
+			{
+				echo '<td>' . $row['telephone'] . '</td>';
+				echo '<td>' . $row['ville'] . '</td>';
+			}
 
 			echo '</tr>';
 		}
