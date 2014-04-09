@@ -77,6 +77,8 @@ class Evenements {
                     FROM evenement
                     WHERE idType = ' . $type . ';';
 
+        $count = NULL;
+
         if($db) {
             try {
                 $query = $db->prepare($sql);
@@ -84,9 +86,7 @@ class Evenements {
 
                 $count = $query->fetch()[0];
             }
-            catch(PDOException $e) {
-                $count = NULL;
-            }
+            catch(PDOException $e) { }
         }
 
         return $count;

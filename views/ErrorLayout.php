@@ -1,7 +1,7 @@
 <?php echo($header); ?>
 <?php echo($navbar); ?>
 
-<h1>Liste des évènements</h1>
+<h1><?php echo $title; ?></h1>
 
 <div class="panel panel-danger">
   <div class="panel-heading">

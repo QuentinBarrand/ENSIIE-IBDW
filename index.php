@@ -26,9 +26,7 @@ Flight::route('/', function(){
 	// Navbar
 	Flight::render('navbar.php',
 		array(
-			'user' => Flight::get('user'),
-			'activePage' => 'home'
-			), 
+			'activePage' => 'home'), 
 		'navbar');
 
 	// Footer
@@ -109,6 +107,33 @@ Flight::route('POST /login', function() {
 
 Flight::route('/logout', function() {
 	Authentification::logout();
+});
+
+/*
+ * Erreurs
+ */
+
+Flight::map('notFound', function(){
+    Flight::render('header.php',
+		array(
+			'title' => 'Page introuvable'
+			), 
+		'header');
+
+	// Navbar
+	Flight::render('navbar.php',
+		array(
+			'activePage' => ''), 
+		'navbar');
+
+	// Footer
+	Flight::render('footer.php',
+		array(), 
+		'footer');	
+
+	$data['error'] = "La page demandée est introuvable.";
+	Flight::render('ErrorLayout.php', array(
+		'data' => $data));
 });
 
 Flight::start();
