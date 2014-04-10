@@ -1,7 +1,16 @@
 <?php echo($header); ?>
 <?php echo($navbar); ?>
 
-<h1>Programme de l'année</h1>
+<h1>
+	Programme de l'année
+	<br>
+	<small>
+		<?php 
+			// Affichage de la saison
+			echo $data['content'][0]['nomsaison']; 
+		?>
+	</small>
+</h1>
 
 <?php
 	// $user = Flight::get('user');
@@ -13,6 +22,7 @@
 <h2>Liste des oeuvres</h2>
 <table class="table table-striped">
 <?php
+	$user = Flight::get('user');
 
 	if(count($data['content']) > 0) {
 		echo '<thead>';
@@ -23,6 +33,10 @@
 		echo '<th>Partition</th>';
 		echo '<th>Durée</th>';
 		echo '<th>Style</th>';
+
+		if($user['authenticated'] && $user['idChoriste'] != NULL)
+			echo '<th>Niveau</th>';
+
 		echo '</tr>';
 
 		echo '</thead>';
@@ -36,6 +50,26 @@
 			echo '<td>' . $row['partition'] . '</td>';
 			echo '<td>' . $row['duree'] . '</td>';
 			echo '<td>' . $row['style'] . '</td>';
+
+			if($user['authenticated'] && $user['idChoriste'] != NULL) {
+				if(isset($data['progression'][$row['idoeuvre']]))
+					$niveau = $data['progression'][$row['idoeuvre']];
+				else
+					$niveau = 0;
+
+				echo '<td>';
+
+				if($niveau == 0)
+					echo '<span class="label label-danger">Non maîtrisée</span>';
+
+				elseif($niveau < 4)
+					echo '<span class="label label-warning">Apprentissage</span>';
+
+				else
+					echo '<span class="label label-success">Maîtrisée</span>';
+
+				echo '</td>';
+			}
 
 			echo '</tr>';
 		}
@@ -67,7 +101,7 @@
 			echo '<tr>';
 
 			echo '<td>' . $row['style'] . '</td>';
-			echo '<td> TODO </td>';
+			echo '<td>' . $row['dureestyle'] . '</td>';
 
 			echo '</tr>';
 		}
