@@ -96,6 +96,21 @@ VALUES (1, '2014-01-25 11:00:00', '12 rue du surf 33850 Lacanau', 'Messe de requ
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
 VALUES (3, '2014-01-25 11:00:00', 'Salle de la cour', 'Saison 2014-2015');
 
+-- Ajout de concerts
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-01-25 11:00:00', 'Lieu1', 'Evènement 1');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-02-25 11:00:00', 'Lieu2', 'Evènement 2');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-03-25 11:00:00', 'Lieu3', 'Evènement 3');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-04-25 11:00:00', 'Lieu4', 'Evènement 4');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-05-25 11:00:00', 'Lieu5', 'Evènement 5');
+INSERT INTO Evenement(idType, heuredate, lieu, nom)
+VALUES (1, '2014-06-25 11:00:00', 'Lieu6', 'Evènement 6');
+
+
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 1, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
