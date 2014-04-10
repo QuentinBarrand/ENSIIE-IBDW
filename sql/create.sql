@@ -25,11 +25,11 @@ create table Responsabilite (
 );
 
 create table endosse (
-    login varchar(45) unique,
+    login varchar(45),
     id smallint unique,
-    constraint pk_endosse PRIMARY KEY (login, id),
-    constraint fk_responsabilite foreign key (login) references Utilisateur (login) ON DELETE CASCADE,
-    constraint fk_utilisateur foreign key (id) references Responsabilite (id) ON DELETE CASCADE
+    constraint pk_endosse PRIMARY KEY (id),
+    constraint fk_utilisateur foreign key (login) references Utilisateur (login) ON DELETE CASCADE,
+    constraint fk_responsabilite foreign key (id) references Responsabilite (id) ON DELETE CASCADE
 );
 
 create table Inscription (
@@ -78,10 +78,11 @@ create table Evenement (
     constraint fk_typeEvt foreign key (idType) references TypeEvt (idType) ON DELETE CASCADE
 );
 
+-- confirmation: 0 indécis et 1 présent. Aucun tuple = absent
 create table participe (
     idChoriste serial,
     idEvenement smallint NOT NULL,
-    confirmation smallint DEFAULT NULL,
+    confirmation smallint DEFAULT 0 NOT NULL,
     constraint pk_participe PRIMARY KEY (idChoriste, idEvenement),
     constraint fk_participe_choriste foreign key (idChoriste) references Choriste (idChoriste) ON DELETE CASCADE,
     constraint fk_participe_evenement foreign key (idEvenement) references Evenement (idEvenement) ON DELETE CASCADE
