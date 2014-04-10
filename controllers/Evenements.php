@@ -84,7 +84,8 @@ class Evenements {
                 $query = $db->prepare($sql);
                 $query->execute();
 
-                $count = $query->fetch()[0];
+                $result = $query->fetch();
+                $count = $result[0];
             }
             catch(PDOException $e) { }
         }

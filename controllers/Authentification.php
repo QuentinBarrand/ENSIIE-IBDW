@@ -33,7 +33,8 @@ class Authentification {
                 $query->execute();
 
                 $data['success'] = true;
-                $encryptedPassword = $query->fetch()[0];
+                $result = $query->fetch();
+                $encryptedPassword = $result[0];
             }
             catch(PDOException $e) {
                 $data['success'] = false;
