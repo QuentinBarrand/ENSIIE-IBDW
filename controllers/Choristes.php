@@ -13,11 +13,11 @@ class Choristes {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        $sql = 'SELECT nom, prenom, typeVoix, ville, telephone, titre as responsabilite, AVG(participe.confirmation) as participations
+        $sql = 'SELECT nom, prenom, typeVoix, ville, telephone, titre as responsabilite, SUM(participe.confirmation) as participations
             FROM Choriste
             LEFT JOIN participe ON Choriste.idChoriste = participe.idChoriste
-            LEFT JOIN Voix ON Choriste.idVoix = Voix.idVoix 
-            LEFT JOIN Utilisateur ON Choriste.login = Utilisateur.login 
+            NATURAL JOIN Voix 
+            NATURAL JOIN Utilisateur 
             LEFT JOIN Endosse ON Utilisateur.login = Endosse.login
             LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id 
             GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
@@ -65,5 +65,39 @@ class Choristes {
             Flight::render('ChoristesLayout.php', array('data' => $data));
         else
             Flight::render('ErrorLayout.php', array('data' => $data));
+    }
+
+    function getVoix() {
+        $voix = NULL;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        $sql = 'SELECT idVoix FROM Voix;';
+
+        // On récupère le nombre d'évènements
+        $data['repets_count'] = Evenements::getCount();
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $query->execute();
+
+                $result = $query->fetchAll();
+
+                for($i = 0; $i < $query->rowCount(); $i++)
+                    $voix[$i] = $result[$i][0];
+            }
+            catch(PDOException $e) { }
+        }
+
+        return $voix;
     }
 }
