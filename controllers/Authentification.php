@@ -115,7 +115,7 @@ class Authentification {
             }
 
             // TODO : remplacer par une requête préparée
-            $sql = "SELECT u.login, c.nom, c.prenom, r.id
+            $sql = "SELECT u.login, c.nom, c.prenom, c.idChoriste, r.id
                 FROM Utilisateur u
                 LEFT JOIN Choriste c ON u.login = c.login
                 LEFT JOIN endosse e ON u.login = e.login
@@ -134,8 +134,8 @@ class Authentification {
                     $user['authenticated'] = true;
                     $user['nom'] = $data['content']['nom'];
                     $user['prenom'] = $data['content']['prenom'];
+                    $user['idChoriste'] = $data['content']['idchoriste'];
                     $user['responsabilite'] = $data['content']['id'];
-
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
