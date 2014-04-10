@@ -31,9 +31,9 @@
           echo '<li><a href="' . $base . '/evenements">Evènements</a></li>';
 
         if($activePage == 'programme')
-          echo '<li class="active"><a href="' . $base . '/programme">Programme</a></li>';
+          echo '<li class="active"><a href="' . $base . '/programme">Programme de l\'année</a></li>';
         else
-          echo '<li><a href="' . $base . '/programme">Programme</a></li>';
+          echo '<li><a href="' . $base . '/programme">Programme de l\'année</a></li>';
 
         ?>
       </ul>
