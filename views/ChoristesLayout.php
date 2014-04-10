@@ -55,7 +55,18 @@
 				// Taux de présence
 				$p = (int)$row['participations'];
 				$r = $data['repets_count'];
-				echo '<td>' . $p . ' / ' . $r . ' (' . ($p / $r) * 100 . ' %)</td>';
+				$pc = ($p / $r) * 100;
+
+				echo '<td>' . $p . ' / ' . $r;
+
+				if($pc < 25)
+					echo '&nbsp;&nbsp;<span class="label label-danger">' . $pc . ' %</span>';
+				elseif($pc < 60)
+					echo '&nbsp;&nbsp;<span class="label label-warning">' . $pc . ' %</span>';
+				else
+					echo '&nbsp;&nbsp;<span class="label label-success">' . $pc . ' %</span>';
+
+				echo '</td>';
 			}
 
 			echo '</tr>';

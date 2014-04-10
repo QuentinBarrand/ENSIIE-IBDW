@@ -11,18 +11,28 @@ class Programme {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        $sql = 'SELECT titre, auteur, partition, duree, style
+        $sql1 = 'SELECT titre, auteur, partition, duree, style
+            FROM oeuvre
+            ORDER BY style;';
+
+        $sql2 = 'SELECT DISTINCT style
             FROM oeuvre
             ORDER BY style;';
 
         if($db) {
             try {
-                $query = $db->prepare($sql);
-                
+                $query = $db->prepare($sql1);
                 $query->execute();
 
-                $data['success'] = true;
                 $data['content'] = $query->fetchAll();
+
+                $query = $db->prepare($sql2);
+                $query->execute();
+
+                $data['styles'] = $query->fetchAll();
+
+                $data['success'] = true;
+
             }
             catch(PDOException $e) {
                 $data['success'] = false;

@@ -18,3 +18,7 @@ body {
 #subscribe {
 	float: right;
 }
+
+table .label {
+	font-size: 0.9em;
+}
