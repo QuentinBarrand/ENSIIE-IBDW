@@ -7,7 +7,7 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="#">MyChorus</a>
+      <a class="navbar-brand" href="/#">MyChorus</a>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
@@ -17,9 +17,9 @@
         if($base == '/') $base = '';
 
         if($activePage == 'home')
-          echo '<li class="active"><a href="' . $base . '">Accueil</a></li>';
+          echo '<li class="active"><a href="' . $base . '/">Accueil</a></li>';
         else
-          echo '<li><a href="' . $base . '">Accueil</a></li>';
+          echo '<li><a href="' . $base . '/">Accueil</a></li>';
 
         if($activePage == 'choristes')
           echo '<li class="active"><a href="' . $base . '/choristes">Choristes</a></li>';

@@ -6,6 +6,8 @@ class Authentification {
         $login = Flight::request()->data->login;
         $password = Flight::request()->data->password;
         $remember = Flight::request()->data->remember;
+        $base = Flight::request()->base;
+        if($base == '/') $base = '';
 
         if($remember == 'true')
             $remember = true;
@@ -55,7 +57,7 @@ class Authentification {
                     $expires = time() + 60 * 60 * 24 * 30;
 
                 setcookie('login', $login, $expires);
-                Flight::redirect(Flight::request()->base);
+                Flight::redirect($base);
             }  
             else
                 $fail = true;
