@@ -5,9 +5,11 @@
 
 <?php
 	$user = Flight::get('user');
+        $base = Flight::request()->base;
+        if($base == '/') $base = '';
 
 	if(! $user['authenticated']) {
-		echo '<a id="subscribe" href="' . Flight::request()->base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
+		echo '<a id="subscribe" href="' . $base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
 	}
 ?>
 

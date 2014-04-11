@@ -11,6 +11,8 @@
     <?php
     
     $base = Flight::request()->base;
+    if($base == '/') $base = '';
+
     
     echo '<title>' . $title . '</title>';
     echo '<link rel="stylesheet" href="' . $base . '/css/bootstrap.min.css">';

@@ -14,6 +14,7 @@
         <?php
 
         $base = Flight::request()->base;
+        if($base == '/') $base = '';
 
         if($activePage == 'home')
           echo '<li class="active"><a href="' . $base . '">Accueil</a></li>';

@@ -14,9 +14,11 @@
 
 <?php
 	// $user = Flight::get('user');
+        // $base = Flight::request()->base;
+        // if($base == '/') $base = '';
 
 	// if(! $user['authenticated']) {
-	// 	echo '<a id="subscribe" href="' . Flight::request()->base . 'programme/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
+	// 	echo '<a id="subscribe" href="' . $base . 'programme/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
 	// }
 ?>
 <h2>Liste des oeuvres</h2>
