@@ -43,6 +43,7 @@
 
         $user = Flight::get('user');
         $base = Flight::request()->base;
+        if($base == '/') $base = '';
 
         if($user['authenticated']) {
           echo '<div id="welcome" class="form-group">';
