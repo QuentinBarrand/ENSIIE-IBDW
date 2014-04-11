@@ -1,5 +1,5 @@
 <?php
-require '../flight/Flight.php';
+require 'lib/flight/Flight.php';
 
 include_once 'config.php';
 
