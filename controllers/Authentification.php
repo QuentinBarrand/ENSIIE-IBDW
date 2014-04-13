@@ -17,11 +17,9 @@ class Authentification {
         }
 
         // TODO : remplacer par une requête préparée
-        $sql = "SELECT motdepasse, titre
-                FROM Utilisateur U
-                LEFT JOIN endosse E ON U.login = E.login
-                LEFT JOIN Responsabilite R ON E.id = R.id
-                WHERE U.login LIKE '" . $login  . "';";
+        $sql = "SELECT motdepasse
+                FROM Utilisateur
+                WHERE login LIKE '" . $login  . "';";
 
         if($db) {
             try {
@@ -31,12 +29,6 @@ class Authentification {
 
                 $data['success'] = true;
                 $result = $query->fetch();
-                if($result[1])
-                    // Enregistrement du role de l'utilisateur
-                    $role = $result[1];
-                else
-                    // L'utilisateur n'a pas de role
-                    $role = "Aucun";
                 $encryptedPassword = $result[0];
             }
             catch(PDOException $e) {
@@ -58,8 +50,7 @@ class Authentification {
                     $expires = time() + 60 * 60;
 
                 // Stockage des informations dans des cookies
-                setcookie('MyChorus[login]', $login, $expires);
-                setcookie('MyChorus[role]', $role, $expires);
+                setcookie('login', $login, $expires);
                 Flight::redirect(Flight::request()->base);
             }  
             else
@@ -102,8 +93,7 @@ class Authentification {
         // TODO : retourner les détails utilisateur (login + role) depuis le cookie.
         $user = array();
 
-        $login = Flight::request()->cookies->MyChorus['login'];
-        $role = Flight::request()->cookies->MyChorus['role'];
+        $login = Flight::request()->cookies->login;
 
         if($login == NULL) {
             $user['authenticated'] = false;
@@ -158,8 +148,7 @@ class Authentification {
     // GET /logout
     // Déconnecte l'utilisateur courant.
     function logout() {
-        setcookie('MyChorus[login]', NULL);
-        setcookie('MyChorus[role]', NULL);
+        setcookie('login', NULL);
         Flight::redirect(Flight::request()->base);
     }
 }
