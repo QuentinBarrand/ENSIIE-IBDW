@@ -13,6 +13,7 @@
       <ul class="nav navbar-nav">
         <?php
 
+        $user = Flight::get('user');
         $base = Flight::request()->base;
         if($base == '/') $base = '';
 
@@ -35,6 +36,18 @@
           echo '<li class="active"><a href="' . $base . '/programme">Programme de l\'année</a></li>';
         else
           echo '<li><a href="' . $base . '/programme">Programme de l\'année</a></li>';
+
+        // Si on est webmaster ou tresorier, on ajoute la page de validation
+        if($user['authenticated'] and in_array($user['responsabilite'], array(2,3))) {
+
+          // On ajoute un indicateur de validation en attente
+          $badge = '<span class="badge">' . $user['validations'] . '</span>';
+
+          if($activePage == 'inscriptions')
+            echo '<li class="active"><a href="' . $base . '/inscriptions">Inscriptions en attente ' . $badge . '</a></li>';
+          else
+            echo '<li><a href="' . $base . '/inscriptions">Inscriptions en attente ' . $badge . '</a></li>';
+        }
 
         ?>
       </ul>
