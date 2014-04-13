@@ -7,11 +7,6 @@ class Authentification {
         $password = Flight::request()->data->password;
         $remember = Flight::request()->data->remember;
 
-        if($remember == 'true')
-            $remember = true;
-        else
-            $remember = false;
-
         try {
             $db = Flight::db();
         }
@@ -22,9 +17,11 @@ class Authentification {
         }
 
         // TODO : remplacer par une requête préparée
-        $sql = "SELECT motdepasse 
-            FROM Utilisateur
-            WHERE login LIKE '" . $login  . "';";
+        $sql = "SELECT motdepasse, titre
+                FROM Utilisateur U
+                LEFT JOIN endosse E ON U.login = E.login
+                LEFT JOIN Responsabilite R ON E.id = R.id
+                WHERE U.login LIKE '" . $login  . "';";
 
         if($db) {
             try {
@@ -34,6 +31,12 @@ class Authentification {
 
                 $data['success'] = true;
                 $result = $query->fetch();
+                if($result[1])
+                    // Enregistrement du role de l'utilisateur
+                    $role = $result[1];
+                else
+                    // L'utilisateur n'a pas de role
+                    $role = "Aucun";
                 $encryptedPassword = $result[0];
             }
             catch(PDOException $e) {
@@ -48,13 +51,15 @@ class Authentification {
             if(md5($password) == $encryptedPassword) {
                 
                 if($remember)
-                    // La session expire dans une heure
-                    $expires = time() + 60 * 60;
-                else
                     // La session expire dans un mois
                     $expires = time() + 60 * 60 * 24 * 30;
+                else
+                    // La session expire dans une heure
+                    $expires = time() + 60 * 60;
 
-                setcookie('login', $login, $expires);
+                // Stockage des informations dans des cookies
+                setcookie('MyChorus[login]', $login, $expires);
+                setcookie('MyChorus[role]', $role, $expires);
                 Flight::redirect(Flight::request()->base);
             }  
             else
@@ -97,7 +102,8 @@ class Authentification {
         // TODO : retourner les détails utilisateur (login + role) depuis le cookie.
         $user = array();
 
-        $login = Flight::request()->cookies->login;
+        $login = Flight::request()->cookies->MyChorus['login'];
+        $role = Flight::request()->cookies->MyChorus['role'];
 
         if($login == NULL) {
             $user['authenticated'] = false;
