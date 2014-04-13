@@ -158,7 +158,8 @@ class Authentification {
     // GET /logout
     // Déconnecte l'utilisateur courant.
     function logout() {
-        setcookie('login', NULL);
+        setcookie('MyChorus[login]', NULL);
+        setcookie('MyChorus[role]', NULL);
         Flight::redirect(Flight::request()->base);
     }
 }
