@@ -6,9 +6,9 @@ RewriteRule ^(.*)$ index.php [QSA,L]
 # Si installé à l'ENSIIE, remplacer le contenu par :
 #
 # RewriteEngine On
-# RewriteBase /~prenom.nom/flight/webroot
+# RewriteBase /~prenom.nom/ENSIIE-IBDW
 # RewriteCond %{REQUEST_FILENAME} !-f
 # RewriteCond %{REQUEST_FILENAME} !-d
-# RewriteRule ^(.*)$ /~prenom.nom/flight/webroot/index.php [QSA,L]
+# RewriteRule ^(.*)$ /~prenom.nom/ENSIIE-IBDW/index.php [QSA,L]
 
 
