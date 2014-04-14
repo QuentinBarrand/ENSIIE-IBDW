@@ -137,22 +137,13 @@ class Authentification {
                     $user['inscriptions'] = 0;
                     if(in_array($user['responsabilite'], array(2, 3))) {
 
-                        // On cherche les validations du webmaster par defaut
+                        // On détecte le type de validation (Webmaster/Tresorier)
                         $type = 0;
-                        // Si tresorier, on cherche les validations du tresorier
                         if($user['responsabilite'] == 2)
                             $type = 1;
 
                         // On effectue la requete
-                        $sql = "SELECT count(*) FROM Inscription
-                                WHERE validation = " . $type . ";";
-                        $query = $db->prepare($sql);
-                        $query->execute();
-
-                        // On stocke le resultat si non-null
-                        $result = $query->fetch();
-                        if($result[0])
-                            $user['validations'] = $result[0];
+                        $user['validations'] = Inscriptions::getCount($type);
                     }
 
                 }

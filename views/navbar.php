@@ -40,8 +40,14 @@
         // Si on est webmaster ou tresorier, on ajoute la page de validation
         if($user['authenticated'] and in_array($user['responsabilite'], array(2,3))) {
 
-          // On ajoute un indicateur de validation en attente
-          $badge = '<span class="badge">' . $user['validations'] . '</span>';
+          // On ajoute un indicateur de validations en attente
+          $badge = '<span class="badge"></span>';
+          if($user['validations'] > 0) {
+              $alert = 'alert-success';
+              if($user['validations'] > 3)
+                  $alert = 'alert-danger';
+              $badge = '<span class="badge ' . $alert . '">' . $user['validations'] . '</span>';
+          }
 
           if($activePage == 'inscriptions')
             echo '<li class="active"><a href="' . $base . '/inscriptions">Inscriptions en attente ' . $badge . '</a></li>';

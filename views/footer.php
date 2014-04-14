@@ -1,4 +1,4 @@
-		<hr></hr>
+		<!-- remove hr to correct a bug in tables display -->
 		<footer>
 			<p>
 				Une application réalisé par les étudiants FIPA 6 et FIP 19 de l'ENSIIE

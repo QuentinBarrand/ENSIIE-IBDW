@@ -7,13 +7,15 @@ include_once 'controllers/Authentification.php';
 include_once 'controllers/Choristes.php';
 include_once 'controllers/Evenements.php';
 include_once 'controllers/Programme.php';
+include_once 'controllers/Inscriptions.php';
+
+// On stocke un objet db qui contient la connexion à la base de données
+Flight::register('db', 'PDO', array('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'),
+                Flight::get('postgres.user'),
+                Flight::get('postgres.password')));
 
 // On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
-
-Flight::register('db', 'PDO', array('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
-                Flight::get('postgres.user'), 
-                Flight::get('postgres.password')));
 
 // Accueil
 Flight::route('/', function(){
@@ -56,6 +58,21 @@ Flight::route('GET /choristes/new', function() {
 // Traitement de la requête issue du formulaire
 Flight::route('POST /choristes/new', function() {
     echo "Traitement de la requête issue du formulaire";
+});
+
+/*
+ * Inscriptions
+ */
+
+// Affichage des inscriptions à valider
+Flight::route('/inscriptions', function() {
+        Inscriptions::get();
+});
+
+
+// Validation d'une inscription
+Flight::route('/inscriptions/validation/@id', function($id) {
+        Inscriptions::validate($id);
 });
 
 /*
@@ -134,6 +151,29 @@ Flight::map('notFound', function(){
 	$data['error'] = "La page demandée est introuvable.";
 	Flight::render('ErrorLayout.php', array(
 		'data' => $data));
+});
+
+Flight::map('forbidden', function(){
+    Flight::render('header.php',
+                array(
+                        'title' => 'Accès interdit'
+                        ),
+                'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+                array(
+                        'activePage' => ''),
+                'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+                array(),
+                'footer');
+
+        $data['error'] = "Vous n'avez pas accès à cette page.";
+        Flight::render('ErrorLayout.php', array(
+                'data' => $data));
 });
 
 Flight::start();

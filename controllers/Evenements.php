@@ -117,7 +117,7 @@ class Evenements {
         }
 
         $sql = 'SELECT count(idEvenement) as TotalRepetitions
-                    FROM evenement
+                    FROM Evenement
                     WHERE idType = ' . $type . ';';
 
         $count = NULL;
