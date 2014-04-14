@@ -17,10 +17,10 @@ class Inscriptions {
         }
 
     // On cherche les validations du webmaster par defaut
-        $type = 0;
+    //    $type = 0;
     // Si tresorier, on cherche les validations du tresorier
-        if($user['responsabilite'] == 2)
-            $type = 1;
+    //    if($user['responsabilite'] == 2)
+    //        $type = 1;
 
     // Connexion à la base de données
         try {
@@ -32,11 +32,11 @@ class Inscriptions {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        $sql = 'SELECT nom, prenom, typeVoix, idInscription
+        $sql = 'SELECT nom, prenom, typeVoix, typeInscription, idInscription, validation
             FROM Choriste
             NATURAL JOIN Voix 
             NATURAL JOIN Inscription
-            WHERE validation = ' . $type . ';';
+            WHERE validation < 2;';
 
         if($db) {
             try {
