@@ -22,12 +22,6 @@ class Evenements {
 
         $voix = Choristes::getVoix();
 
-        // echo '<pre>';
-        // var_dump($voix);
-        // echo '</pre>';
-
-        // die;
-
         $sql2 = 'SELECT Evenement.idEvenement, heureDate, lieu, nom';
 
 
@@ -125,7 +119,7 @@ class Evenements {
             array(), 
             'footer');
 
-        Flight::render('EvenementsNewLayout.php');
+        Flight::render('EvenementNewLayout.php');
     }
 
     /* Retourne le nombre total d'évènements du type passé en paramètre

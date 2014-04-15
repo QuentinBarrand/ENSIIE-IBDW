@@ -53,7 +53,7 @@ Flight::route('/choristes', function() {
 
 // Affichage du formulaire d'ajout d'un choriste
 Flight::route('GET /choristes/nouveau', function() {
-    echo "Formulaire d'ajout d'un choriste";
+    Choristes::displayChoristeForm();
 });
 
 // Traitement de la requête issue du formulaire

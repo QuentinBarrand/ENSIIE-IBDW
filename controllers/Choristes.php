@@ -67,6 +67,29 @@ class Choristes {
             Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
+    function displayChoristeForm() {
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Ajouter un évènement'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');
+
+        Flight::render('ChoristeNewLayout.php');
+    }
+
     function getVoix() {
         $voix = NULL;
 
