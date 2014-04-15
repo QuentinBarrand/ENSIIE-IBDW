@@ -6,7 +6,7 @@ class Inscriptions {
     function get() {
         $user = Flight::get('user');
 
-    // Restriction aux responsabilites webmaster et tresorier
+        // Restriction aux responsabilites webmaster et tresorier
         if(! $user['authenticated']) {
             Flight::forbidden();
             return;
@@ -16,13 +16,13 @@ class Inscriptions {
             return;
         }
 
-    // On cherche les validations du webmaster par defaut
-    //    $type = 0;
-    // Si tresorier, on cherche les validations du tresorier
-    //    if($user['responsabilite'] == 2)
-    //        $type = 1;
+        // On cherche les validations du webmaster par defaut
+        //    $type = 0;
+        // Si tresorier, on cherche les validations du tresorier
+        //    if($user['responsabilite'] == 2)
+        //        $type = 1;
 
-    // Connexion à la base de données
+        // Connexion à la base de données
         try {
             $db = Flight::db();
         }
@@ -86,7 +86,7 @@ class Inscriptions {
     function validate($inscriptionId) {
         $user = Flight::get('user');
 
-    // Restriction aux responsabilites webmaster et tresorier
+        // Restriction aux responsabilites webmaster et tresorier
         if(! $user['authenticated']) {
             Flight::forbidden();
             return;
@@ -96,7 +96,7 @@ class Inscriptions {
             return;
         }
 
-    // Connexion à la base de données
+        // Connexion à la base de données
         try {
             $db = Flight::db();
         }
@@ -104,7 +104,7 @@ class Inscriptions {
             $db = null;
         }
 
-    // Detection du type de validation (Webmaster/Tresorier)
+        // Detection du type de validation (Webmaster/Tresorier)
         $type = 1;
         if($user['responsabilite'] == 2)
             $type = 2;
@@ -113,7 +113,7 @@ class Inscriptions {
                 SET validation = ' . $type . '
                 WHERE idInscription = ' . $inscriptionId . ';';
 
-    // Execution de la requête SQL
+        // Execution de la requête SQL
         if($db) {
             try {
                 $query = $db->prepare($sql);
@@ -126,9 +126,8 @@ class Inscriptions {
             }
         }
 
-    // Finalement on reditige vers la liste des validations
+        // Finalement on reditige vers la liste des validations
         Flight::redirect('/inscriptions');
-
     }
 
     /* Retourne le nombre total d'inscriptions en fonction
@@ -165,5 +164,4 @@ class Inscriptions {
 
         return $count;
     }
-
 }
