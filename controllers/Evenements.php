@@ -104,6 +104,29 @@ class Evenements {
             Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
+    // GET /evenements/nouveau
+    function displayEventForm() {
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Ajouter un évènement'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');
+
+        Flight::render('EvenementsNewLayout.php');
+    }
 
     /* Retourne le nombre total d'évènements du type passé en paramètre
      * (par défaut 2 = répétitions) dans la base de données.

@@ -11,8 +11,8 @@ include_once 'controllers/Inscriptions.php';
 
 // On stocke un objet db qui contient la connexion à la base de données
 Flight::register('db', 'PDO', array('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'),
-                Flight::get('postgres.user'),
-                Flight::get('postgres.password')));
+    Flight::get('postgres.user'),
+    Flight::get('postgres.password')));
 
 // On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
@@ -52,14 +52,15 @@ Flight::route('/choristes', function() {
 });
 
 // Affichage du formulaire d'ajout d'un choriste
-Flight::route('GET /choristes/new', function() {
+Flight::route('GET /choristes/nouveau', function() {
     echo "Formulaire d'ajout d'un choriste";
 });
 
 // Traitement de la requête issue du formulaire
-Flight::route('POST /choristes/new', function() {
-    echo "Traitement de la requête issue du formulaire";
+Flight::route('POST /choristes/nouveau', function() {
+    echo "Formulaire d'ajout d'un choriste";
 });
+
 
 /*
  * Inscriptions
@@ -76,6 +77,7 @@ Flight::route('/inscriptions/validation/@id', function($id) {
     Inscriptions::validate($id);
 });
 
+
 /*
  * Evènements
  */
@@ -86,12 +88,12 @@ Flight::route('/evenements', function() {
 });
 
 // Affichage du formulaire d'ajout d'un évènement
-Flight::route('GET /evenements/new', function() {
-    echo "Formulaire d'ajout d'un évènement";
+Flight::route('GET /evenements/nouveau', function() {
+    Evenements::displayEventForm();
 });
 
 // Traitement de la requête issue du formulaire
-Flight::route('POST /evenements/new', function() {
+Flight::route('POST /evenements/nouveau', function() {
     echo "Traitement de la requête issue du formulaire";
 });
 
@@ -105,7 +107,7 @@ Flight::route('/programme', function() {
 });
 
 // Affichage de la liste des oeuvres
-Flight::route('/programme/new', function() {
+Flight::route('/programme/nouveau', function() {
     echo "Formulaire d'ajout d'une oeuvre";
 });
 

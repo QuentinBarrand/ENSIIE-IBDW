@@ -9,7 +9,7 @@
         if($base == '/') $base = '';
 
 	if($user['authenticated'] && $user['responsabilite'] == 1)
-		echo '<a id="subscribe" href="' . $base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> Nouvel évènement</a>';
+		echo '<a id="subscribe" href="' . $base . '/evenements/nouveau" class="btn btn-success" role="button"><b>+</b> Nouvel évènement</a>';
 
 	date_default_timezone_set('UTC');
 

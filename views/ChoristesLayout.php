@@ -9,7 +9,7 @@
         if($base == '/') $base = '';
 
 	if(! $user['authenticated']) {
-		echo '<a id="subscribe" href="' . $base . '/choristes/new" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
+		echo '<a id="subscribe" href="' . $base . '/choristes/nouveau" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';
 	}
 ?>
 

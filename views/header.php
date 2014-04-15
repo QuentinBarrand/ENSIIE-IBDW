@@ -15,8 +15,11 @@
 
     
     echo '<title>' . $title . '</title>';
+
     echo '<link rel="stylesheet" href="' . $base . '/css/bootstrap.min.css">';
-    echo '<link href="' . $base . '/css/style.css" rel="stylesheet">';
+    echo '<link rel="stylesheet" href="' . $base . '/css/style.css">';
+
+    echo '<link rel="stylesheet" href="' . $base . '/css/datepicker3.css">';
 
     ?>
 
