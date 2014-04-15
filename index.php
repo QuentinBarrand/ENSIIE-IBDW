@@ -18,26 +18,27 @@ Flight::register('db', 'PDO', array('pgsql:host='. Flight::get('postgres.host') 
 Flight::set('user', Authentification::getUserDetails());
 
 // Accueil
-Flight::route('/', function(){
-	Flight::render('header.php',
-		array(
-			'title' => 'Accueil'
-			), 
-		'header');
+Flight::route('/', function() {
+    // Header
+    Flight::render('header.php',
+        array(
+            'title' => 'Accueil'
+            ), 
+        'header');
 
-	// Navbar
-	Flight::render('navbar.php',
-		array(
-			'activePage' => 'home'), 
-		'navbar');
+    // Navbar
+    Flight::render('navbar.php',
+        array(
+            'activePage' => 'home'), 
+        'navbar');
 
-	// Footer
-	Flight::render('footer.php',
-		array(), 
-		'footer');		
+    // Footer
+    Flight::render('footer.php',
+        array(), 
+        'footer');      
 
-	// Finalement on rend le layout
-	Flight::render('HomeLayout.php', array());
+    // Finalement on rend le layout
+    Flight::render('HomeLayout.php', array());
 });
 
 
@@ -47,7 +48,7 @@ Flight::route('/', function(){
 
 // Affichage de la liste des choristes
 Flight::route('/choristes', function() {
-	Choristes::get();
+    Choristes::get();
 });
 
 // Affichage du formulaire d'ajout d'un choriste
@@ -66,13 +67,13 @@ Flight::route('POST /choristes/new', function() {
 
 // Affichage des inscriptions à valider
 Flight::route('/inscriptions', function() {
-        Inscriptions::get();
+    Inscriptions::get();
 });
 
 
 // Validation d'une inscription
 Flight::route('/inscriptions/validation/@id', function($id) {
-        Inscriptions::validate($id);
+    Inscriptions::validate($id);
 });
 
 /*
@@ -123,57 +124,58 @@ Flight::route('POST /login', function() {
 });
 
 Flight::route('/logout', function() {
-	Authentification::logout();
+    Authentification::logout();
 });
 
 /*
  * Erreurs
  */
 
-Flight::map('notFound', function(){
+Flight::map('notFound', function() {
     Flight::render('header.php',
-		array(
-			'title' => 'Page introuvable'
-			), 
-		'header');
+        array(
+            'title' => 'Page introuvable'
+            ), 
+        'header');
 
-	// Navbar
-	Flight::render('navbar.php',
-		array(
-			'activePage' => ''), 
-		'navbar');
+    // Navbar
+    Flight::render('navbar.php',
+        array(
+            'activePage' => ''), 
+        'navbar');
 
-	// Footer
-	Flight::render('footer.php',
-		array(), 
-		'footer');	
+    // Footer
+    Flight::render('footer.php',
+        array(), 
+        'footer');  
 
-	$data['error'] = "La page demandée est introuvable.";
-	Flight::render('ErrorLayout.php', array(
-		'data' => $data));
+    $data['error'] = "La page demandée est introuvable.";
+    Flight::render('ErrorLayout.php', array(
+        'data' => $data));
 });
 
-Flight::map('forbidden', function(){
+Flight::map('forbidden', function() {
     Flight::render('header.php',
-                array(
-                        'title' => 'Accès interdit'
-                        ),
-                'header');
+        array(
+            'title' => 'Accès interdit'
+            ),
+        'header');
 
-        // Navbar
-        Flight::render('navbar.php',
-                array(
-                        'activePage' => ''),
-                'navbar');
+    // Navbar
+    Flight::render('navbar.php',
+        array(
+            'activePage' => ''
+            ),
+        'navbar');
 
-        // Footer
-        Flight::render('footer.php',
-                array(),
-                'footer');
+    // Footer
+    Flight::render('footer.php',
+        array(),
+        'footer');
 
-        $data['error'] = "Vous n'avez pas accès à cette page.";
-        Flight::render('ErrorLayout.php', array(
-                'data' => $data));
+    $data['error'] = "Vous n'avez pas accès à cette page.";
+    Flight::render('ErrorLayout.php', array(
+        'data' => $data));
 });
 
 Flight::start();
