@@ -17,9 +17,12 @@ class Authentification {
         }
 
         // TODO : remplacer par une requête préparée
-        $sql = "SELECT motdepasse
-                FROM Utilisateur
-                WHERE login LIKE '" . $login  . "';";
+        $sql = "SELECT u.motdepasse, i.validation
+                FROM Utilisateur u
+                NATURAL JOIN Choriste c
+                NATURAL JOIN Inscription i
+                WHERE u.login LIKE '" . $login  . "'
+                AND i.validation > 0;";
 
         if($db) {
             try {
@@ -111,12 +114,13 @@ class Authentification {
             }
 
             // TODO : remplacer par une requête préparée
-            $sql = "SELECT u.login, c.nom, c.prenom, c.idChoriste, r.id
-                FROM Utilisateur u
-                LEFT JOIN Choriste c ON u.login = c.login
-                LEFT JOIN endosse e ON u.login = e.login
-                LEFT JOIN Responsabilite r ON e.id = r.id
-                WHERE u.login LIKE '" . $login . "';";
+            $sql = "SELECT u.login, i.validation, c.nom, c.prenom, c.idChoriste, r.id
+                    FROM Utilisateur u
+                    LEFT JOIN Choriste c ON u.login = c.login
+                    LEFT JOIN Inscription i ON c.idInscription = i.idInscription
+                    LEFT JOIN endosse e ON u.login = e.login
+                    LEFT JOIN Responsabilite r ON e.id = r.id
+                    WHERE u.login LIKE '" . $login . "';";
 
             if($db) {
                 try {
@@ -128,6 +132,7 @@ class Authentification {
                     $data['content'] = $query->fetch();
 
                     $user['authenticated'] = true;
+                    $user['validation'] = $data['content']['validation'];
                     $user['nom'] = $data['content']['nom'];
                     $user['prenom'] = $data['content']['prenom'];
                     $user['idChoriste'] = $data['content']['idchoriste'];

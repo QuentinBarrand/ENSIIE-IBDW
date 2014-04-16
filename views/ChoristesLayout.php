@@ -24,7 +24,7 @@ if(count($data['content']) > 0) {
 	echo '<th>Voix</th>';
 
 	// Détails supplémentaires si l'utilisateur est authentifié
-	if($user['authenticated'])
+	if($user['authenticated'] and $user['validation'] > 1)
 	{
 		echo '<th>Téléphone</th>';		
 		echo '<th>Ville</th>';
@@ -50,7 +50,7 @@ if(count($data['content']) > 0) {
 		echo '<td>' . $row['typevoix'] . '</td>';
 
 		// Détails supplémentaires si l'utilisateur est authentifié
-		if($user['authenticated'])
+		if($user['authenticated'] and $user['validation'] > 1)
 		{
 			echo '<td>' . $row['telephone'] . '</td>';
 			echo '<td>' . $row['ville'] . '</td>';

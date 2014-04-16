@@ -22,7 +22,7 @@
 		echo '<th>Date et heure</th>';
 		echo '<th>Lieu</th>';
 		
-		if($user['authenticated']) {
+		if($user['authenticated'] and $user['validation'] > 1) {
 			echo '<th>Statut</th>';	
 		}
 
@@ -46,7 +46,7 @@
 				echo '<td>' . date('d / m / Y -  H:i:s', $epoch_evenement) . '</td>';
 				echo '<td>' . $row['lieu'] . '</td>';
 
-				if($user['authenticated']) {
+				if($user['authenticated'] and $user['validation'] > 1) {
 					echo '<td>';
 					echo '<span class="label label-danger">Pas assez de choristes</span>';
 					echo '</td>';
