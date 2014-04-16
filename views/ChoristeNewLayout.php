@@ -1,63 +1,113 @@
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="../../assets/ico/favicon.ico">
+<?php echo($header); ?>
+<?php echo($navbar); ?>
 
-    <title>Inscription</title>
-  </head>
-  <body>
-    <form method="post" action="traitement.php"> 
-	<p>
-		<label for="login">Login</label>
-    		<input type="text" name="login" id="login" />
-	</p>
-    
-	<p>
-		<label for="Mot de passe">Mot de passe</label>
- 		<input type="password" name="pass" id="pass" />		
-	</p>
-  
-	<p>
-		<label for="Mot de passe">Confirmation du mot de passe</label>
-		<input type="password" name="pass" id="pass" />
-	</p>
-  
-	<p>
-		<label for="nom">Nom</label>
-		<input type="text" name="nom" id="nom" />
-	</p>
-  	
-	<p>
-        	<label for="prenom">Prénom</label>
-        	<input type="text" name="prenom" id="prenom" />
-	</p>
-  	
-	<p>
-        	<label for="ville">Ville</label>
-        	<input type="text" name="ville" id="ville" />
-	</p>  
-  	
-	<p>
-        	<label for="telephone">Numéro de téléphone</label>
-		<input type="text" name="telephone" id="telephone" />
-	</p>  
-  	
-	<p>
-		<label for="voix">Type de voix</label><br />
-			<select name="voix" id="voix">
-			<option value="1">Soprano</option>
-       			<option value="2">Alto</option>
-       			<option value="3">Ténor</option>
-       			<option value="4">Basse</option>
-        		</select>
-	</p> 
+<h1>
+    S'inscrire en tant que Choriste
+    <br>
+    <small>Bienvenue !</small>
+</h1>
 
-  <input type="submit" value="Envoyer" />
-  </form>
-  </body>
-</html>
+
+<div class="row">
+    <div class="col-lg-5">
+        <form role="form" action="<?php echo Flight::request()->base; ?>/choriste/nouveau" method="post">
+          
+          <div class="form-group">
+            <label>Identifiant</label>
+            <input type="text" class="form-control" placeholder="Caractères alphanumériques sans espaces">
+          </div>
+
+          <div class="form-group">
+            <label>Mot de passe</label>
+            <input type="password" class="form-control" id="password0" placeholder="Ce que vous voulez">
+            <br>
+            <input type="password" class="form-control" id="password1" placeholder="Confirmez votre mot de passe">
+          </div>
+
+          <div class="form-group">
+            <label>Prénom</label>
+            <input type="text" class="form-control" placeholder="John">
+          </div>
+
+          <div class="form-group">
+            <label>Nom</label>
+            <input type="text" class="form-control" placeholder="Doe">
+          </div>
+
+          <div class="form-group">
+            <label>Ville</label>
+            <input type="text" class="form-control" placeholder="Evry">
+          </div>
+
+          <div class="form-group">
+            <label>Téléphone</label>
+            <input type="tel" class="form-control" placeholder="+33 1 23 45 67 89">
+          </div>
+
+          <div class="form-group">
+            <label>Voix</label>
+            <select class="form-control">
+              <option>1</option>
+              <option>2</option>
+              <option>3</option>
+              <option>4</option>
+              <option>5</option>
+            </select>
+          </div>
+
+
+          <button type="submit" class="btn btn-default">M'inscrire</button>
+        </form>
+    </div>
+
+    <div class="col-lg-6 col-lg-offset-1 well">
+        <h2>Merci de vous inscrire à notre chorale !</h2>
+        <h4>En vous inscrivant, vous pouvez suivre votre progression et participer aux répétitions et concerts.</h4>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Donec a diam lectus. 
+            Sed sit amet ipsum mauris. 
+            Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. 
+            Donec et mollis dolor. 
+            Praesent et diam eget libero egestas mattis sit amet vitae augue. 
+            Nam tincidunt congue enim, ut porta lorem lacinia consectetur. 
+            Donec ut libero sed arcu vehicula ultricies a non tortor. 
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Aenean ut gravida lorem. 
+            Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. 
+            Pellentesque auctor nisi id magna consequat sagittis. 
+            Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. 
+            Ut convallis libero in urna ultrices accumsan. 
+            Donec sed odio eros. 
+            Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. 
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+            In rutrum accumsan ultricies. 
+            Mauris vitae nisi at sem facilisis semper ac in est.
+        </p>
+
+        <p>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Donec a diam lectus. 
+            Sed sit amet ipsum mauris. 
+            Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit. 
+            Donec et mollis dolor. 
+            Praesent et diam eget libero egestas mattis sit amet vitae augue. 
+            Nam tincidunt congue enim, ut porta lorem lacinia consectetur. 
+            Donec ut libero sed arcu vehicula ultricies a non tortor. 
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit. 
+            Aenean ut gravida lorem. 
+            Ut turpis felis, pulvinar a semper sed, adipiscing id dolor. 
+            Pellentesque auctor nisi id magna consequat sagittis. 
+            Curabitur dapibus enim sit amet elit pharetra tincidunt feugiat nisl imperdiet. 
+            Ut convallis libero in urna ultrices accumsan. 
+            Donec sed odio eros. 
+            Donec viverra mi quis quam pulvinar at malesuada arcu rhoncus. 
+            Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. 
+            In rutrum accumsan ultricies. 
+            Mauris vitae nisi at sem facilisis semper ac in est.
+        </p>
+    </div>
+</div>
+
+<?php echo $footer; ?>

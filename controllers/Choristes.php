@@ -67,6 +67,7 @@ class Choristes {
             Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
+    // GET /choristes/nouveau
     function displayChoristeForm() {
         // Header
         Flight::render('header.php',

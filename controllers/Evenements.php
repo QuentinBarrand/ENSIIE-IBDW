@@ -119,7 +119,15 @@ class Evenements {
             array(), 
             'footer');
 
-        Flight::render('EvenementNewLayout.php');
+        $user = Flight::get('user');
+
+        if($user['authenticated'] && $user['responsabilite'] == 1)
+            Flight::render('EvenementNewLayout.php');
+        else {
+            $data = array(
+                'error' => 'Vous n\'avez pas les droits nécessaires pour accéder à cette page.');
+            Flight::render('ErrorLayout.php', $data);
+        }
     }
 
     /* Retourne le nombre total d'évènements du type passé en paramètre
