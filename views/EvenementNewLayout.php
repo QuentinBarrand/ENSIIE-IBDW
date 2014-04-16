@@ -8,18 +8,18 @@
         <form role="form" action="<?php echo Flight::request()->base; ?>/evenements/nouveau" method="post">
           <div class="form-group">
             <label for="eventName">Nom de l'évènement</label>
-            <input type="text" class="form-control" id="eventName" placeholder="Concert du Bar(c)">
+            <input type="text" class="form-control" id="eventName" placeholder="Intitulé de l'évènement">
           </div>
           <div class="form-group">
             <label for="eventPlace">Lieu de l'évènement</label>
-            <input type="text" class="form-control" id="eventPlace" placeholder="1 Place de la Résistance 90000 Evry">
+            <input type="text" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville">
           </div>
             <div class="form-group">
             <label for="eventDate">Date de l'évènement</label>
 
             <div id="datepicker">
                 <div class="input-group date">
-                    <input id="eventDate" type="text" class="form-control">
+                    <input id="eventDate" type="text" class="form-control" placeholder="DD/MM/AAAA">
                     <span class="input-group-addon">Cliquez pour choisir une date</span>
                 </div>
             </div>
@@ -28,6 +28,17 @@
 
           <button type="submit" class="btn btn-default">Ajouter l'évènement</button>
         </form>
+    </div>
+    <div class="col-lg-6 col-lg-offset-1 well">
+        <h2>Avant d'ajouter un évènement, vérifiez bien que :</h2>
+        <ul>
+            <li>Lorem ipsum dolor sit amet, consectetur adipiscing elit. </li>
+            <li>Donec a diam lectus.</li>
+            <li>Sed sit amet ipsum mauris.</li>
+            <li>Maecenas congue ligula ac quam viverra nec consectetur ante hendrerit.</li>
+            <li>Donec et mollis dolor.</li>
+            <li>Praesent et diam eget libero egestas mattis sit amet vitae augue.</li>
+        </ul>
     </div>
 </div>
     
