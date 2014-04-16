@@ -1,3 +1,11 @@
+<?php
+
+$user = Flight::get('user');
+$base = Flight::request()->base;
+if($base == '/') $base = '';
+
+?>
+
 <div class="navbar navbar-inverse navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
@@ -7,20 +15,11 @@
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
       </button>
-      <a class="navbar-brand" href="/">MyChorus</a>
+      <a class="navbar-brand" href="<?php echo $base; ?>">MyChorus</a>
     </div>
     <div class="collapse navbar-collapse">
       <ul class="nav navbar-nav">
         <?php
-
-        $user = Flight::get('user');
-        $base = Flight::request()->base;
-        if($base == '/') $base = '';
-
-        if($activePage == 'home')
-          echo '<li class="active"><a href="' . $base . '/">Accueil</a></li>';
-        else
-          echo '<li><a href="' . $base . '/">Accueil</a></li>';
 
         if($activePage == 'choristes')
           echo '<li class="active"><a href="' . $base . '/choristes">Choristes</a></li>';
