@@ -8,18 +8,18 @@
         <form role="form" action="<?php echo Flight::request()->base; ?>/evenements/nouveau" method="post">
           <div class="form-group">
             <label for="eventName">Nom de l'évènement</label>
-            <input type="text" class="form-control" id="eventName" placeholder="Intitulé de l'évènement">
+            <input type="text" class="form-control" id="eventName" placeholder="Intitulé de l'évènement" required>
           </div>
           <div class="form-group">
             <label for="eventPlace">Lieu de l'évènement</label>
-            <input type="text" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville">
+            <input type="text" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville" required>
           </div>
             <div class="form-group">
             <label for="eventDate">Date de l'évènement</label>
 
             <div id="datepicker">
                 <div class="input-group date">
-                    <input id="eventDate" type="text" class="form-control" placeholder="DD/MM/AAAA">
+                    <input id="eventDate" type="text" class="form-control" placeholder="DD/MM/AAAA" required>
                     <span class="input-group-addon">Cliquez pour choisir une date</span>
                 </div>
             </div>

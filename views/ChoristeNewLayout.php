@@ -10,43 +10,43 @@
 
 <div class="row">
     <div class="col-lg-5">
-        <form role="form" action="<?php echo Flight::request()->base; ?>/choriste/nouveau" method="post">
+        <form role="form" action="<?php echo Flight::request()->base; ?>/choristes/nouveau" method="post">
           
           <div class="form-group">
             <label>Identifiant</label>
-            <input type="text" class="form-control" placeholder="Caractères alphanumériques sans espaces">
+            <input type="text" name="login" class="form-control" placeholder="Caractères alphanumériques sans espaces" required>
           </div>
 
           <div class="form-group">
             <label>Mot de passe</label>
-            <input type="password" class="form-control" id="password0" placeholder="Ce que vous voulez">
+            <input type="password" name="password" class="form-control" id="password0" placeholder="Ce que vous voulez" required>
             <br>
-            <input type="password" class="form-control" id="password1" placeholder="Confirmez votre mot de passe">
+            <input type="password" class="form-control" id="password1" placeholder="Confirmez votre mot de passe" required>
           </div>
 
           <div class="form-group">
             <label>Prénom</label>
-            <input type="text" class="form-control" placeholder="John">
+            <input type="text" name="prenom" class="form-control" placeholder="John" required>
           </div>
 
           <div class="form-group">
             <label>Nom</label>
-            <input type="text" class="form-control" placeholder="Doe">
+            <input type="text" name="nom" class="form-control" placeholder="Doe" required>
           </div>
 
           <div class="form-group">
             <label>Ville</label>
-            <input type="text" class="form-control" placeholder="Evry">
+            <input type="text" name="ville" class="form-control" placeholder="Evry" required>
           </div>
 
           <div class="form-group">
             <label>Téléphone</label>
-            <input type="tel" class="form-control" placeholder="+33 1 23 45 67 89">
+            <input type="tel" name="telephone" class="form-control" placeholder="+33 1 23 45 67 89" required>
           </div>
 
           <div class="form-group">
             <label>Voix</label>
-            <select class="form-control">
+            <select name="voix" class="form-control" required>
             <?php
                 foreach($voix as $v) {
                     echo '<option>' . $v['typevoix'] .'</option>';
