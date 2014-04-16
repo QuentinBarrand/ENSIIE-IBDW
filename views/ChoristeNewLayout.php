@@ -56,6 +56,15 @@
             </select>
           </div>
 
+          <div class="form-group">
+            <label>Statut</label>
+            <select name="statut" class="form-control" required>
+              <option>Etudiant</option>
+              <option>Actif</option>
+              <option>Retraîté</option>
+            </select>
+          </div>
+
           <br>
           <div class="button-validate">
             <button type="submit" class="btn btn-lg btn-primary">M'inscrire</button>

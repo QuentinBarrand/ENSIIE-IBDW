@@ -69,20 +69,25 @@ class Choristes {
 
     // GET /choristes/nouveau
     function displayChoristeForm() {
+        $user = Flight::get('user');
+
+        if($user['authenticated'])
+            Flight::redirect(Flight::request()->base . '/choristes');
+
         // Récupération des voix pour le <select>
         $voix = Choristes::getVoix();
 
         // Header
         Flight::render('header.php',
             array(
-                'title' => 'Ajouter un évènement'
+                'title' => 'S\'inscrire'
                 ), 
             'header');
 
         // Navbar
         Flight::render('navbar.php',
             array(
-                'activePage' => 'evenements'
+                'activePage' => 'choristes'
                 ), 
             'navbar');
 
@@ -94,6 +99,7 @@ class Choristes {
         Flight::render('ChoristeNewLayout.php', array('voix' => $voix));
     }
 
+    // Retourne l'ensemble des voix dans la base de données (ID + type)
     function getVoix() {
         $voix = NULL;
 
@@ -108,9 +114,6 @@ class Choristes {
 
         $sql = 'SELECT idVoix, typeVoix FROM Voix;';
 
-        // On récupère le nombre d'évènements
-        $data['repets_count'] = Evenements::getCount();
-
         if($db) {
             try {
                 $query = $db->prepare($sql);
@@ -120,13 +123,192 @@ class Choristes {
                 $result = $query->fetchAll();
 
                 $voix = $result;
-
-                // for($i = 0; $i < $query->rowCount(); $i++)
-                //     $voix[$i] = $result[$i][0];
             }
             catch(PDOException $e) { }
         }
 
         return $voix;
+    }
+
+    // Retourne l'identifiant d'une voix spécifiée par type
+    function getVoixIdFromType($typeVoix) {
+        $idVoix = NULL;
+
+        // print_r($typeVoix); die;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        $sql = "SELECT idVoix FROM Voix WHERE typeVoix = :typeVoix;";
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql); 
+                
+                $query->execute(array(
+                    ':typeVoix' => $typeVoix
+                    )
+                );
+
+                $result = $query->fetch();
+
+                $idVoix = $result['idvoix'];
+            }
+            catch(PDOException $e) { }
+        }
+
+        return $idVoix;
+    }
+
+    // POST /choristes/nouveau
+    function subscribe() {
+        // Récupération des données POST
+        $login     = Flight::request()->data->login;
+        $password  = Flight::request()->data->password;
+        $nom       = Flight::request()->data->nom;
+        $prenom    = Flight::request()->data->prenom;
+        $ville     = Flight::request()->data->ville;
+        $telephone = Flight::request()->data->telephone;
+        $voix      = Flight::request()->data->voix;
+        $statut    = Flight::request()->data->statut;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        // Création d'un utilisateur (login / mot de passe)
+        $sql = "INSERT INTO utilisateur (login, motdepasse)
+                  VALUES (:login, :password)";
+    
+        if($db) {
+                try {
+                    $query = $db->prepare($sql);
+                    
+                    $query->execute(array(
+                        'login'    => $login,
+                        'password' => md5($password)
+                        )
+                    );
+
+                    $data['success'] = true;
+     
+                }
+                catch(PDOException $e) {
+                    $data['success'] = false;
+                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                }
+            }
+
+        $idVoix = Choristes::getVoixIdFromType($voix);
+
+        // Création d'une inscription
+        $sql = "INSERT INTO Inscription (typeInscription, montant, annee)
+            VALUES (:statut, :montant, :annee)
+            RETURNING idinscription;";
+
+        switch($statut) {
+            case "Etudiant":
+                $montant = 200;
+            case "Salarié":
+                $montant = 300;
+            case "Retraîté":
+                $montant = 250;
+
+            default:
+                $montant = 275;
+        }
+
+        $idInscription = NULL;
+
+        // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
+        if($db && $data['success']) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $query->execute(array(
+                    ':statut' => "'" . $statut . "'",
+                    ':montant' => $montant,
+                    ':annee' => date('Y')
+                    )
+                );
+
+                $result = $query->fetch();
+
+                $idInscription = $result['idinscription'];
+
+                $data['success'] = true;
+  
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+            }
+        }
+
+        // Création d'un choriste
+        $sql = "INSERT INTO Choriste (nom, prenom, idVoix, ville, telephone, login, idInscription)
+            VALUES (:nom, :prenom, :idVoix, :ville, :telephone, :login, :idInscription)
+            RETURNING idChoriste;";
+
+        // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
+        if($db && $data['success']) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $executed = $query->execute(array(
+                    ':nom'           => $nom,
+                    ':prenom'        => $prenom,
+                    ':idVoix'        => $idVoix,
+                    ':ville'         => $ville,
+                    ':telephone'     => $telephone,
+                    ':login'         => $login,
+                    ':idInscription' => $idInscription,
+                    )
+                );
+
+                $data['success'] = true;
+                $data['message'] = "Votre compte '" . $login . "' a bien été créé.";
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+            }
+        }
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Inscription' 
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'choristes'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');      
+
+        // Finalement on rend le layout
+        if($data['success'])
+            Flight::render('SuccessLayout.php', array('data' => $data));
+        else
+            Flight::render('ErrorLayout.php', array('data' => $data));
     }
 }

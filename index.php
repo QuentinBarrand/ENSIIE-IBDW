@@ -58,7 +58,7 @@ Flight::route('GET /choristes/nouveau', function() {
 
 // Traitement de la requête issue du formulaire
 Flight::route('POST /choristes/nouveau', function() {
-    echo "Formulaire d'ajout d'un choriste";
+    Choristes::subscribe();
 });
 
 
