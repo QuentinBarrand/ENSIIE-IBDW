@@ -15,7 +15,7 @@
 
     function show_table($data, $user_type, $display_type) {
 
-    // Affichage du titre en fonction de la validation à afficher
+        // Affichage du titre en fonction de la validation à afficher
         if($user_type == $display_type) {
             echo '<h2>Inscriptions à valider</h2>';
         }
@@ -26,7 +26,25 @@
             echo '<h2>Inscriptions en attente du ' . $other_user . '</h2>';
         }
 
-    // Affichage des en-têtes du tableau
+        // On compte les inscriptions tout court
+        if(count($data['content']) < 1) {
+            echo "<h3>Aucune inscription à valider.</h3>";
+            return;
+        }
+
+        // On compte les inscriptions à valider
+        $i = 0;
+
+        foreach($data['content'] as $row)
+            if($row['validation'] == $display_type)
+                $i++;
+
+        if($i == 0) {
+            echo "<h3>Aucune inscription à valider.</h3>";
+            return;
+        }
+
+        // Affichage des en-têtes du tableau
         echo '<table class="table table-striped">';
         echo '<thead>';
         echo '<tr>';
@@ -37,7 +55,7 @@
         echo '</thead>';
         echo '<tbody>';
 
-    // Affichage des éléments du tableau (seulement ceux du bon type)
+        // Affichage des éléments du tableau (seulement ceux du bon type)
         foreach($data['content'] as $row) {
 
             if($row['validation'] == $display_type) {
@@ -48,7 +66,7 @@
                 echo '<td>' . $row['typeinscription'] . '</td>';
                 echo '<td>';
 
-    // Affichage du bouton de validation si nécessaire
+                // Affichage du bouton de validation si nécessaire
                 if($user_type == $display_type) {
                     $link = 'href="' .Flight::request()->base .'/inscriptions/validation/' . $row['idinscription'] . '"';
                     $class = 'class="label label-warning"';
