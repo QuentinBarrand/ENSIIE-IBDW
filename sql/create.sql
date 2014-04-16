@@ -34,7 +34,7 @@ create table endosse (
 
 create table Inscription (
     idInscription serial,
-    typeInscription varchar(10) NOT NULL,
+    typeInscription varchar(30) NOT NULL,
     montant decimal NOT NULL,
     annee varchar(10) NOT NULL,
     validation smallint DEFAULT 0,

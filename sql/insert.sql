@@ -93,49 +93,49 @@ VALUES ('gbriquet', 6);
 
 --INSCRIPTION
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1, 'etudiant', '200', '2014', 2);
+VALUES (1, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (2, 'etudiant', '200', '2014', 1);
+VALUES (2, 'Etudiant', '200', '2014', 1);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (3, 'salarie', '300', '2014', 0);
+VALUES (3, 'Salarié', '300', '2014', 0);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (4, 'etudiant', '200', '2014', 2);
+VALUES (4, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (5, 'etudiant', '200', '2014', 2);
+VALUES (5, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (6, 'etudiant', '200', '2014', 2);
+VALUES (6, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (7, 'etudiant', '200', '2014', 1);
+VALUES (7, 'Etudiant', '200', '2014', 1);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (8, 'salarie', '300', '2014', 2);
+VALUES (8, 'Salarié', '300', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (9, 'etudiant', '200', '2014', 0);
+VALUES (9, 'Etudiant', '200', '2014', 0);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (10, 'etudiant', '200', '2014', 2);
+VALUES (10, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (11, 'etudiant', '200', '2014', 2);
+VALUES (11, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (12, 'salarie', '300', '2014', 2);
+VALUES (12, 'Salarié', '300', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (13, 'etudiant', '200', '2014', 1);
+VALUES (13, 'Etudiant', '200', '2014', 1);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (14, 'etudiant', '200', '2014', 2);
+VALUES (14, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (15, 'etudiant', '200', '2014', 2);
+VALUES (15, 'Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (109, 'etudiant', '200', '2013', 0);
+VALUES (109, 'Etudiant', '200', '2013', 0);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1010, 'etudiant', '200', '2013', 2);
+VALUES (1010, 'Etudiant', '200', '2013', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1011, 'etudiant', '200', '2013', 2);
+VALUES (1011, 'Etudiant', '200', '2013', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1012, 'salarie', '300', '2013', 2);
+VALUES (1012, 'Salarié', '300', '2013', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1013, 'etudiant', '200', '2013', 1);
+VALUES (1013, 'Etudiant', '200', '2013', 1);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1014, 'etudiant', '200', '2013', 2);
+VALUES (1014, 'Etudiant', '200', '2013', 2);
 INSERT INTO Inscription(idInscription, typeInscription, montant, annee, validation)
-VALUES (1015, 'etudiant', '200', '2013', 2);
+VALUES (1015, 'Etudiant', '200', '2013', 2);
 
 --VOIX
 INSERT INTO Voix(typeVoix)
