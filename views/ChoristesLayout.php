@@ -1,14 +1,13 @@
+<?php echo($header); ?>
+<?php echo($navbar); ?>
+
+<h1>Liste des choristes</h1>
+
 <?php 
 
-echo $header;
-echo $navbar;
-
-echo '<h1>Liste des choristes</h1>';
-
-
 $user = Flight::get('user');
-    $base = Flight::request()->base;
-    if($base == '/') $base = '';
+$base = Flight::request()->base;
+if($base == '/') $base = '';
 
 if(! $user['authenticated']) {
 	echo '<a id="subscribe" href="' . $base . '/choristes/nouveau" class="btn btn-success" role="button"><b>+</b> M\'inscrire</a>';

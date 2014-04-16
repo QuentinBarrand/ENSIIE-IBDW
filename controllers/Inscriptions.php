@@ -85,6 +85,8 @@ class Inscriptions {
      */
     function validate($inscriptionId) {
         $user = Flight::get('user');
+        $base = Flight::request()->base;
+        if($base == '/') $base = '';
 
         // Restriction aux responsabilites webmaster et tresorier
         if(! $user['authenticated']) {
@@ -127,7 +129,7 @@ class Inscriptions {
         }
 
         // Finalement on reditige vers la liste des validations
-        Flight::redirect(Flight::request()->base . '/inscriptions');
+        Flight::redirect($base . '/inscriptions');
     }
 
     /* Retourne le nombre total d'inscriptions en fonction
