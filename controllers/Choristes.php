@@ -69,6 +69,9 @@ class Choristes {
 
     // GET /choristes/nouveau
     function displayChoristeForm() {
+        // Récupération des voix pour le <select>
+        $voix = Choristes::getVoix();
+
         // Header
         Flight::render('header.php',
             array(
@@ -88,7 +91,7 @@ class Choristes {
             array(), 
             'footer');
 
-        Flight::render('ChoristeNewLayout.php');
+        Flight::render('ChoristeNewLayout.php', array('voix' => $voix));
     }
 
     function getVoix() {
@@ -103,7 +106,7 @@ class Choristes {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        $sql = 'SELECT idVoix FROM Voix;';
+        $sql = 'SELECT idVoix, typeVoix FROM Voix;';
 
         // On récupère le nombre d'évènements
         $data['repets_count'] = Evenements::getCount();
@@ -116,8 +119,10 @@ class Choristes {
 
                 $result = $query->fetchAll();
 
-                for($i = 0; $i < $query->rowCount(); $i++)
-                    $voix[$i] = $result[$i][0];
+                $voix = $result;
+
+                // for($i = 0; $i < $query->rowCount(); $i++)
+                //     $voix[$i] = $result[$i][0];
             }
             catch(PDOException $e) { }
         }

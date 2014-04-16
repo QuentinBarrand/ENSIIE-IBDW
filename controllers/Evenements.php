@@ -24,9 +24,8 @@ class Evenements {
 
         $sql2 = 'SELECT Evenement.idEvenement, heureDate, lieu, nom';
 
-
         foreach($voix as $v)
-            $sql2 .= ', nbc_' . $v;
+            $sql2 .= ', nbc_' . $v['idvoix'];
 
 
         $sql2 .= ' FROM Evenement
@@ -34,14 +33,14 @@ class Evenements {
 
         foreach($voix as $v)
             $sql2 .= 'LEFT OUTER JOIN (
-                          SELECT idEvenement, count(participe.idChoriste) as nbc_' . $v . '
+                          SELECT idEvenement, count(participe.idChoriste) as nbc_' . $v['idvoix'] . '
                           FROM participe
                           NATURAL JOIN Choriste
-                          WHERE idVoix = ' . $v . '
+                          WHERE idVoix = ' . $v['idvoix'] . '
                           AND confirmation = 1
                           GROUP BY idEvenement
-                        ) as view_nbvoix_' . $v . '
-                      ON Evenement.idEvenement = view_nbvoix_' . $v . '.idEvenement ';
+                        ) as view_nbvoix_' . $v['idvoix'] . '
+                      ON Evenement.idEvenement = view_nbvoix_' . $v['idvoix'] . '.idEvenement ';
 
         $sql2 .= "WHERE typeEvt='Concert'
                   ORDER BY heureDate DESC;";

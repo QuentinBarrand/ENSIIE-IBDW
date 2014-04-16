@@ -47,11 +47,12 @@
           <div class="form-group">
             <label>Voix</label>
             <select class="form-control">
-              <option>1</option>
-              <option>2</option>
-              <option>3</option>
-              <option>4</option>
-              <option>5</option>
+            <?php
+                foreach($voix as $v) {
+                    echo '<option>' . $v['typevoix'] .'</option>';
+                }
+
+            ?>
             </select>
           </div>
 

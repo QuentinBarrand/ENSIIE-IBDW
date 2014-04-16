@@ -26,6 +26,7 @@
 
           </div>
 
+          <br>
           <div class="button-validate">
             <button type="submit" class="btn btn-lg btn-primary">Ajouter l'évènement</button>
           </div>
