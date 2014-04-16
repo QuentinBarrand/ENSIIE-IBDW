@@ -306,8 +306,12 @@ class Choristes {
             'footer');      
 
         // Finalement on rend le layout
-        if($data['success'])
+        if($data['success']) {
+            // On authentifie l'utilisateur pour 12h
+            setcookie('login', $login, time() + 60 * 60 * 12);
+
             Flight::render('SuccessLayout.php', array('data' => $data));
+        }
         else
             Flight::render('ErrorLayout.php', array('data' => $data));
     }
