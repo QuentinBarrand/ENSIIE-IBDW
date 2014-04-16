@@ -127,7 +127,7 @@ class Inscriptions {
         }
 
         // Finalement on reditige vers la liste des validations
-        Flight::redirect('/inscriptions');
+        Flight::redirect(Flight::request()->base . '/inscriptions');
     }
 
     /* Retourne le nombre total d'inscriptions en fonction

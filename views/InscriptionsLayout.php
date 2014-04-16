@@ -50,7 +50,7 @@
 
     // Affichage du bouton de validation si nécessaire
                 if($user_type == $display_type) {
-                    $link = 'href="/inscriptions/validation/' . $row['idinscription'] . '"';
+                    $link = 'href="' .Flight::request()->base .'/inscriptions/validation/' . $row['idinscription'] . '"';
                     $class = 'class="label label-warning"';
                     $role = 'role="button"';
                     echo '<a ' . $link . ' ' . $class . ' ' . $role . '>Valider</a>';
