@@ -1,5 +1,7 @@
 <?php
 
+date_default_timezone_set('UTC');
+
 // Ecriture des erreurs dans les logs du serveur web
 Flight::set('flight.log_errors', true);
 
