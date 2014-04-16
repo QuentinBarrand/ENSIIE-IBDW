@@ -1,8 +1,7 @@
-		<!-- remove hr to correct a bug in tables display -->
         <hr>
 		<footer>
 			<p>
-				Une application réalisé par les étudiants FIPA 6 et FIP 19 de l'ENSIIE
+				Une application réalisée par les étudiants FIPA 6 et FIP 19 de l'ENSIIE
 			</p>
 		</footer>
 	
