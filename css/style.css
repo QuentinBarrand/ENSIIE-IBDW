@@ -22,3 +22,7 @@ body {
 table .label {
 	font-size: 0.9em;
 }
+
+form .button-validate {
+    text-align: center;
+}

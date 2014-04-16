@@ -26,7 +26,9 @@
 
           </div>
 
-          <button type="submit" class="btn btn-default">Ajouter l'évènement</button>
+          <div class="button-validate">
+            <button type="submit" class="btn btn-lg btn-primary">Ajouter l'évènement</button>
+          </div>
         </form>
     </div>
     <div class="col-lg-6 col-lg-offset-1 well">

@@ -55,8 +55,10 @@
             </select>
           </div>
 
-
-          <button type="submit" class="btn btn-default">M'inscrire</button>
+          <br>
+          <div class="button-validate">
+            <button type="submit" class="btn btn-lg btn-primary">M'inscrire</button>
+          </div>
         </form>
     </div>
 
