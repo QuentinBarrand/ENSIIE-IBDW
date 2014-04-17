@@ -543,4 +543,107 @@ class Evenements {
 
         return $returnValue;
     }
+
+
+    /* POST /evenements
+     *
+     */
+    function updateEvents() {
+        $user = Flight::get('user');
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+        }
+        $requestEvents = Flight::request()->data['idevenement'];
+        $requestPresences = Flight::request()->data['presence'];
+
+        //récupére la présence de l'utilisateur pour chaque évènements
+        $sql = "select idevenement,confirmation
+                        from choriste
+                        natural join participe
+                        where login = :login ;";
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+
+                $query->execute(array(
+                        'login' => $user['login']
+                    )
+                );
+
+                foreach($query->fetchAll() as $row) {
+                    $id =$row['idevenement'];
+                    $presences[$id] = $row ;
+                }
+
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+            }
+        }
+
+        for ($i = 0; $i <= count($requestEvents)-1 && $i <= count($requestPresences)-1; $i++) {
+
+            $sql = NULL;
+
+            // S'il va être présent
+            if ($requestPresences[$i] == "present"){
+
+                // S'il était absent, on fait un add
+                if (!isset($presences[$requestEvents[$i]]['confirmation'])){
+                    $sql = "INSERT INTO participe(idchoriste,idevenement,confirmation)
+                            VALUES (:idchoriste , :idevenement, 1);";
+                }
+                // S'il était indécis, on fait un update
+                else if ( ($presences[$requestEvents[$i]]['confirmation']) == 0){
+                    $sql = "UPDATE participe
+                            SET confirmation = 1
+                            WHERE idevenement = :idevenement AND idchoriste = :idchoriste ;";
+                }
+            }
+            // S'il va être indécis
+            else if ($requestPresences[$i] == "indecis"){
+                // S'il était absent, on fait un add
+                if (!isset($presences[$requestEvents[$i]]['confirmation'])){
+                    $sql = "INSERT INTO participe(idchoriste,idevenement,confirmation)
+                            VALUES(:idchoriste , :idevenement , 0);";
+                }
+                // S'il était présent, on fait un update
+                else if ( ($presences[$requestEvents[$i]]['confirmation']) == 1){
+                    $sql = "UPDATE participe
+                            SET confirmation = 0
+                            WHERE idevenement = :idevenement AND idchoriste = :idchoriste ;";
+                }
+            }
+            // S'il va être absent
+            else if ($requestPresences[$i] == "absent"){
+                // S'il n'était pas déjà absent on supprime
+                if(isset($presences[$requestEvents[$i]]['confirmation']))
+                {
+                    $sql = "DELETE FROM participe
+                             WHERE idevenement = :idevenement AND idchoriste = :idchoriste ;";
+
+                }
+            }
+
+            if($db && $sql!=NULL) {
+                try {
+                    $query = $db->prepare($sql);
+                    $query->execute( array ('idevenement' => $requestEvents[$i],
+                        'idchoriste' => $user['idChoriste']));
+
+
+                }
+                catch(PDOException $e) { }
+            }
+        }
+
+        $base = Flight::request()->base;
+        Flight::redirect($base . '/evenements');
+    }
 }
