@@ -167,7 +167,7 @@ class Authentification {
     // GET /logout
     // Déconnecte l'utilisateur courant.
     function logout() {
-        setcookie('login', NULL);
+        setcookie('login', NULL, time(), '/');
         Flight::redirect(Flight::request()->base);
     }
 }
