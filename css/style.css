@@ -26,3 +26,8 @@ table .label {
 form .button-validate {
     text-align: center;
 }
+
+#eventTypeButtons {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}

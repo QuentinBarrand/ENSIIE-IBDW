@@ -10,6 +10,13 @@ if($base == '/') $base = '';
 
 <div class="row">
     <div class="col-lg-5">
+
+        <div id="eventTypeButtons" class="btn-group btn-group-lg">
+          <button type="button" id="repetitionButton" class="btn btn-default">Répétition</button>
+          <button type="button" id="concertButton" class="btn btn-default">Concert</button>
+          <button type="button" id="saisonButton" class="btn btn-default">Saison</button>
+        </div>
+
         <form role="form" action="<?php echo $base; ?>/evenements/nouveau" method="post">
           <div class="form-group">
             <label for="eventName">Nom de l'évènement</label>
@@ -19,7 +26,8 @@ if($base == '/') $base = '';
             <label for="eventPlace">Lieu de l'évènement</label>
             <input type="text" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville" required>
           </div>
-            <div class="form-group">
+
+          <div class="form-group">
             <label for="eventDate">Date de l'évènement</label>
 
             <div id="datepicker">
@@ -28,8 +36,14 @@ if($base == '/') $base = '';
                     <span class="input-group-addon">Cliquez pour choisir une date</span>
                 </div>
             </div>
-
           </div>
+
+          <div class="form-group">
+            <label for="eventTime">Heure de l'évènement</label>
+            <input type="text" class="form-control" id="eventTime" placeholder="HH:MM:SS" required>
+          </div>
+
+          <input id="eventType" type="hidden" name="type" value="repetition">
 
           <br>
           <div class="button-validate">
@@ -56,11 +70,27 @@ if($base == '/') $base = '';
 <script src="<?php echo Flight::request()->base; ?>/js/bootstrap-datepicker.fr.js"></script>
 
 <script>
+    // Enregistrement du datepicker
     $('#datepicker .input-group.date').datepicker({
         format: "dd/mm/yyyy",
         todayBtn: "linked",
         language: "fr"
     });
+
+    // Action sur les boutons de type d'évènement
+    $('#repetitionButton').click(function() {
+        $('#eventType').val("repetition");
+    });
+    
+    $('#concertButton').click(function() {
+        $('#eventType').val("concert");
+    });
+
+    $('#saisonButton').click(function() {
+        $('#eventType').val("saison");
+    });
+
+    $('#repetitionButton').trigger('click')
 </script>
 
     <hr>
