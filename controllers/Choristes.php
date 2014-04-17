@@ -176,7 +176,7 @@ class Choristes {
         // Récupération des données POST
         $login     = Flight::request()->data->login;
         $password  = Flight::request()->data->password;
-	$password1 = Flight::request()->data->password1;
+	    $password1 = Flight::request()->data->password1;
         $nom       = Flight::request()->data->nom;
         $prenom    = Flight::request()->data->prenom;
         $ville     = Flight::request()->data->ville;
@@ -192,39 +192,38 @@ class Choristes {
             $data['success'] = false;
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
+    
+        if($db) {
+            $sql = "SELECT COUNT(*) FROM choriste WHERE login = :login";
+            
+            $query = $db->prepare($sql);
+            
+            $query->execute(array(
+                    'login' => $login
+                    )
+                  );
 
-        //Verification de l'existence du login dans la base
-        $sqlLoginExist = "Select login from Choriste where login = :login";
-        $query = $db->prepare($sqlLoginExist);
-        $query->execute(array(
-                'login' => $login
-                )
-              );
+            $result = $query->fetch();
 
-        $fail = false;
-        
-        if ($query->rowCount() >= 1 ) 
-            $fail = true;
+            $fail['error'] = $result[0] > 0 ? true : false;
+            $fail['message'] = "L'identifiant " . $login . " existe déjà dans la base de données.";
+        }
 
-        // Verification du mot de passe de confirmation
-        if($password != $password1)
-            $fail = true;
+        if(! $fail['error']) {
+            $idVoix = Choristes::getVoixIdFromType($voix);
 
+       $idVoix = Choristes::getVoixIdFromType($voix);   
 
-        if(! $fail) {
-
-        $idVoix = Choristes::getVoixIdFromType($voix);	
-
-                // Création d'un utilisateur (login / mot de passe)
+        // Création d'un utilisateur (login / mot de passe)
         $sql = "INSERT INTO utilisateur (login, motdepasse)
-                  VALUES (:login, :password)";
+            VALUES (:login, :password)";
     
         if($db) {
                 try {
                     $query = $db->prepare($sql);
                     
                     $query->execute(array(
-                        'login'    => $login,
+                        'login' => $login,
                         'password' => md5($password)
                         )
                     );
@@ -236,82 +235,81 @@ class Choristes {
                     $data['success'] = false;
                     $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
-            }        
+            } 
 
-        // Création d'une inscription
-        $sql = "INSERT INTO Inscription (typeInscription, montant, annee)
-            VALUES (:statut, :montant, :annee)
-            RETURNING idinscription;";
+            // Création d'une inscription
+            $sql = "INSERT INTO Inscription (typeInscription, montant, annee)
+                VALUES (:statut, :montant, :annee)
+                RETURNING idinscription;";
 
-        switch($statut) {
-            case "Etudiant":
-                $montant = 200;
-            case "Salarié":
-                $montant = 300;
-            case "Retraîté":
-                $montant = 250;
+            switch($statut) {
+                case "Etudiant":
+                    $montant = 200;
+                case "Salarié":
+                    $montant = 300;
+                case "Retraîté":
+                    $montant = 250;
 
-            default:
-                $montant = 275;
-        }
-
-        $idInscription = NULL;
-
-        // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
-        if($db && $data['success']) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute(array(
-                    ':statut' => "'" . $statut . "'",
-                    ':montant' => $montant,
-                    ':annee' => date('Y')
-                    )
-                );
-
-                $result = $query->fetch();
-
-                $idInscription = $result['idinscription'];
-
-                $data['success'] = true;
-  
+                default:
+                    $montant = 275;
             }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+
+            $idInscription = NULL;
+
+            // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
+            if($db && $data['success']) {
+                try {
+                    $query = $db->prepare($sql);
+                    
+                    $query->execute(array(
+                        ':statut' => "'" . $statut . "'",
+                        ':montant' => $montant,
+                        ':annee' => date('Y')
+                        )
+                    );
+
+                    $result = $query->fetch();
+
+                    $idInscription = $result['idinscription'];
+
+                    $data['success'] = true;
+      
+                }
+                catch(PDOException $e) {
+                    $data['success'] = false;
+                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                }
             }
-        }
 
-        // Création d'un choriste
-        $sql = "INSERT INTO Choriste (nom, prenom, idVoix, ville, telephone, login, idInscription)
-            VALUES (:nom, :prenom, :idVoix, :ville, :telephone, :login, :idInscription)
-            RETURNING idChoriste;";
+            // Création d'un choriste
+            $sql = "INSERT INTO Choriste (nom, prenom, idVoix, ville, telephone, login, idInscription)
+                VALUES (:nom, :prenom, :idVoix, :ville, :telephone, :login, :idInscription)
+                RETURNING idChoriste;";
 
-        // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
-        if($db && $data['success']) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $executed = $query->execute(array(
-                    ':nom'           => $nom,
-                    ':prenom'        => $prenom,
-                    ':idVoix'        => $idVoix,
-                    ':ville'         => $ville,
-                    ':telephone'     => $telephone,
-                    ':login'         => $login,
-                    ':idInscription' => $idInscription,
-                    )
-                );
+            // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
+            if($db && $data['success']) {
+                try {
+                    $query = $db->prepare($sql);
+                    
+                    $executed = $query->execute(array(
+                        ':nom'           => $nom,
+                        ':prenom'        => $prenom,
+                        ':idVoix'        => $idVoix,
+                        ':ville'         => $ville,
+                        ':telephone'     => $telephone,
+                        ':login'         => $login,
+                        ':idInscription' => $idInscription,
+                        )
+                    );
 
-                $data['success'] = true;
-                $data['message'] = "Votre compte '" . $login . "' a bien été créé.";
+                    $data['success'] = true;
+                    $data['message'] = "Votre compte '" . $login . "' a bien été créé.";
+                }
+                catch(PDOException $e) {
+                    $data['success'] = false;
+                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                }
             }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
-        }
-
         }
 
         // Header
@@ -334,8 +332,9 @@ class Choristes {
             'footer');      
 
         // Finalement on rend le layout
-        if($fail) {
+        if($fail['error']) {
             $voix = Choristes::getVoix();
+
             Flight::render('ChoristeNewLayout.php', array(
             'fail' => $fail,
             'voix' => $voix

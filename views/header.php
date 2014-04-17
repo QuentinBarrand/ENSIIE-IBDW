@@ -18,8 +18,7 @@
 
     echo '<link rel="stylesheet" href="' . $base . '/css/bootstrap.min.css">';
     echo '<link rel="stylesheet" href="' . $base . '/css/style.css">';
-
-    echo '<link rel="stylesheet" href="' . $base . '/css/datepicker3.css">';
+    echo '<link rel="stylesheet" href="' . $base . '/css/bootstrap-datetimepicker.min.css">';
 
     ?>
 

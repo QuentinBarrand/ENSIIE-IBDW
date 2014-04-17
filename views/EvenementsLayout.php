@@ -35,9 +35,9 @@
 			$epoch_evenement = strtotime($row['heuredate']);
 
 			if($type == 'a_venir')
-				$condition = time() > $epoch_evenement;
-			else
 				$condition = time() < $epoch_evenement;
+			else
+				$condition = time() > $epoch_evenement;
 
 			if($condition) {
 				echo '<tr>';

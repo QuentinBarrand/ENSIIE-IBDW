@@ -12,7 +12,7 @@ if($base == '/') $base = '';
     <div class="col-lg-5">
 
         <div id="eventTypeButtons" class="btn-group btn-group-lg">
-          <button type="button" id="repetitionButton" class="btn btn-default">Répétition</button>
+          <button type="button" id="repetitionButton" class="btn btn-default active">Répétition</button>
           <button type="button" id="concertButton" class="btn btn-default">Concert</button>
           <button type="button" id="saisonButton" class="btn btn-default">Saison</button>
         </div>
@@ -22,26 +22,22 @@ if($base == '/') $base = '';
             <label for="eventName">Nom de l'évènement</label>
             <input type="text" name="nom" class="form-control" id="eventName" placeholder="Intitulé de l'évènement" required>
           </div>
-          <div class="form-group">
+          <div class="form-group" id="lieuDiv">
             <label for="eventPlace">Lieu de l'évènement</label>
             <input type="text" name="lieu" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville" required>
           </div>
 
-          <div class="form-group">
-            <label for="eventDate">Date de l'évènement</label>
-
-            <div id="datepicker">
-                <div class="input-group date">
-                    <input id="eventDate" type="text" name="date" class="form-control" placeholder="DD/MM/AAAA" required>
-                    <span class="input-group-addon">Cliquez pour choisir une date</span>
+            <div class="form-group" id="dateDiv">
+                <label for="eventDate">Date de l'évènement</label>
+                <div class='input-group date' id='datetimepicker1'>
+                    <input type='text' id="eventDate" name="date" class="form-control" />
+                    <span class="input-group-addon">
+                        <span class="glyphicon glyphicon-calendar">
+                        </span>
+                    </span>
                 </div>
             </div>
-          </div>
 
-          <div class="form-group">
-            <label for="eventTime">Heure de l'évènement</label>
-            <input type="text" name="heure" class="form-control" id="eventTime" placeholder="HH:MM:SS" required>
-          </div>
 
           <input id="eventType" type="hidden" name="type" value="repetition">
 
@@ -65,32 +61,50 @@ if($base == '/') $base = '';
 </div>
     
 <script src="<?php echo Flight::request()->base; ?>/js/jquery.min.js"></script>
+<script src="<?php echo Flight::request()->base; ?>/js/moment.min.js"></script>
+
 <script src="<?php echo Flight::request()->base; ?>/js/bootstrap.min.js"></script>
-<script src="<?php echo Flight::request()->base; ?>/js/bootstrap-datepicker.js"></script>
-<script src="<?php echo Flight::request()->base; ?>/js/bootstrap-datepicker.fr.js"></script>
+
+<script src="<?php echo Flight::request()->base; ?>/js/bootstrap-datetimepicker.min.js"></script>
+<script src="<?php echo Flight::request()->base; ?>/js/bootstrap-datetimepicker.fr.js"></script>
+
 
 <script>
-    // Enregistrement du datepicker
-    $('#datepicker .input-group.date').datepicker({
-        format: "dd/mm/yyyy",
-        todayBtn: "linked",
-        language: "fr"
+    // Enregistrement du timepicker
+    $(function () {
+        $('#datetimepicker1').datetimepicker({
+            language: 'fr',
+            useSeconds: false
+            });
     });
+
+    function resetButtons() {
+        $('#repetitionButton').removeClass('active');
+        $('#concertButton').removeClass('active');
+        $('#saisonButton').removeClass('active');
+    }
 
     // Action sur les boutons de type d'évènement
     $('#repetitionButton').click(function() {
+        resetButtons();
+
         $('#eventType').val("repetition");
+        $('#repetitionButton').addClass('active');
     });
     
     $('#concertButton').click(function() {
+        resetButtons();
+
         $('#eventType').val("concert");
+        $('#concertButton').addClass('active');
     });
 
     $('#saisonButton').click(function() {
-        $('#eventType').val("saison");
-    });
+        resetButtons();
 
-    $('#repetitionButton').trigger('click')
+        $('#eventType').val("saison");
+        $('#saisonButton').addClass('active');
+    });
 </script>
 
     <hr>

@@ -20,32 +20,32 @@ class Evenements {
             WHERE typeEvt LIKE 'Concert' 
             ORDER BY heureDate DESC;";
 
-        $voix = Choristes::getVoix();
-
-        $sql2 = 'SELECT Evenement.idEvenement, heureDate, lieu, nom';
-
-        foreach($voix as $v)
-            $sql2 .= ', nbc_' . $v['idvoix'];
-
-
-        $sql2 .= ' FROM Evenement
-                  NATURAL JOIN TypeEvt ';
-
-        foreach($voix as $v)
-            $sql2 .= 'LEFT OUTER JOIN (
-                          SELECT idEvenement, count(participe.idChoriste) as nbc_' . $v['idvoix'] . '
-                          FROM participe
-                          NATURAL JOIN Choriste
-                          WHERE idVoix = ' . $v['idvoix'] . '
-                          AND confirmation = 1
-                          GROUP BY idEvenement
-                        ) as view_nbvoix_' . $v['idvoix'] . '
-                      ON Evenement.idEvenement = view_nbvoix_' . $v['idvoix'] . '.idEvenement ';
-
-        $sql2 .= "WHERE typeEvt='Concert'
-                  ORDER BY heureDate DESC;";
-
         if($db) {
+            $voix = Choristes::getVoix();
+
+            $sql2 = 'SELECT Evenement.idEvenement, heureDate, lieu, nom';
+
+            foreach($voix as $v)
+                $sql2 .= ', nbc_' . $v['idvoix'];
+
+
+            $sql2 .= ' FROM Evenement
+                      NATURAL JOIN TypeEvt ';
+
+            foreach($voix as $v)
+                $sql2 .= 'LEFT OUTER JOIN (
+                              SELECT idEvenement, count(participe.idChoriste) as nbc_' . $v['idvoix'] . '
+                              FROM participe
+                              NATURAL JOIN Choriste
+                              WHERE idVoix = ' . $v['idvoix'] . '
+                              AND confirmation = 1
+                              GROUP BY idEvenement
+                            ) as view_nbvoix_' . $v['idvoix'] . '
+                          ON Evenement.idEvenement = view_nbvoix_' . $v['idvoix'] . '.idEvenement ';
+
+            $sql2 .= "WHERE typeEvt='Concert'
+                      ORDER BY heureDate DESC;";
+
             try {
                 // SQL 1
                 $query = $db->prepare($sql1);
@@ -166,16 +166,17 @@ class Evenements {
         $nom   = Flight::request()->data->nom;
         $lieu  = Flight::request()->data->lieu;
         $date  = Flight::request()->data->date;
-        $heure = Flight::request()->data->heure;
         $type  = Flight::request()->data->type;
 
-        $timestamp = DateTime::createFromFormat("d/m/Y", $date);
+
+
+        $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
         $annee = date("Y", $timestamp->getTimestamp());
 
         switch($type) {
             case 'repetition':
             case 'concert':
-                Evenements::addEvent($nom, $lieu, $date, $heure, $type);
+                Evenements::addEvent($nom, $lieu, $date, $type);
                 break;
 
             case 'saison':
@@ -185,7 +186,7 @@ class Evenements {
     }
 
     // Fonction d'ajout d'une répétition ou d'un concert
-    function addEvent($nom, $lieu, $date, $heure, $type) {
+    function addEvent($nom, $lieu, $date, $type) {
         try {
             $db = Flight::db();
         }
@@ -211,7 +212,7 @@ class Evenements {
         }
 
         // Traitement heureDate
-        $timestamp = DateTime::createFromFormat("d/m/Y", $date);
+        $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
         $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
 
         if($db) {
