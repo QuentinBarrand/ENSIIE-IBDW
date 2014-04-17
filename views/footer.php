@@ -2,7 +2,7 @@
 $base = Flight::request()->base;
 if($base == '/') $base = '';
 ?>
-        <hr>
+        <!-- <hr> -->
 		<footer>
 			<p>
 				Une application réalisée par les étudiants FIPA 6 et FIP 19 de l'ENSIIE
