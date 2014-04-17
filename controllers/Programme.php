@@ -1,6 +1,8 @@
 <?php
 
 class Programme {
+
+    // GET /programme
 	function get() {
         $user = Flight::get('user');
 
@@ -141,5 +143,34 @@ class Programme {
             Flight::render('ProgrammeLayout.php', array('data' => $data));
         else
             Flight::render('ErrorLayout.php', array('data' => $data));
+    }
+
+
+    function getOeuvres() {
+        $oeuvres = NULL;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        $sql = 'SELECT * FROM oeuvre;';
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $query->execute();
+
+                $oeuvres = $query->fetchAll();
+            }
+            catch(PDOException $e) { }
+        }
+        
+        return $oeuvres;
     }
 }

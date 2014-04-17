@@ -169,13 +169,18 @@ class Evenements {
         $heure = Flight::request()->data->heure;
         $type  = Flight::request()->data->type;
 
+        $timestamp = DateTime::createFromFormat("d/m/Y", $date);
+        $annee = date("Y", $timestamp->getTimestamp());
+
         switch($type) {
             case 'repetition':
             case 'concert':
                 Evenements::addEvent($nom, $lieu, $date, $heure, $type);
+                break;
 
             case 'saison':
-                Evenements::DisplaySaisonForm($nom, $date);
+                Evenements::displaySaisonForm($nom, $annee);
+                break;
         }
     }
 
@@ -198,8 +203,11 @@ class Evenements {
         switch($type) {
             case 'repetition':
                 $idType = 1;
+                break;
+
             case 'concert':
                 $idType = 2;
+                break;
         }
 
         // Traitement heureDate
@@ -252,10 +260,88 @@ class Evenements {
             Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
-    function DisplaySaisonForm($nom, $date) {
-        // Formulaire d'ajout des oeuvres
+    function displaySaisonForm($nom, $annee, $added = NULL) {
+        $oeuvres = Programme::getOeuvres();
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Ajouter une saison'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');
+
+        Flight::render('SaisonNewLayout.php', array(
+            'nom' => $nom,
+            'annee' => $annee,
+            'oeuvres' => $oeuvres,
+            'added' => $added
+            )
+        );
     }
 
+    // GET /oeuvre/nouveau
+    function addOeuvre() {
+        $titre     = Flight::request()->data->titre;
+        $auteur    = Flight::request()->data->auteur;
+        $partition = Flight::request()->data->partition;
+        $duree     = intval(Flight::request()->data->duree);
+        $style     = Flight::request()->data->style;
+
+        // Pour le displaySaisonForm() en bas
+        $nom       = Flight::request()->data->nom;
+        $annee     = Flight::request()->data->annee;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        // On insère l'évènement courant
+        $sql = "INSERT INTO Oeuvre(titre, auteur, partition, duree, style)
+            VALUES(:titre, :auteur, :partition, :duree, :style)
+            RETURNING idOeuvre;";
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                $query->execute(array(
+                    ':titre' => $titre,
+                    ':auteur' => $auteur,
+                    ':partition' => $partition,
+                    ':duree' => $duree,
+                    ':style' => $style
+                    )
+                );
+
+                $data['success'] = true;
+                $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+            }
+        }
+
+        Evenements::displaySaisonForm($nom, $annee, $data['message']);
+    }
+
+    // GET 
     function addSaison() {
         // Récupération des oeuvres et ajout dans la base de données
     }
