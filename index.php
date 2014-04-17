@@ -61,6 +61,19 @@ Flight::route('POST /choristes/nouveau', function() {
     Choristes::subscribe();
 });
 
+/* Compte
+ *
+ */
+
+// Affichage des informations du compte de l'utilisateur
+Flight::route('GET /choristes/account', function() {
+    Choristes::displayAccountForm();
+});
+
+// Traitement de la requête issue du formulaire de modification du compte
+Flight::route('POST /choristes/account', function() {
+    Choristes::submitAccountForm();
+});
 
 /*
  * Inscriptions
