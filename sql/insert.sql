@@ -97,7 +97,7 @@ VALUES ('Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Etudiant', '200', '2014', 1);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
-VALUES ('Salarié', '300', '2014', 0);
+VALUES ('Salarié', '300', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
@@ -123,7 +123,7 @@ VALUES ('Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
-VALUES ('Etudiant', '200', '2013', 0);
+VALUES ('Etudiant', '200', '2013', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Etudiant', '200', '2013', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
@@ -178,6 +178,8 @@ INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription
 VALUES ('Hourquebie', 'bryan', 4, 'bordeaux', '0666040999', 'bryan',14);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('Hegoak', 'ryan', 1, 'Bayonne', '0666040656', 'ryan',15);
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
+VALUES ('Diallo', 'Dounde', 1, 'amiens', '0605060708', 'ddiallo', 16);
 
 --TYPE D'EVENEMENT
 INSERT INTO TypeEvt(typeEvt)
