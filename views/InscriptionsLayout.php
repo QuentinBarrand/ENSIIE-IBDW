@@ -51,6 +51,11 @@
         echo '<th>Nom</th>';
         echo '<th>Prenom</th>';
         echo '<th>Type de Voix</th>';
+        echo '<th>Type d\'inscription</th>';
+
+        if($row['validation'] == $display_type)
+            echo '<th>Validation</th>';
+
         echo '</tr>';
         echo '</thead>';
         echo '<tbody>';
@@ -64,17 +69,15 @@
                 echo '<td>' . $row['prenom'] . '</td>';
                 echo '<td>' . $row['typevoix'] . '</td>';
                 echo '<td>' . $row['typeinscription'] . '</td>';
-                echo '<td>';
 
                 // Affichage du bouton de validation si nécessaire
                 if($user_type == $display_type) {
                     $link = 'href="' . $base .'/inscriptions/validation/' . $row['idinscription'] . '"';
                     $class = 'class="label label-warning"';
                     $role = 'role="button"';
-                    echo '<a ' . $link . ' ' . $class . ' ' . $role . '>Valider</a>';
+                    echo '<td><a ' . $link . ' ' . $class . ' ' . $role . '>Valider</a></td>';
                 }
 
-                echo '</td>';
             }
 
         }
