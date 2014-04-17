@@ -192,7 +192,8 @@ class Choristes {
             $data['success'] = false;
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
-    
+
+        // Vérification de l'égalité des mots de passe
         if($db) {
             $sql = "SELECT COUNT(*) FROM choriste WHERE login = :login";
             
@@ -209,16 +210,23 @@ class Choristes {
             $fail['message'] = "L'identifiant " . $login . " existe déjà dans la base de données.";
         }
 
+        // Vérification de l'égalité des mots de passe
+        if($password != $password1) {
+            $fail['error'] = true;
+            $fail['message'] = "Les mots de passe entrés ne sont pas identiques.";
+        }
+
+
         if(! $fail['error']) {
             $idVoix = Choristes::getVoixIdFromType($voix);
 
-       $idVoix = Choristes::getVoixIdFromType($voix);   
+            $idVoix = Choristes::getVoixIdFromType($voix);  
 
-        // Création d'un utilisateur (login / mot de passe)
-        $sql = "INSERT INTO utilisateur (login, motdepasse)
-            VALUES (:login, :password)";
+            // Création d'un utilisateur (login / mot de passe)
+            $sql = "INSERT INTO utilisateur (login, motdepasse)
+                VALUES (:login, :password)";
     
-        if($db) {
+            if($db) {
                 try {
                     $query = $db->prepare($sql);
                     
