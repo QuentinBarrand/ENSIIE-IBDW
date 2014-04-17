@@ -11,6 +11,20 @@ if($base == '/') $base = '';
 <div class="row">
     <div class="col-lg-5">
 
+    <?php
+        if($fail['error']) {
+          echo '<div class="panel panel-danger">';
+          echo '<div class="panel-heading">';
+          echo '<h3 class="panel-title">Erreur</h3>';
+          echo '</div>';
+          echo '<div class="panel-body">';
+          echo $fail['message'];
+          echo '</div>';
+          echo '</div>';
+        }
+
+    ?>
+
         <div id="eventTypeButtons" class="btn-group btn-group-lg">
           <button type="button" id="repetitionButton" class="btn btn-default active">Répétition</button>
           <button type="button" id="concertButton" class="btn btn-default">Concert</button>

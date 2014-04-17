@@ -98,7 +98,7 @@ class Evenements {
     }
 
     // GET /evenements/nouveau
-    function displayEventForm() {
+    function displayEventForm($fail = NULL) {
         // Header
         Flight::render('header.php',
             array(
@@ -120,8 +120,14 @@ class Evenements {
 
         $user = Flight::get('user');
 
-        if($user['authenticated'] && $user['responsabilite'] == 1)
-            Flight::render('EvenementNewLayout.php');
+        if($user['authenticated'] && $user['responsabilite'] == 1) {
+            $fail['error'] = $fail == NULL ? false : true;
+
+            Flight::render('EvenementNewLayout.php', array(
+                'fail' => $fail
+                )
+            );
+        }
         else {
             $data = array(
                 'error' => 'Vous n\'avez pas les droits nécessaires pour accéder à cette page.');
@@ -168,17 +174,22 @@ class Evenements {
         $date  = Flight::request()->data->date;
         $type  = Flight::request()->data->type;
 
-
-
         $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
         $annee = date("Y", $timestamp->getTimestamp());
+
+        if(! Evenements::seasonExists($annee)) {
+            $fail['error'] = true;
+            $fail['message'] = "La saison " . $annee . " existe déjà.";
+
+            Evenements::displayEventForm($fail);
+            return;
+        }
 
         switch($type) {
             case 'repetition':
             case 'concert':
                 Evenements::addEvent($nom, $lieu, $date, $type);
-                break;
-
+                
             case 'saison':
                 Evenements::displaySaisonForm($nom, $annee);
                 break;
@@ -345,5 +356,46 @@ class Evenements {
     // GET 
     function addSaison() {
         // Récupération des oeuvres et ajout dans la base de données
+    }
+
+    // Retourne true si la saison existe, false sinon
+    function seasonExists($annee) {
+        $returnValue = NULL;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        $sql = "SELECT count(*) 
+            FROM Evenement
+            NATURAL JOIN TypeEvt
+            WHERE typeEvt LIKE 'Saison'
+            AND EXTRACT(YEAR from heureDate) = :annee";
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $query->execute(array(
+                    ':annee' => $annee
+                    )
+                );
+
+                $result = $query->fetch();
+                
+                if($result[0] > 0) 
+                    $returnValue = false;
+                else
+                    $returnValue = true;
+            }
+            catch(PDOException $e) { }
+        }
+
+        return $returnValue;
     }
 }
