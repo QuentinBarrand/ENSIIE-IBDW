@@ -235,17 +235,17 @@ INSERT INTO Evenement(idType, heuredate, lieu, nom)
 VALUES (2, '2014-07-28 19:00:00', '3 rue Victor Hugo 78000 Sartrouville', 'Répétition générale: musiques diverses');
 -- Concerts Vides
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (1, '2014-01-25 11:00:00', 'Lieu1', 'Evènement 1');
+VALUES (1, '2014-01-25 11:00:00', '49,  rue Berger -  75001 Paris', 'Concert Tryo [reprises]');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (1, '2014-02-25 11:00:00', 'Lieu2', 'Evènement 2');
+VALUES (1, '2014-02-25 11:00:00', '42,  rue des Lombards -  75001 Paris', 'Concert Rock / Metal');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (1, '2014-03-25 11:00:00', 'Lieu3', 'Evènement 3');
+VALUES (1, '2014-03-25 11:00:00', '11,  quai François-Mauriac -  75013 Paris ', 'Les choristes à l''Olympia');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (1, '2014-04-25 11:00:00', 'Lieu4', 'Evènement 4');
+VALUES (1, '2014-04-25 11:00:00', 'route du Champ-de-Manœuvre -  91000 Evry', 'Eminem au Palio');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (1, '2014-05-25 11:00:00', 'Lieu5', 'Evènement 5');
+VALUES (1, '2014-05-25 11:00:00', '07, rue de la Musique - 77 000 Savigny-le-Temple', 'Passenger en concert unique à Paris !');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (1, '2014-06-25 11:00:00', 'Lieu6', 'Evènement 6');
+VALUES (1, '2014-06-25 11:00:00', 'avenue de la prairie Strasbourg 67000', 'Metallica au Zénith de Strasbourg');
 
 --PARTICIPATION
 -- Confirmation: 0 indécis et 1 présent. Aucun tuple = absent
