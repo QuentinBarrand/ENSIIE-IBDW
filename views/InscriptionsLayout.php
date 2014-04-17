@@ -13,7 +13,7 @@
     if($user['responsabilite'] == 2)
         $type = 1;
 
-    function show_table($data, $user_type, $display_type) {
+    function show_table($base, $data, $user_type, $display_type) {
 
         // Affichage du titre en fonction de la validation à afficher
         if($user_type == $display_type) {
@@ -68,7 +68,7 @@
 
                 // Affichage du bouton de validation si nécessaire
                 if($user_type == $display_type) {
-                    $link = 'href="' .Flight::request()->base .'/inscriptions/validation/' . $row['idinscription'] . '"';
+                    $link = 'href="' . $base .'/inscriptions/validation/' . $row['idinscription'] . '"';
                     $class = 'class="label label-warning"';
                     $role = 'role="button"';
                     echo '<a ' . $link . ' ' . $class . ' ' . $role . '>Valider</a>';
@@ -83,8 +83,8 @@
         echo '</table>';
     }
 
-    show_table($data, $type, abs($type-1));
-    show_table($data, $type, $type);
+    show_table($base, $data, $type, abs($type-1));
+    show_table($base, $data, $type, $type);
 
 ?>
 

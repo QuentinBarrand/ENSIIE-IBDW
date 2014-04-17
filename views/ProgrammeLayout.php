@@ -36,7 +36,7 @@
 		echo '<th>Durée</th>';
 		echo '<th>Style</th>';
 
-		if($user['authenticated'] && $user['idChoriste'] != NULL)
+		if($user['authenticated'] && $user['validation'] > 1)
 			echo '<th>Niveau</th>';
 
 		echo '</tr>';
@@ -53,7 +53,7 @@
 			echo '<td>' . $row['duree'] . '</td>';
 			echo '<td>' . $row['style'] . '</td>';
 
-			if($user['authenticated'] && $user['idChoriste'] != NULL) {
+			if($user['authenticated'] && $user['validation'] > 1) {
 				if(isset($data['progression'][$row['idoeuvre']]))
 					$niveau = $data['progression'][$row['idoeuvre']];
 				else

@@ -1,6 +1,11 @@
 <?php echo($header); ?>
 <?php echo($navbar); ?>
 
+<?php
+$base = Flight::request()->base;
+if($base == '/') $base = '';
+?>
+
 <h1>
     S'inscrire en tant que Choriste
     <br>
@@ -10,7 +15,7 @@
 
 <div class="row">
     <div class="col-lg-5">
-        <form role="form" action="<?php echo Flight::request()->base; ?>/choristes/nouveau" method="post">
+        <form role="form" action="<?php echo $base; ?>/choristes/nouveau" method="post">
           
           <div class="form-group">
             <label>Identifiant</label>

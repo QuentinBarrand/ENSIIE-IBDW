@@ -1,11 +1,16 @@
 <?php echo($header); ?>
 <?php echo($navbar); ?>
 
+<?php
+$base = Flight::request()->base;
+if($base == '/') $base = '';
+?>
+
 <h1>Ajouter un évènement</h1>
 
 <div class="row">
     <div class="col-lg-5">
-        <form role="form" action="<?php echo Flight::request()->base; ?>/evenements/nouveau" method="post">
+        <form role="form" action="<?php echo $base; ?>/evenements/nouveau" method="post">
           <div class="form-group">
             <label for="eventName">Nom de l'évènement</label>
             <input type="text" class="form-control" id="eventName" placeholder="Intitulé de l'évènement" required>
