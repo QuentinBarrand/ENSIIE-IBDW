@@ -114,9 +114,10 @@ class Authentification {
             }
 
             // TODO : remplacer par une requête préparée
-            $sql = "SELECT u.login, i.validation, c.nom, c.prenom, c.idChoriste, r.id
+            $sql = "SELECT u.login, i.validation, c.nom, c.prenom,c.telephone, c.ville, c.idChoriste, r.id, v.idVoix
                     FROM Utilisateur u
                     LEFT JOIN Choriste c ON u.login = c.login
+                    LEFT JOIN Voix v ON c.idVoix = v.idVoix
                     LEFT JOIN Inscription i ON c.idInscription = i.idInscription
                     LEFT JOIN endosse e ON u.login = e.login
                     LEFT JOIN Responsabilite r ON e.id = r.id
@@ -132,11 +133,15 @@ class Authentification {
                     $data['content'] = $query->fetch();
 
                     $user['authenticated'] = true;
+                    $user['login'] = $login;
                     $user['validation'] = $data['content']['validation'];
                     $user['nom'] = $data['content']['nom'];
                     $user['prenom'] = $data['content']['prenom'];
+                    $user['telephone'] = $data['content']['telephone'];
+                    $user['ville'] = $data['content']['ville'];
                     $user['idChoriste'] = $data['content']['idchoriste'];
                     $user['responsabilite'] = $data['content']['id'];
+                    $user['idvoix'] = $data['content']['idvoix'];
 
                     // Calcul des validation en attente si webmaster ou tresorier
                     $user['inscriptions'] = 0;
