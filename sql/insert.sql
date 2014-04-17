@@ -64,32 +64,15 @@ VALUES ('bryan', md5('kitchen'));
 INSERT INTO Utilisateur(login, motdepasse)
 VALUES ('ryan', md5('lalouve'));
 
---RESPONSABILITE
-INSERT INTO Responsabilite(titre)
-VALUES ('Chef de coeur');
-INSERT INTO Responsabilite(titre)
-VALUES ('Tresorier');
-INSERT INTO Responsabilite(titre)
-VALUES ('Webmaster');
-INSERT INTO Responsabilite(titre)
-VALUES ('Secrétaire');
-INSERT INTO Responsabilite(titre)
-VALUES ('Organisateur');
-INSERT INTO Responsabilite(titre)
-VALUES ('Responsable du matériel');
-
-INSERT INTO endosse(login, id)
-VALUES ('ddiallo', 1);
-INSERT INTO endosse(login, id)
-VALUES ('ssabatier', 2);
-INSERT INTO endosse(login, id)
-VALUES ('qbarrand', 3);
-INSERT INTO endosse(login, id)
-VALUES ('mpaume', 4);
-INSERT INTO endosse(login, id)
-VALUES ('mpaume', 5);
-INSERT INTO endosse(login, id)
-VALUES ('gbriquet', 6);
+--VOIX
+INSERT INTO Voix(typeVoix)
+VALUES ('alto');
+INSERT INTO Voix(typeVoix)
+VALUES ('soprano');
+INSERT INTO Voix(typeVoix)
+VALUES ('tenor');
+INSERT INTO Voix(typeVoix)
+VALUES ('basse');
 
 --INSCRIPTION
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
@@ -130,32 +113,22 @@ INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Etudiant', '200', '2013', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Salarié', '300', '2013', 2);
-INSERT INTO Inscription(typeInscription, montant, annee, validation)
-VALUES ('Etudiant', '200', '2013', 1);
-INSERT INTO Inscription(typeInscription, montant, annee, validation)
-VALUES ('Etudiant', '200', '2013', 2);
-INSERT INTO Inscription(typeInscription, montant, annee, validation)
-VALUES ('Etudiant', '200', '2013', 2);
-
---VOIX
-INSERT INTO Voix(typeVoix)
-VALUES ('alto');
-INSERT INTO Voix(typeVoix)
-VALUES ('soprano');
-INSERT INTO Voix(typeVoix)
-VALUES ('tenor');
-INSERT INTO Voix(typeVoix)
-VALUES ('basse');
+-- INSERT INTO Inscription(typeInscription, montant, annee, validation)
+-- VALUES ('Etudiant', '200', '2013', 1);
+-- INSERT INTO Inscription(typeInscription, montant, annee, validation)
+-- VALUES ('Etudiant', '200', '2013', 2);
+-- INSERT INTO Inscription(typeInscription, montant, annee, validation)
+-- VALUES ('Etudiant', '200', '2013', 2);
 
 --CHORISTES
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login , idInscription)
 VALUES ('sarboni', 'thomas', 1, 'angers', '0601020304', 'tsarboni', 1);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('sabatier', 'sébastien', 4, 'bordeaux', '0602030405', 'ssabatier',2);
+VALUES ('sabatier', 'sébastien', NULL, 'bordeaux', '0602030405', 'ssabatier',2);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('barrand', 'quentin', 3, 'taverny', '0604050607', 'qbarrand',3);
+VALUES ('barrand', 'quentin', NULL, 'taverny', '0604050607', 'qbarrand',3);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('briquet', 'gaétan', 1, 'amiens', '0605060708', 'gbriquet',4);
+VALUES ('briquet', 'gaétan', NULL, 'amiens', '0605060708', 'gbriquet',4);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('Muller', 'Chris', 2, 'sarcelles', '0603040506', 'MullerChris',5);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
@@ -179,7 +152,41 @@ VALUES ('Hourquebie', 'bryan', 4, 'bordeaux', '0666040999', 'bryan',14);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('Hegoak', 'ryan', 1, 'Bayonne', '0666040656', 'ryan',15);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('Diallo', 'Dounde', 1, 'amiens', '0605060708', 'ddiallo', 16);
+VALUES ('Diallo', 'Dounde', NULL, 'amiens', '0605060708', 'ddiallo', 16);
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login , idInscription)
+VALUES ('Paume', 'Mylène', NULL, 'strasbourg', '0601030415', 'mpaume', 17);
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login , idInscription)
+VALUES ('Monier', 'Gwenaël', NULL, 'bordeaux', '0601030225', 'gmonier', 18);
+INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login , idInscription)
+VALUES ('Godin', 'Pierre', 3, 'bordeaux', '0601030225', 'Pierre', 19);
+
+--RESPONSABILITE
+INSERT INTO Responsabilite(titre)
+VALUES ('Chef de coeur');
+INSERT INTO Responsabilite(titre)
+VALUES ('Tresorier');
+INSERT INTO Responsabilite(titre)
+VALUES ('Webmaster');
+INSERT INTO Responsabilite(titre)
+VALUES ('Secrétaire');
+INSERT INTO Responsabilite(titre)
+VALUES ('Organisateur');
+INSERT INTO Responsabilite(titre)
+VALUES ('Responsable du matériel');
+
+INSERT INTO endosse(login, id)
+VALUES ('ddiallo', 1);
+INSERT INTO endosse(login, id)
+VALUES ('ssabatier', 2);
+INSERT INTO endosse(login, id)
+VALUES ('qbarrand', 3);
+INSERT INTO endosse(login, id)
+VALUES ('mpaume', 4);
+INSERT INTO endosse(login, id)
+VALUES ('mpaume', 5);
+INSERT INTO endosse(login, id)
+VALUES ('gbriquet', 6);
+
 
 --TYPE D'EVENEMENT
 INSERT INTO TypeEvt(typeEvt)

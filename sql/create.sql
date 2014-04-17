@@ -51,7 +51,7 @@ create table Choriste (
     idChoriste serial,
     nom varchar(45) NOT NULL,
     prenom varchar(45) NOT NULL,
-    idVoix smallint NOT NULL,
+    idVoix smallint DEFAULT NULL,
     ville varchar(45) NOT NULL,
     telephone varchar(30) NOT NULL,
     login varchar(45) NOT NULL,
