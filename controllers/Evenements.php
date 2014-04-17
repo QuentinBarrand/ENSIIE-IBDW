@@ -159,4 +159,104 @@ class Evenements {
 
         return $count;
     }
+
+    // POST /evenements/nouveau
+    function add() {
+        // Récupération des données POST
+        $nom   = Flight::request()->data->nom;
+        $lieu  = Flight::request()->data->lieu;
+        $date  = Flight::request()->data->date;
+        $heure = Flight::request()->data->heure;
+        $type  = Flight::request()->data->type;
+
+        switch($type) {
+            case 'repetition':
+            case 'concert':
+                Evenements::addEvent($nom, $lieu, $date, $heure, $type);
+
+            case 'saison':
+                Evenements::DisplaySaisonForm($nom, $date);
+        }
+    }
+
+    // Fonction d'ajout d'une répétition ou d'un concert
+    function addEvent($nom, $lieu, $date, $heure, $type) {
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        // On insère l'évènement courant
+        $sql = "INSERT INTO Evenement(idType, heureDate, lieu, nom)
+            VALUES(:idType, :heureDate, :lieu, :nom)
+            RETURNING idEvenement;";
+
+        switch($type) {
+            case 'repetition':
+                $idType = 1;
+            case 'concert':
+                $idType = 2;
+        }
+
+        // Traitement heureDate
+        $timestamp = DateTime::createFromFormat("d/m/Y", $date);
+        $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                $query->execute(array(
+                    ':idType' => $idType,
+                    ':heureDate' => $heureDate,
+                    ':lieu' => $lieu,
+                    ':nom' => $nom
+                    )
+                );
+
+                $data['success'] = true;
+                $data['message'] = "L'évènement <b>" . $nom . "</b> a bien été ajouté.";
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+            }
+        }
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Ajout d\'un évènement'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');      
+
+        // Finalement on rend le layout
+        if($data['success'])
+            Flight::render('SuccessLayout.php', array('data' => $data));
+        else
+            Flight::render('ErrorLayout.php', array('data' => $data));
+    }
+
+    function DisplaySaisonForm($nom, $date) {
+        // Formulaire d'ajout des oeuvres
+    }
+
+    function addSaison() {
+        // Récupération des oeuvres et ajout dans la base de données
+    }
 }

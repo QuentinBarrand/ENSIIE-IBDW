@@ -94,7 +94,7 @@ Flight::route('GET /evenements/nouveau', function() {
 
 // Traitement de la requête issue du formulaire
 Flight::route('POST /evenements/nouveau', function() {
-    echo "Traitement de la requête issue du formulaire";
+    Evenements::add();
 });
 
 /*

@@ -20,11 +20,11 @@ if($base == '/') $base = '';
         <form role="form" action="<?php echo $base; ?>/evenements/nouveau" method="post">
           <div class="form-group">
             <label for="eventName">Nom de l'évènement</label>
-            <input type="text" class="form-control" id="eventName" placeholder="Intitulé de l'évènement" required>
+            <input type="text" name="nom" class="form-control" id="eventName" placeholder="Intitulé de l'évènement" required>
           </div>
           <div class="form-group">
             <label for="eventPlace">Lieu de l'évènement</label>
-            <input type="text" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville" required>
+            <input type="text" name="lieu" class="form-control" id="eventPlace" placeholder="Adresse, code postal et ville" required>
           </div>
 
           <div class="form-group">
@@ -32,7 +32,7 @@ if($base == '/') $base = '';
 
             <div id="datepicker">
                 <div class="input-group date">
-                    <input id="eventDate" type="text" class="form-control" placeholder="DD/MM/AAAA" required>
+                    <input id="eventDate" type="text" name="date" class="form-control" placeholder="DD/MM/AAAA" required>
                     <span class="input-group-addon">Cliquez pour choisir une date</span>
                 </div>
             </div>
@@ -40,7 +40,7 @@ if($base == '/') $base = '';
 
           <div class="form-group">
             <label for="eventTime">Heure de l'évènement</label>
-            <input type="text" class="form-control" id="eventTime" placeholder="HH:MM:SS" required>
+            <input type="text" name="heure" class="form-control" id="eventTime" placeholder="HH:MM:SS" required>
           </div>
 
           <input id="eventType" type="hidden" name="type" value="repetition">
