@@ -50,7 +50,7 @@ class Authentification {
                     $expires = time() + 60 * 60;
 
                 // Stockage des informations dans des cookies
-                setcookie('login', $login, $expires);
+                setcookie('login', $login, $expires, '/');
                 Flight::redirect(Flight::request()->base);
             }  
             else
