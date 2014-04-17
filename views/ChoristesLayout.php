@@ -58,7 +58,7 @@ if(count($data['content']) > 0) {
 			// Taux de présence
 			$p = (int)$row['participations'];
 			$r = $data['repets_count'];
-			$pc = ($p / $r) * 100;
+			$pc = round(($p / $r) * 100);
 
 			echo '<td>' . $p . ' / ' . $r;
 
