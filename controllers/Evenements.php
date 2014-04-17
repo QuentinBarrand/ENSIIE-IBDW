@@ -189,7 +189,7 @@ class Evenements {
             case 'repetition':
             case 'concert':
                 Evenements::addEvent($nom, $lieu, $date, $type);
-                
+
             case 'saison':
                 Evenements::displaySaisonForm($nom, $annee);
                 break;
@@ -353,9 +353,110 @@ class Evenements {
         Evenements::displaySaisonForm($nom, $annee, $data['message']);
     }
 
-    // GET 
+    // POST /saison/nouveau
     function addSaison() {
-        // Récupération des oeuvres et ajout dans la base de données
+        // print_r(Flight::request()->data); die;
+        $nom = Flight::request()->data->nom;
+        $annee = Flight::request()->data->annee;
+        $oeuvres = Flight::request()->data->oeuvres;
+
+        // Ajout de la saison en base de données
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        $sql = "INSERT INTO Evenement(idType, heureDate, lieu, nom)
+            VALUES(3, :heureDate, '', :nom)
+            RETURNING idEvenement;";
+
+        // annee en timestamp compatible postgres
+        $timestamp = DateTime::createFromFormat("Y", $annee);
+        $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
+
+        if($db) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $query->execute(array(
+                    ':heureDate' => $heureDate,
+                    ':nom' => $nom
+                    )
+                );
+
+                $result = $query->fetch();
+                
+                $saisonId = $result['idevenement']; 
+            }
+            catch(PDOException $e) { }
+        }
+
+        // Ajout des oeuvres dans la table est_au_programme
+        if(! isset($saisonId)) {
+            $data['success'] = false;
+            $data['message'] = "Impossible d'ajouter la saison " . $annee .".";
+        }
+        else {
+            if(count($oeuvres) > 0) {   
+                try {
+                    $sql = "INSERT INTO est_au_programme";
+
+                    $query = $db->prepare($sql);
+
+                    $first = true;
+
+                    foreach($oeuvres as $oeuvreId) {
+                        if($first) {
+                            $sql .= " VALUES ";
+                            $first = false;
+                        }
+                        
+                        else
+                            $sql .= ",";
+
+                        $sql .= "(" . $oeuvreId . ", " . $saisonId . ")";
+                    }
+
+                    $sql .= ";";
+
+                    $query = $db->prepare($sql);
+                    $query->execute();
+                }
+                catch(PDOException $e) { }
+            }
+
+            $data['success'] = true;
+            $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
+        }
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Ajout d\'une saison'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');      
+
+        // Finalement on rend le layout
+        if($data['success'])
+            Flight::render('SuccessLayout.php', array('data' => $data));
+        else
+            Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
     // Retourne true si la saison existe, false sinon

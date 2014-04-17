@@ -115,6 +115,11 @@ Flight::route('POST /oeuvre/nouveau', function() {
     Evenements::addOeuvre();
 });
 
+// Traitement de la requête issue du formulaire
+Flight::route('POST /saison/nouveau', function() {
+    Evenements::addSaison();
+});
+
 /*
  * Programme
  */

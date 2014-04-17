@@ -12,7 +12,7 @@ if($base == '/') $base = '';
 <div class="row">
     <div class="col-lg-5">
         <h2>Etablir le programme de la saison</h2>
-        <form role="form" action="<?php echo $base; ?>/evenements/nouveau" method="post" class="form-horizontal" >
+        <form role="form" action="<?php echo $base; ?>/saison/nouveau" method="post" class="form-horizontal" >
             <div class="form-group">
                 <label class="col-sm-2 control-label">Nom</label>
                 <div class="col-sm-10">
@@ -37,6 +37,11 @@ if($base == '/') $base = '';
                 </select>
             </div>
           <br>
+
+          <input id="eventType" type="hidden" name="nom" value="<?php echo $nom; ?>">
+          <input id="eventType" type="hidden" name="annee" value="<?php echo $annee; ?>">
+
+
           <div class="button-validate">
             <button type="submit" class="btn btn-lg btn-primary">Valider le programme</button>
           </div>
