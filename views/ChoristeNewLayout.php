@@ -16,7 +16,18 @@ if($base == '/') $base = '';
 <div class="row">
     <div class="col-lg-5">
         <form role="form" action="<?php echo $base; ?>/choristes/nouveau" method="post">
-          
+           <?php
+           if($fail) {
+                echo '<div class="panel panel-danger">';
+                echo '<div class="panel-heading">';
+                echo '<h3 class="panel-title">Erreur d\'authentification</h3>';
+                echo '</div>';
+                echo '<div class="panel-body">';
+                echo 'Les informations transmises n\'ont pas permis de vous authentifier (identifiant ou mot de passe incorrect).';
+                echo '</div>';
+                echo '</div>';
+           }
+           ?>
           <div class="form-group">
             <label>Identifiant</label>
             <input type="text" name="login" class="form-control" placeholder="Caractères alphanumériques sans espaces" required>

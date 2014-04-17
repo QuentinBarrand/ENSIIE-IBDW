@@ -97,7 +97,11 @@ class Choristes {
             array(), 
             'footer');
 
-        Flight::render('ChoristeNewLayout.php', array('voix' => $voix));
+        Flight::render('ChoristeNewLayout.php', array(
+            'voix' => $voix,
+            'fail' => false
+            )
+        );
     }
 
     // Retourne l'ensemble des voix dans la base de données (ID + type)
@@ -210,6 +214,19 @@ class Choristes {
                     $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
             }
+        $sqlLoginExist = "Select login from Choristes where login = :login";
+        $query = $db->prepare($sqlLoginExist);
+        $query->execute(array(
+                'login' => $login
+                )
+              );
+
+        $fail = false;
+        
+        if ($query->rowCount() >= 1 ) 
+            $fail = true;
+
+        if(! $fail) {
 
         $idVoix = Choristes::getVoixIdFromType($voix);
 
@@ -287,6 +304,8 @@ class Choristes {
             }
         }
 
+        }
+
         // Header
         Flight::render('header.php',
             array(
@@ -307,7 +326,15 @@ class Choristes {
             'footer');      
 
         // Finalement on rend le layout
-        if($data['success'])
+        if($fail) {
+            $voix = Choristes::getVoix();
+            Flight::render('ChoristeNewLayout.php', array(
+            'fail' => $fail,
+            'voix' => $voix
+                )
+            );            
+        }
+        elseif($data['success'])
             Flight::render('SuccessLayout.php', array('data' => $data));
         else
             Flight::render('ErrorLayout.php', array('data' => $data));
