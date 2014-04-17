@@ -142,6 +142,7 @@ class Authentification {
                     $user['idChoriste'] = $data['content']['idchoriste'];
                     $user['responsabilite'] = $data['content']['id'];
                     $user['idvoix'] = $data['content']['idvoix'];
+                    $user['login'] = $data['content']['login'];
 
                     // Calcul des validation en attente si webmaster ou tresorier
                     $user['inscriptions'] = 0;

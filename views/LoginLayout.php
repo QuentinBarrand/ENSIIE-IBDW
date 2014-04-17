@@ -46,7 +46,7 @@
         }
         ?>
 
-        <input name="login" type="text" class="form-control" placeholder="Email" required autofocus>
+        <input name="login" type="text" class="form-control" placeholder="Identifiant" required autofocus>
         <input name="password" type="password" class="form-control" placeholder="Mot de passe" required>
         <label class="checkbox">
           <input name="remember" type="checkbox" value="true"> Se souvenir de moi

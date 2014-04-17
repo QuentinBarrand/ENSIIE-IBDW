@@ -96,13 +96,18 @@ Flight::route('/inscriptions/validation/@id', function($id) {
  */
 
 // Affichage de la liste des évènements
-Flight::route('/evenements', function() {
+Flight::route('GET /evenements', function() {
     Evenements::get();
 });
 
 // Affichage du formulaire d'ajout d'un évènement
 Flight::route('GET /evenements/nouveau', function() {
     Evenements::displayEventForm();
+});
+
+// Mise à jour de la liste des évènements (présence aux évènements)
+Flight::route('POST /evenements', function() {
+    Evenements::updateEvents();
 });
 
 // Traitement de la requête issue du formulaire

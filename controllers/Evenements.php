@@ -2,8 +2,14 @@
 
 class Evenements {
 
+    
     // GET /evenements
     function get() {
+
+        //Récupérer un utilisateur connecté s'il y en a un
+        $user = Flight::get('user');
+
+
         try {
             $db = Flight::db();
         }
@@ -16,9 +22,12 @@ class Evenements {
         // On récupère tous les évènements
         $sql1 = "SELECT idEvenement, heureDate, lieu, nom 
             FROM evenement
-            NATURAL JOIN TypeEvt
-            WHERE typeEvt LIKE 'Concert' 
-            ORDER BY heureDate DESC;";
+            NATURAL JOIN TypeEvt ";
+            // Si l'internaute n'est pas connecté, on affiche que les concerts
+            if (!$user['authenticated']){
+                $sql1.=" WHERE typeEvt LIKE 'Concert' ";
+            }
+            $sql1.=" ORDER BY heureDate DESC; ";
 
         if($db) {
             $voix = Choristes::getVoix();
@@ -46,55 +55,90 @@ class Evenements {
             $sql2 .= "WHERE typeEvt='Concert'
                       ORDER BY heureDate DESC;";
 
-            try {
-                // SQL 1
-                $query = $db->prepare($sql1);
-                $query->execute();
-
-                $data['success'] = true;
-                $data['content'] = $query->fetchAll();
-
-                // SQL2
-                $query = $db->prepare($sql2);
-                $query->execute();
-
-                $result = $query->fetchAll();
-                // var_dump($sql2);
-                // echo '<pre>';
-                // var_dump($result);
-                // echo '</pre>';
-                // die;
+            // On récupère la présence/participation de l'utilisateur connecté (s'il y en a un) pour chaque évènements
+            if($user['authenticated']) {
+                $sqlPresence = "SELECT evenement.idEvenement, confirmation
+                    FROM evenement
+                    NATURAL JOIN TypeEvt
+                    INNER JOIN participe ON evenement.idevenement=participe.idevenement
+                    INNER JOIN choriste ON choriste.idchoriste=participe.idchoriste
+                    WHERE "."login='".$user['login']."' "
+                    ."ORDER BY heureDate DESC;";
             }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+
+            if($db) {
+                try {
+                    // Traitement de SQL1
+                    $query = $db->prepare($sql1);
+                    $query->execute();
+
+                    //$content: variable contenant les données récupérées avec les requêtes sql
+                    foreach($query->fetchAll() as $row) {
+                        $id =$row['idevenement'];
+                        $content[$id] = $row ;
+                    }
+
+                    // Traitement de SqlPresence
+                    if($user['authenticated']) {
+                        $query = $db->prepare($sqlPresence);
+                        $query->execute();
+
+                        //Par défaut l'utilisateur ne va pas à l'évènement
+                        foreach($content as $row) {
+                            $row['presence'] = "absent";
+                            $content[$row['idevenement']] = $row;
+                        }
+
+                        // Traitement des résultats de SqlPresence
+                        foreach($query->fetchAll() as $row) {
+                            $id =$row['idevenement'];
+                            if ($row['confirmation'] == 0)
+                                $content[$id]['presence'] = 'indécis';
+                            else if ($row['confirmation'] == 1)
+                                $content[$id]['presence'] = 'présent';
+                        }
+                    }
+
+                    $data['success'] = true;
+                    $data['content'] = $content;
+
+                    // SQL2
+                    $query = $db->prepare($sql2);
+                    $query->execute();
+
+                    $result = $query->fetchAll();
+                }
+                catch(PDOException $e) {
+                    $data['success'] = false;
+                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                }
             }
+
+            // Header
+            Flight::render('header.php',
+                array(
+                    'title' => 'Liste des évènements'
+                    ),
+                'header');
+
+            // Navbar
+            Flight::render('navbar.php',
+                array(
+                    'activePage' => 'evenements'
+                    ),
+                'navbar');
+
+            // Footer
+            Flight::render('footer.php',
+                array(),
+                'footer');
+
+            // Finalement on rend le layout
+            if($data['success'])
+                Flight::render('EvenementsLayout.php', array('data' => $data));
+            else
+                Flight::render('ErrorLayout.php', array('data' => $data));
         }
-
-        // Header
-        Flight::render('header.php',
-            array(
-                'title' => 'Liste des évènements'
-                ), 
-            'header');
-
-        // Navbar
-        Flight::render('navbar.php',
-            array(
-                'activePage' => 'evenements'
-                ), 
-            'navbar');
-
-        // Footer
-        Flight::render('footer.php',
-            array(), 
-            'footer');      
-
-        // Finalement on rend le layout
-        if($data['success'])
-            Flight::render('EvenementsLayout.php', array('data' => $data));
-        else
-            Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
     // GET /evenements/nouveau
