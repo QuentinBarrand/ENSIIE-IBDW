@@ -13,7 +13,7 @@ DROP TABLE IF EXISTS est_au_programme CASCADE;
 --CREATE EXTENSION pgcrypto;
 
 create table Utilisateur (
-    login varchar(45),
+    login varchar(200),
     motdepasse text NOT NULL,
     constraint pk_utilisateur PRIMARY KEY(login)
 );
@@ -25,7 +25,7 @@ create table Responsabilite (
 );
 
 create table endosse (
-    login varchar(45),
+    login varchar(200),
     id smallint unique,
     constraint pk_endosse PRIMARY KEY (id),
     constraint fk_utilisateur foreign key (login) references Utilisateur (login) ON DELETE CASCADE,
@@ -43,18 +43,18 @@ create table Inscription (
 
 create table Voix (
     idVoix serial,
-    typeVoix varchar(45) NOT NULL,
+    typeVoix varchar(200) NOT NULL,
     constraint pk_idVoix PRIMARY KEY(idVoix)
 );
 
 create table Choriste (
     idChoriste serial,
-    nom varchar(45) NOT NULL,
-    prenom varchar(45) NOT NULL,
+    nom varchar(200) NOT NULL,
+    prenom varchar(200) NOT NULL,
     idVoix smallint DEFAULT NULL,
-    ville varchar(45) NOT NULL,
+    ville varchar(200) NOT NULL,
     telephone varchar(30) NOT NULL,
-    login varchar(45) NOT NULL,
+    login varchar(200) NOT NULL,
     idInscription smallint,
     constraint pk_idChoriste PRIMARY KEY(idChoriste),
     constraint fk_utilisateur foreign key (login) references Utilisateur (login) ON DELETE CASCADE,
@@ -64,7 +64,7 @@ create table Choriste (
 
 create table TypeEvt (
     idType serial,
-    typeEvt varchar(45) NOT NULL,
+    typeEvt varchar(200) NOT NULL,
     constraint pk_idType PRIMARY KEY(idType)
 );
 
@@ -72,8 +72,8 @@ create table Evenement (
     idEvenement serial,
     idType smallint NOT NULL,
     heureDate timestamp NOT NULL,
-    lieu varchar(45) NOT NULL,
-    nom varchar(45) NOT NULL,
+    lieu varchar(200) NOT NULL,
+    nom varchar(200) NOT NULL,
     constraint pk_idEvenement PRIMARY KEY(idEvenement),
     constraint fk_typeEvt foreign key (idType) references TypeEvt (idType) ON DELETE CASCADE
 );
@@ -90,11 +90,11 @@ create table participe (
 
 create table Oeuvre (
     idOeuvre serial,
-    titre varchar(45),
-    auteur varchar(45),
-    partition varchar(45),
+    titre varchar(200),
+    auteur varchar(200),
+    partition varchar(200),
     duree smallint,
-    style varchar(45),
+    style varchar(200),
     constraint pk_oeuvre PRIMARY KEY (idOeuvre)
 );
 
