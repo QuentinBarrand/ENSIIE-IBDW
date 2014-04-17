@@ -354,4 +354,115 @@ class Choristes {
         else
             Flight::render('ErrorLayout.php', array('data' => $data));
     }
+
+    // GET /choristes/modification du compte
+    function displayAccountForm() {
+	$user = Flight::get('user');
+
+        // Récupération des voix pour le <select>
+        $voix = Choristes::getVoix();
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Mon compte'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'account'
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');
+
+        Flight::render('ChoristeAccountLayout.php', array('voix' => $voix));
+    }
+
+// POST /choristes/account
+
+    function submitAccountForm() {
+        // Récupération des données POST
+        $login     = Flight::request()->data->login;
+        $password  = Flight::request()->data->password;
+        $nom       = Flight::request()->data->nom;
+        $prenom    = Flight::request()->data->prenom;
+        $ville     = Flight::request()->data->ville;
+        $telephone = Flight::request()->data->telephone;
+        $voix      = Flight::request()->data->voix;
+        $statut    = Flight::request()->data->statut;
+
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
+        // Modification d'un utilisateur (login / mot de passe)
+        $sql = "UPDATE utilisateur (login, motdepasse)
+                  VALUES (:login, :password)";
+    
+        if($db) {
+                try {
+                    $query = $db->prepare($sql);
+                    
+                    $query->execute(array(
+                        'login'    => $login,
+                        'password' => md5($password)
+                        )
+                    );
+
+                    $data['success'] = true;
+     
+                }
+                catch(PDOException $e) {
+                    $data['success'] = false;
+                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                }
+            }
+
+        $idVoix = Choristes::getVoixIdFromType($voix);
+
+
+
+        // Modification d'un choriste
+        $sql = "UPDATE Choriste (nom, prenom, idVoix, ville, telephone, login, idInscription)
+            VALUES (:nom, :prenom, :idVoix, :ville, :telephone, :login, :idInscription)
+            RETURNING idChoriste;";
+
+        // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
+        if($db && $data['success']) {
+            try {
+                $query = $db->prepare($sql);
+                
+                $executed = $query->execute(array(
+                    ':nom'           => $nom,
+                    ':prenom'        => $prenom,
+                    ':idVoix'        => $idVoix,
+                    ':ville'         => $ville,
+                    ':telephone'     => $telephone,
+                    ':login'         => $login,
+                    ':idInscription' => $idInscription,
+                    )
+                );
+
+                $data['success'] = true;
+                $data['message'] = "Votre compte '" . $login . "' a bien été modifié.";
+            }
+            catch(PDOException $e) {
+                $data['success'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+            }
+        }
+
+    }
+
 }
