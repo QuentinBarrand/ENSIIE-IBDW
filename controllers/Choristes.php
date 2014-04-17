@@ -20,6 +20,7 @@ class Choristes {
                 NATURAL JOIN Utilisateur 
                 LEFT JOIN Endosse ON Utilisateur.login = Endosse.login
                 LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id 
+                WHERE Endosse.id IS NULL OR Endosse.id != 1
                 GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
                 ORDER BY typeVoix;';
 
