@@ -37,7 +37,7 @@ if($base == '/') $base = '';
             <label>Mot de passe</label>
             <input type="password" name="password" class="form-control" id="password0" placeholder="Ce que vous voulez" required>
             <br>
-            <input type="password" class="form-control" id="password1" placeholder="Confirmez votre mot de passe" required>
+            <input type="password" name="password1" class="form-control" id="password1" placeholder="Confirmez votre mot de passe" required>
           </div>
 
           <div class="form-group">

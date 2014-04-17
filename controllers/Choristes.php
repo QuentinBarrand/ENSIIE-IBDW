@@ -176,6 +176,7 @@ class Choristes {
         // Récupération des données POST
         $login     = Flight::request()->data->login;
         $password  = Flight::request()->data->password;
+	$password1 = Flight::request()->data->password1;
         $nom       = Flight::request()->data->nom;
         $prenom    = Flight::request()->data->prenom;
         $ville     = Flight::request()->data->ville;
@@ -192,7 +193,29 @@ class Choristes {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        // Création d'un utilisateur (login / mot de passe)
+        //Verification de l'existence du login dans la base
+        $sqlLoginExist = "Select login from Choriste where login = :login";
+        $query = $db->prepare($sqlLoginExist);
+        $query->execute(array(
+                'login' => $login
+                )
+              );
+
+        $fail = false;
+        
+        if ($query->rowCount() >= 1 ) 
+            $fail = true;
+
+        // Verification du mot de passe de confirmation
+        if($password != $password1)
+            $fail = true;
+
+
+        if(! $fail) {
+
+        $idVoix = Choristes::getVoixIdFromType($voix);	
+
+                // Création d'un utilisateur (login / mot de passe)
         $sql = "INSERT INTO utilisateur (login, motdepasse)
                   VALUES (:login, :password)";
     
@@ -213,22 +236,7 @@ class Choristes {
                     $data['success'] = false;
                     $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
-            }
-        $sqlLoginExist = "Select login from Choristes where login = :login";
-        $query = $db->prepare($sqlLoginExist);
-        $query->execute(array(
-                'login' => $login
-                )
-              );
-
-        $fail = false;
-        
-        if ($query->rowCount() >= 1 ) 
-            $fail = true;
-
-        if(! $fail) {
-
-        $idVoix = Choristes::getVoixIdFromType($voix);
+            }        
 
         // Création d'une inscription
         $sql = "INSERT INTO Inscription (typeInscription, montant, annee)
