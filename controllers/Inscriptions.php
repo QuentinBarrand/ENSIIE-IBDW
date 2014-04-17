@@ -33,10 +33,10 @@ class Inscriptions {
         }
 
         $sql = 'SELECT nom, prenom, typeVoix, typeInscription, idInscription, validation
-            FROM Choriste
-            NATURAL JOIN Voix 
-            NATURAL JOIN Inscription
-            WHERE validation < 2;';
+                FROM Choriste
+                NATURAL JOIN Voix 
+                NATURAL JOIN Inscription
+                WHERE validation < 2;';
 
         if($db) {
             try {

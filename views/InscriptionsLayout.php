@@ -53,7 +53,7 @@
         echo '<th>Type de Voix</th>';
         echo '<th>Type d\'inscription</th>';
 
-        if($row['validation'] == $display_type)
+        if($row['validation'] != $display_type)
             echo '<th>Validation</th>';
 
         echo '</tr>';

@@ -14,14 +14,14 @@ class Choristes {
         }
 
         $sql = 'SELECT nom, prenom, typeVoix, ville, telephone, titre as responsabilite, SUM(participe.confirmation) as participations
-            FROM Choriste
-            LEFT JOIN participe ON Choriste.idChoriste = participe.idChoriste
-            NATURAL JOIN Voix 
-            NATURAL JOIN Utilisateur 
-            LEFT JOIN Endosse ON Utilisateur.login = Endosse.login
-            LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id 
-            GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
-            ORDER BY typeVoix;';
+                FROM Choriste
+                LEFT JOIN participe ON Choriste.idChoriste = participe.idChoriste
+                NATURAL JOIN Voix 
+                NATURAL JOIN Utilisateur 
+                LEFT JOIN Endosse ON Utilisateur.login = Endosse.login
+                LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id 
+                GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
+                ORDER BY typeVoix;';
 
         // On récupère le nombre d'évènements
         $data['repets_count'] = Evenements::getCount();
