@@ -545,9 +545,7 @@ class Evenements {
     }
 
 
-    /* POST /evenements
-     *
-     */
+    // POST /evenements
     function updateEvents() {
         $user = Flight::get('user');
 

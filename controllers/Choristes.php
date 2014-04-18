@@ -311,7 +311,7 @@ class Choristes {
                     );
 
                     $data['success'] = true;
-                    $data['message'] = "Votre compte '" . $login . "' a bien été créé.";
+                    $data['message'] = "Votre compte <b>" . $login . "</b> a bien été créé.";
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
@@ -384,8 +384,7 @@ class Choristes {
         Flight::render('ChoristeAccountLayout.php', array('voix' => $voix));
     }
 
-// POST /choristes/account
-
+    // POST /choristes/account
     function submitAccountForm() {
         // Récupération des données POST
         $login     = Flight::request()->data->login;
@@ -462,7 +461,5 @@ class Choristes {
                 $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
             }
         }
-
     }
-
 }
