@@ -396,8 +396,8 @@ INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (10, 13, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (11, 14, 1);
-INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (2, 15, 0);
+-- INSERT INTO participe(idChoriste, idEvenement, confirmation)
+-- VALUES (2, 15, 0);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (4, 16, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
@@ -422,8 +422,8 @@ INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (10, 9, 0);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (4, 10, 1);
-INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (4, 15, 0);
+-- INSERT INTO participe(idChoriste, idEvenement, confirmation)
+-- VALUES (4, 15, 0);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 7, 0);
 
