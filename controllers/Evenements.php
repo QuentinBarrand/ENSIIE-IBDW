@@ -20,13 +20,15 @@ class Evenements {
         }
 
         // On récupère tous les évènements
-        $sql1 = "SELECT idEvenement, heureDate, lieu, nom 
+        $sql1 = "SELECT idEvenement, heureDate, lieu, nom, idType 
             FROM evenement
             NATURAL JOIN TypeEvt ";
+            
             // Si l'internaute n'est pas connecté, on affiche que les concerts
             if (!$user['authenticated']){
                 $sql1.=" WHERE typeEvt LIKE 'Concert' ";
             }
+
             $sql1.=" ORDER BY heureDate DESC; ";
 
         if($db) {

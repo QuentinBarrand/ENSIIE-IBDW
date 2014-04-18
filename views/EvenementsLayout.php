@@ -21,10 +21,12 @@
 		echo '<th>Nom</th>';
 		echo '<th>Date et heure</th>';
 		echo '<th>Lieu</th>';
+        echo '<th>Type</th>';
 		
 		if($user['authenticated'] and $user['validation'] > 1) {
-			echo '<th>Statut</th>';	
-			echo '<th>Présence</th>';	
+			echo '<th>Statut</th>';
+
+            if($type == 'a_venir') echo '<th>Présence</th>';	
 		}
 
 		echo '</tr>';
@@ -35,35 +37,45 @@
 		foreach($data['content'] as $row) {
 			$epoch_evenement = strtotime($row['heuredate']);
 
-			if($type == 'a_venir')
-				$condition = time() < $epoch_evenement;
-			else
-				$condition = time() > $epoch_evenement;
+            $condition = $type == 'a_venir' ? time() < $epoch_evenement : time() > $epoch_evenement;
 
-			if($condition) {
+			if($condition && $row['idtype'] != 3) {
 				echo '<tr>';
 				
 				echo '<td>' . $row['nom'] . '</td>';
 				echo '<td>' . date('d / m / Y -  H:i:s', $epoch_evenement) . '</td>';
 				echo '<td>' . $row['lieu'] . '</td>';
 
+                switch($row['idtype']) {
+                    case 1:
+                        echo '<td>Concert</td>';
+                        break;
+                    
+                    case 2:
+                        echo '<td>Répétition</td>';
+                        break;
+                }
+
 				if($user['authenticated'] and $user['validation'] > 1) {
-                    //Statut
+                    // Nombre de choristes présents
 					echo '<td>';
 					echo '<span class="label label-danger">Pas assez de choristes </span>';
 					echo '</td>';
-                    //Présence
-					echo '<td><input type="hidden" name="idevenement[]" value="'.$row['idevenement'].'">';
-					echo '<select name="presence[]">';
-                    echo '<option value="'.$row['presence'].'">'.$row['presence'].'</option>';
-                    if ($row['presence'] != 'présent')
-                        echo '<option value="present">présent</option>';
-                    if ($row['presence'] != 'absent')
-                        echo '<option value="absent">absent</option>';
-                    if ($row['presence'] != 'indécis')
-                        echo '<option value="indecis">indécis</option>';
-                    echo '</select>';
-                    echo '</td>';
+
+                    // Présence du choriste connecté
+                    if($type == 'a_venir') {
+    					echo '<td><input type="hidden" name="idevenement[]" value="'.$row['idevenement'].'">';
+    					echo '<select name="presence[]">';
+                        echo '<option value="'.$row['presence'].'">'.$row['presence'].'</option>';
+                        if ($row['presence'] != 'présent')
+                            echo '<option value="present">présent</option>';
+                        if ($row['presence'] != 'absent')
+                            echo '<option value="absent">absent</option>';
+                        if ($row['presence'] != 'indécis')
+                            echo '<option value="indecis">indécis</option>';
+                        echo '</select>';
+                        echo '</td>';
+                    }
 				}
 
 				echo '</tr>';
@@ -80,14 +92,14 @@
 	echo '<h2>Evènements à venir</h2>';
 	printTable('a_venir', $user, $data);
 	
-	echo '<h2>Evènements passés</h2>';
-	printTable('passes', $user, $data);
-
     echo '<div class="button-validate">
             <button type="submit" class="btn btn-lg btn-primary">Mettre à jour la présence</button>
           </div>';
 
     echo '</form>';
+    
+	echo '<h2>Evènements passés</h2>';
+	printTable('passes', $user, $data);
 ?>
 
 <?php echo($footer); ?>
