@@ -49,7 +49,7 @@
 
 			echo '<td>' . $row['titre'] . '</td>';
 			echo '<td>' . $row['auteur'] . '</td>';
-			echo '<td>' . $row['partition'] . '</td>';
+			echo '<td><a href="' . $row['partition'] . '">' . $row['partition'] . '</a></td>';
 			echo '<td>' . $row['duree'] . '</td>';
 			echo '<td>' . $row['style'] . '</td>';
 
