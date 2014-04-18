@@ -78,7 +78,7 @@ VALUES ('basse');
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
-VALUES ('Etudiant', '200', '2014', 1);
+VALUES ('Etudiant', '200', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
 VALUES ('Salarié', '300', '2014', 2);
 INSERT INTO Inscription(typeInscription, montant, annee, validation)
@@ -303,19 +303,33 @@ VALUES (15, 2, 0);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (2, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (3, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (4, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (5, 3, 0);
+VALUES (5, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (6, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (7, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (13, 3, 0);
+VALUES (8, 3, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
-VALUES (15, 3, 0);
+VALUES (9, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (10, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (11, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (12, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (13, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (14, 3, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (15, 3, 1);
 -- évènement 4
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 4, 1);
@@ -412,6 +426,39 @@ INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (4, 15, 0);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (1, 7, 0);
+
+-- évènement 15 (contient suffisamment de choristes)
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (1, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (2, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (3, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (4, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (5, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (6, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (7, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (8, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (9, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (10, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (11, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (12, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (13, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (14, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (15, 15, 1);
+
 
 INSERT INTO oeuvre(titre, auteur, partition, duree, style)
 VALUES ('51 je taime', 'René Pastis', 'http://www.youtube.com/~theme_song12587', '60', 'chanson à boire');
