@@ -223,7 +223,7 @@ class Evenements {
         $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
         $annee = date("Y", $timestamp->getTimestamp());
 
-        if(! Evenements::seasonExists($annee)) {
+        if($type == 'saison' && Evenements::seasonExists($annee)) {
             $fail['error'] = true;
             $fail['message'] = "La saison " . $annee . " existe déjà.";
 
@@ -235,6 +235,7 @@ class Evenements {
             case 'repetition':
             case 'concert':
                 Evenements::addEvent($nom, $lieu, $date, $type);
+                break;
 
             case 'saison':
                 Evenements::displaySaisonForm($nom, $annee);
@@ -260,11 +261,11 @@ class Evenements {
 
         switch($type) {
             case 'repetition':
-                $idType = 1;
+                $idType = 2;
                 break;
 
             case 'concert':
-                $idType = 2;
+                $idType = 1;
                 break;
         }
 
@@ -401,7 +402,6 @@ class Evenements {
 
     // POST /saison/nouveau
     function addSaison() {
-        // print_r(Flight::request()->data); die;
         $nom = Flight::request()->data->nom;
         $annee = Flight::request()->data->annee;
         $oeuvres = Flight::request()->data->oeuvres;
@@ -534,11 +534,11 @@ class Evenements {
                 );
 
                 $result = $query->fetch();
-                
+
                 if($result[0] > 0) 
-                    $returnValue = false;
-                else
                     $returnValue = true;
+                else
+                    $returnValue = false;
             }
             catch(PDOException $e) { }
         }
