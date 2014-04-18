@@ -16,7 +16,7 @@ if($base == '/') $base = '';
 
 <div class="row">
     <div class="col-lg-5">
-        <form role="form" action="<?php echo $base; ?>/choristes/nouveau" method="post">
+        <form role="form" action="<?php echo $base; ?>/choristes/account" method="post">
           
           <div class="form-group">
             <label>Identifiant</label>
@@ -51,21 +51,26 @@ if($base == '/') $base = '';
             <input type="tel" name="telephone" class="form-control" value="<?php echo $user['telephone']; ?>">
           </div>
 
-          <div class="form-group">
-            <label>Voix</label>
-            <select name="voix" class="form-control" required>
-            <?php
+          <?php
+
+          // On affiche le choix de la voix si l'utilisateur est un choriste seulement
+          if($user['idvoix'] != NULL) {
+            echo '<div class="form-group">';
+            echo '<label>Voix</label>';
+            echo '<select name="voix" class="form-control" required>';
+
                 foreach($voix as $v) {
-		    if($user['idvoix'] == $v['idvoix']) {
+		              if($user['idvoix'] == $v['idvoix']) {
                         echo '<option selected>' . $v['typevoix'] .' </option>';
                     } else {
                         echo '<option>' . $v['typevoix'] .'</option>';
                     }
                 }
 
-            ?>
-            </select>
-          </div>
+            echo '</select>';
+            echo '</div>';
+          } 
+          ?>
 
           <br>
           <div class="button-validate">

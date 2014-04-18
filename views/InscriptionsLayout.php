@@ -9,9 +9,7 @@
     if($base == '/') $base = '';
 
     // Detection du type de validation à afficher
-    $type = 0;
-    if($user['responsabilite'] == 2)
-        $type = 1;
+    $type = $user['responsabilite'] == 2 ? 1 : 0;
 
     function show_table($base, $data, $user_type, $display_type) {
 
@@ -20,9 +18,7 @@
             echo '<h2>Inscriptions à valider</h2>';
         }
         else {
-            $other_user = "Webmaster";
-            if($display_type == 1)
-                $other_user = "Trésorier";
+            $other_user = $display_type == 1 ? "Trésorier" : "Webmaster";
             echo '<h2>Inscriptions en attente du ' . $other_user . '</h2>';
         }
 

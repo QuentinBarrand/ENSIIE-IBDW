@@ -357,7 +357,7 @@ class Choristes {
 
     // GET /choristes/modification du compte
     function displayAccountForm() {
-	$user = Flight::get('user');
+	   $user = Flight::get('user');
 
         // Récupération des voix pour le <select>
         $voix = Choristes::getVoix();
@@ -406,8 +406,9 @@ class Choristes {
         }
 
         // Modification d'un utilisateur (login / mot de passe)
-        $sql = "UPDATE utilisateur (login, motdepasse)
-                  VALUES (:login, :password)";
+        $sql = "UPDATE utilisateur SET
+            motdepasse = :password
+            WHERE login = :login;";
     
         if($db) {
                 try {
@@ -430,12 +431,14 @@ class Choristes {
 
         $idVoix = Choristes::getVoixIdFromType($voix);
 
-
-
         // Modification d'un choriste
-        $sql = "UPDATE Choriste (nom, prenom, idVoix, ville, telephone, login, idInscription)
-            VALUES (:nom, :prenom, :idVoix, :ville, :telephone, :login, :idInscription)
-            RETURNING idChoriste;";
+        $sql = "UPDATE Choriste SET 
+            nom = :nom,
+            prenom = :prenom,
+            ville = :ville,
+            telephone = :telephone,
+            idVoix = :idVoix
+            WHERE login = :login;";
 
         // On vérifie que l'insertion précédente a bien pu avoir lieu avec $data['success']
         if($db && $data['success']) {
@@ -449,17 +452,41 @@ class Choristes {
                     ':ville'         => $ville,
                     ':telephone'     => $telephone,
                     ':login'         => $login,
-                    ':idInscription' => $idInscription,
                     )
                 );
 
                 $data['success'] = true;
-                $data['message'] = "Votre compte '" . $login . "' a bien été modifié.";
+                $data['message'] = "Votre compte <b>" . $login . "</b> a bien été modifié.";
             }
             catch(PDOException $e) {
                 $data['success'] = false;
                 $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
             }
         }
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Modification du profil'
+                ), 
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => ''
+                ), 
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(), 
+            'footer');      
+
+        // Finalement on rend le layout
+        if($data['success'])
+            Flight::render('SuccessLayout.php', array('data' => $data));
+        else
+            Flight::render('ErrorLayout.php', array('data' => $data));
     }
 }

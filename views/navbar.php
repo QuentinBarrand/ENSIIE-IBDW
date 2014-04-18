@@ -65,7 +65,7 @@ if($base == '/') $base = '';
 
         if($user['authenticated']) {
           echo '<div id="welcome" class="form-group">';
-          echo '<h4><a href="' . $base . '/choristes/account">(Modifier infos)</a>  Bienvenue, ' . $user['prenom'] . ' ' . $user['nom'] . '   </h4>';
+          echo '<h4> Bienvenue, <a href="' . $base . '/choristes/account">' . $user['prenom'] . ' ' . $user['nom'] . '</a>   </h4>';
           echo '</div>';
           echo '<div class="form-group">';
           echo '<a href="' . $base . '/logout" class="btn btn-warning" role="button">Déconnexion</a>';
