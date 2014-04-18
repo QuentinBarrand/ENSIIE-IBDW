@@ -210,7 +210,7 @@ VALUES (1, '2014-01-25 11:00:00', '12 rue du surf 33850 Lacanau', 'Messe de requ
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
 VALUES (3, '2014-01-25 11:00:00', 'Salle de la cour', 'Saison 2014-2015');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
-VALUES (3, '2013-12-21 14:05:00', '41, allée des rosignols 65170 Tarbes', 'Répétition générale 3');
+VALUES (2, '2013-12-21 14:05:00', '41, allée des rosignols 65170 Tarbes', 'Répétition générale 3');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
 VALUES (3, '2014-06-22 17:55:00', '41, allée des rosignols 65170 Tarbes', 'Saison 2013-2014');
 INSERT INTO Evenement(idType, heuredate, lieu, nom)
