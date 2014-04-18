@@ -59,7 +59,13 @@
 				if($user['authenticated'] and $user['validation'] > 1) {
                     // Nombre de choristes présents
 					echo '<td>';
-					echo '<span class="label label-danger">Pas assez de choristes </span>';
+
+                    // print_r($row); die;
+
+                    if(isset($row['valide']) && $row['valide'])
+                       echo '<span class="label label-success">Présence suffisante</span>';					   
+                    else
+                       echo '<span class="label label-danger">Pas assez de choristes</span>';
 					echo '</td>';
 
                     // Présence du choriste connecté

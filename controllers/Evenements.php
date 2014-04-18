@@ -2,7 +2,6 @@
 
 class Evenements {
 
-    
     // GET /evenements
     function get() {
 
@@ -101,14 +100,29 @@ class Evenements {
                         }
                     }
 
-                    $data['success'] = true;
-                    $data['content'] = $content;
-
                     // SQL2
+                    // print_r($sql2); die;
+
                     $query = $db->prepare($sql2);
                     $query->execute();
 
                     $result = $query->fetchAll();
+
+                    // Traitement résultats $sql2
+                    foreach($result as $row) {
+                        $eventValide = true;
+
+                        foreach($voix as $v) {
+                            // Deux choristes par voix au minimum
+                            if($row['nbc_' . $v['idvoix']] == NULL || $row['nbc_' . $v['idvoix']] < 2)
+                                $eventValide = false;
+                        }
+
+                        $content[$row['idevenement']]['valide'] = $eventValide;
+                    }
+
+                    $data['success'] = true;
+                    $data['content'] = $content;
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
@@ -545,7 +559,6 @@ class Evenements {
 
         return $returnValue;
     }
-
 
     // POST /evenements
     function updateEvents() {
