@@ -175,7 +175,9 @@ class Evenements {
 
         // Footer
         Flight::render('footer.php',
-            array(), 
+            array(
+                'activePage' => 'nouvel_evenement'
+                ),
             'footer');
 
         $user = Flight::get('user');

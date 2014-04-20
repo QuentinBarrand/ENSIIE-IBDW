@@ -10,16 +10,24 @@
 <?php
     $base = Flight::request()->base;
     if($base == '/') $base = '';
+
     $js_scripts = ['jquery.min.js',
-                   'moment.min.js',
                    'bootstrap.min.js',
-                   'bootstrap-datepicker.js',
-                   'bootstrap-datetimepicker.min.js',
-                   'bootstrap-datetimepicker.fr.js'
+                   'bootstrap-datepicker.js'
                   ];
-    foreach($js_scripts as $script) {
+
+    if($activePage == 'nouvel_evenement')
+        array_push($js_scripts,
+                   'moment.min.js',
+                   'bootstrap-datetimepicker.min.js',
+                   'bootstrap-datetimepicker.fr.js');
+
+    foreach($js_scripts as $script)
         echo '<script src="' . $base . '/js/' . $script . '"></script>';
-    }
+
+    if($activePage == 'nouvel_evenement')
+        include 'EvenementNewJS.php';
+
 ?>
 
 </body>
