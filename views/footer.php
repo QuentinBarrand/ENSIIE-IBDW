@@ -1,7 +1,3 @@
-<?php
-$base = Flight::request()->base;
-if($base == '/') $base = '';
-?>
         <!-- <hr> -->
 		<footer>
 			<p>
@@ -11,9 +7,20 @@ if($base == '/') $base = '';
 	
 	</div><!-- /.container -->
 
-    <script src="<?php echo $base; ?>/js/jquery.min.js"></script>
-    <script src="<?php echo $base; ?>/js/bootstrap.min.js"></script>
-    <script src="<?php echo $base; ?>/js/bootstrap-datepicker.js"></script>
+<?php
+    $base = Flight::request()->base;
+    if($base == '/') $base = '';
+    $js_scripts = ['jquery.min.js',
+                   'moment.min.js',
+                   'bootstrap.min.js',
+                   'bootstrap-datepicker.js',
+                   'bootstrap-datetimepicker.min.js',
+                   'bootstrap-datetimepicker.fr.js'
+                  ];
+    foreach($js_scripts as $script) {
+        echo '<script src="' . $base . '/js/' . $script . '"></script>';
+    }
+?>
 
 </body>
 </html>
