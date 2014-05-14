@@ -11,10 +11,10 @@
     $base = Flight::request()->base;
     if($base == '/') $base = '';
 
-    $js_scripts = ['jquery.min.js',
+    $js_scripts = array('jquery.min.js',
                    'bootstrap.min.js',
                    'bootstrap-datepicker.js'
-                  ];
+                  );
 
     if(isset($activePage) && $activePage == 'nouvel_evenement')
         array_push($js_scripts,
