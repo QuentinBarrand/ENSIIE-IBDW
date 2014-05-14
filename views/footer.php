@@ -16,7 +16,7 @@
                    'bootstrap-datepicker.js'
                   ];
 
-    if($activePage == 'nouvel_evenement')
+    if(isset($activePage) && $activePage == 'nouvel_evenement')
         array_push($js_scripts,
                    'moment.min.js',
                    'bootstrap-datetimepicker.min.js',
@@ -25,7 +25,7 @@
     foreach($js_scripts as $script)
         echo '<script src="' . $base . '/js/' . $script . '"></script>';
 
-    if($activePage == 'nouvel_evenement')
+    if(isset($activePage) && $activePage == 'nouvel_evenement')
         include 'EvenementNewJS.php';
 
 ?>
