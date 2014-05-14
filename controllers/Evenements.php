@@ -8,27 +8,17 @@ class Evenements {
         //Récupérer un utilisateur connecté s'il y en a un
         $user = Flight::get('user');
 
-
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
         // On récupère tous les évènements
         $sql1 = "SELECT idEvenement, heureDate, lieu, nom, idType 
             FROM evenement
             NATURAL JOIN TypeEvt ";
             
-            // Si l'internaute n'est pas connecté, on affiche que les concerts
-            if (!$user['authenticated']){
-                $sql1.=" WHERE typeEvt LIKE 'Concert' ";
-            }
+        // Si l'internaute n'est pas connecté, on affiche que les concerts
+        if (!$user['authenticated']){
+            $sql1.=" WHERE typeEvt LIKE 'Concert' ";
+        }
 
-            $sql1.=" ORDER BY heureDate DESC; ";
+        $sql1.=" ORDER BY heureDate DESC; ";
 
         if($db) {
             $voix = Choristes::getVoix();
