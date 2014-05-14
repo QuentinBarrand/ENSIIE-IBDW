@@ -139,8 +139,6 @@ class Choristes {
     function getVoixIdFromType($typeVoix) {
         $idVoix = NULL;
 
-        // print_r($typeVoix); die;
-
         try {
             $db = Flight::db();
         }
@@ -388,13 +386,16 @@ class Choristes {
     function submitAccountForm() {
         // Récupération des données POST
         $login     = Flight::request()->data->login;
-        $password  = Flight::request()->data->password;
         $nom       = Flight::request()->data->nom;
         $prenom    = Flight::request()->data->prenom;
         $ville     = Flight::request()->data->ville;
         $telephone = Flight::request()->data->telephone;
         $voix      = Flight::request()->data->voix;
         $statut    = Flight::request()->data->statut;
+
+        $current_pw     = Flight::request()->data["current-pw"];
+        $new_pw         = Flight::request()->data["new-pw"];
+        $new_pw_confirm = Flight::request()->data["new-pw-confirm"];
 
         try {
             $db = Flight::db();
@@ -405,29 +406,68 @@ class Choristes {
             $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
-        // Modification d'un utilisateur (login / mot de passe)
-        $sql = "UPDATE utilisateur SET
-            motdepasse = :password
-            WHERE login = :login;";
-    
-        if($db) {
+
+        if($new_pw == $new_pw_confirm)
+        {
+            $oldPassword = null;
+
+            // On vérifie que le mot de passe actuel est le bon
+            $sql = "SELECT motdepasse FROM utilisateur
+                WHERE login = :login;";
+
+            if($db) {
                 try {
                     $query = $db->prepare($sql);
                     
                     $query->execute(array(
                         'login'    => $login,
-                        'password' => md5($password)
                         )
                     );
 
+                    $result = $query->fetch();
+
+                    $oldPassword = $result[0];
+
                     $data['success'] = true;
-     
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
                     $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
             }
+
+            if($oldPassword != md5($current_pw)) {
+                $data['success'] = false;
+                $data['error'] = 'Impossible de changer le mot de passe : le mot de passe actuel est incorrect.';
+            }
+            else
+            {
+            // Modification d'un utilisateur (login / mot de passe)
+            $sql = "UPDATE utilisateur SET
+                motdepasse = :password
+                WHERE login = :login;";
+        
+                if($db) {
+                    try {
+                        $query = $db->prepare($sql);
+                        
+                        $query->execute(array(
+                            'login'    => $login,
+                            'password' => md5($new_pw)
+                            )
+                        );
+
+                        $data['success'] = true;
+         
+                    }
+                    catch(PDOException $e) {
+                        $data['success'] = false;
+                        $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                    }
+                }
+            }
+
+        }
 
         $idVoix = Choristes::getVoixIdFromType($voix);
 

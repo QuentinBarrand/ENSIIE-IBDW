@@ -23,14 +23,6 @@ if($base == '/') $base = '';
             <input type="text" name="login" class="form-control" value="<?php echo $user['login']; ?>" readonly>
           </div>
 
-<!--         <div class="form-group">
-            <label>Ancien Mot de passe</label>
-            <input type="password" name="password" class="form-control" id="password0" required>
-            <br>
-            <label>Nouveau Mot de passe</label>
-            <input type="password" class="form-control" id="password1" required>
-        </div>
--->
           <div class="form-group">
             <label>Prénom</label>
             <input type="text" name="prenom" class="form-control" value="<?php echo $user['prenom']; ?>" required>
@@ -71,6 +63,24 @@ if($base == '/') $base = '';
             echo '</div>';
           } 
           ?>
+
+          <br>
+          <h3>Mot de passe</h3>
+
+          <div class="form-group">
+            <label>Mot de passe actuel</label>
+            <input type="password" name="current-pw" class="form-control" placeholder="Mot de passe actuel">
+          </div>
+
+          <div class="form-group">
+            <label>Nouveau mot de passe</label>
+            <input type="password" name="new-pw" class="form-control" placeholder="Nouveau mot de passe">
+          </div>
+
+          <div class="form-group">
+            <label>Confirmation du nouveau mot de passe</label>
+            <input type="password" name="new-pw-confirm" class="form-control" placeholder="Nouveau mot de passe">
+          </div>
 
           <br>
           <div class="button-validate">

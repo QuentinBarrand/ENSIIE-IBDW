@@ -61,8 +61,8 @@ Flight::route('POST /choristes/nouveau', function() {
     Choristes::subscribe();
 });
 
-/* Compte
- *
+/*
+ * Compte
  */
 
 // Affichage des informations du compte de l'utilisateur

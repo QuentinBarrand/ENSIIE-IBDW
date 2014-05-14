@@ -98,9 +98,10 @@
 	echo '<h2>Evènements à venir</h2>';
 	printTable('a_venir', $user, $data);
 	
-    echo '<div class="button-validate">
-            <button type="submit" class="btn btn-lg btn-primary">Mettre à jour la présence</button>
-          </div>';
+	if($user['authenticated'])
+	    echo '<div class="button-validate">
+	            <button type="submit" class="btn btn-lg btn-primary">Mettre à jour la présence</button>
+	          </div>';
 
     echo '</form>';
     
