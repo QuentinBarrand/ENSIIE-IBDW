@@ -1,6 +1,6 @@
 <?php 
 
-require_once '../model/Authentication.php';
+require_once 'model/Authentication.php';
 
 class Authentification {
     // POST /login
@@ -91,7 +91,7 @@ class Authentification {
                 $user['nom'] = $data['content']['nom'];
                 $user['prenom'] = $data['content']['prenom'];
                 $user['telephone'] = $data['content']['telephone'];
-                $user['ville'] = $data['content']['ville']
+                $user['ville'] = $data['content']['ville'];
                 $user['idChoriste'] = $data['content']['idchoriste'];
                 $user['responsabilite'] = $data['content']['id'];
                 $user['idvoix'] = $data['content']['idvoix'];

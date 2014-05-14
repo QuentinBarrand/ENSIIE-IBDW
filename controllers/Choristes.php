@@ -1,6 +1,6 @@
 <?php
 
-require_once '../model/Choristes.php';
+require_once 'model/Choristes.php';
 
 class Choristes {
 
@@ -139,7 +139,7 @@ class Choristes {
                 $fail['message'] = "Les mots de passe entrés ne sont pas identiques.";
             }
         }
-        catch {
+        catch(PDOException $e) {
             $fail['error'] = true;
             $fail['message'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
@@ -363,9 +363,10 @@ class Choristes {
             'footer');      
 
         // Finalement on rend le layout
-        if($data['success'])
+        if($data['success']) {
             Flight::render('SuccessLayout.php', array('data' => $data));
-        else
+        } else {
             Flight::render('ErrorLayout.php', array('data' => $data));
+        }
     }
 }
