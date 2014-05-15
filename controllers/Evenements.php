@@ -422,7 +422,6 @@ class Evenements {
                 $data['success'] = false;
                 $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
             }
-        }
 
         for ($i = 0; $i <= count($requestEvents)-1 && $i <= count($requestPresences)-1; $i++) {
 
