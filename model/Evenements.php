@@ -88,6 +88,34 @@ class E_Queries {
 
     }
 
+    function countSeasonsByYear($annee) {
+
+        $fetchall = False;
+
+        $sql = "SELECT count(*)
+                FROM Evenement
+                WHERE typeEvt LIKE 'Saison'
+                AND EXTRACT(YEAR from heureDate) = " . $annee . ";";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function getPresencesByLogin($login) {
+
+        $fetchall = True;
+
+        $sql = "SELECT idevenement, confirmation
+                FROM Choriste
+                NATURAL JOIN participe
+                WHERE login = " . $login . "'";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
     function insertEvent($evenement) {
 
         $fetchall = False;
@@ -113,6 +141,23 @@ class E_Queries {
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
+
+    }
+
+    function insertSaison($saison) {
+
+        $fetchall = False;
+
+        list($fields, $values) = Query::getFields($saison);
+
+        $sql = "INSERT INTO Evenement(' . $fields . ')
+                VALUES(' . $values . ');";
+
+        $id_sql = "SELECT currval('evenement_idevenement_seq');";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        list($success, $id_result) = Query::execute($id_sql, $fetchall);
+        return array($success, $result, $id_result[0]);
 
     }
 

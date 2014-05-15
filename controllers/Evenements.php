@@ -1,6 +1,7 @@
 <?php
 
 require_once 'model/Evenements.php';
+require_once 'model/Programme.php';
 
 class Evenements {
 
@@ -216,7 +217,7 @@ class Evenements {
         $evt['nom'] = $nom;
 
         try {
-            list($status, $result) = E_Query::insertEvent($evt);
+            list($status, $result) = E_Queries::insertEvent($evt);
             $data['success'] = $status;
             $data['message'] = "L'évènement <b>" . $nom . "</b> a bien été ajouté.";
         }
@@ -302,7 +303,7 @@ class Evenements {
 
         // On insère l'évènement courant
         try {
-            list($status, $result) = E_Query::insertOeuvre($oeuvre);
+            list($status, $result) = E_Queries::insertOeuvre($oeuvre);
             $data['success'] = $status;
             $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
         }
@@ -331,7 +332,7 @@ class Evenements {
 
         // Ajout de la saison en base de données
         try {
-            list($status, $result, $id) = E_Query::insertSaison($saison);
+            list($status, $result, $id) = E_Queries::insertSaison($saison);
             $data['success'] = $status;
         }
         catch(PDOException $e) {
@@ -348,7 +349,7 @@ class Evenements {
             if(count($oeuvres) > 0) {   
                 try {
                     
-                    list($status, $result, $id) = P_Query::addOeuvreToProgramme($oeuvres);
+                    list($status, $result, $id) = P_Queries::addOeuvreToProgramme($oeuvres);
                     $data['success'] = $status;
                     $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
                 }
@@ -388,38 +389,15 @@ class Evenements {
         $returnValue = NULL;
 
         try {
-            $db = Flight::db();
+            list($status, $result) = E_Queries::countSeasonsByYear($annee);
+            $success = $status;
+
+            if($result[0] > 0) 
+                $returnValue = true;
+            else
+                $returnValue = false;
         }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        $sql = "SELECT count(*) 
-            FROM Evenement
-            NATURAL JOIN TypeEvt
-            WHERE typeEvt LIKE 'Saison'
-            AND EXTRACT(YEAR from heureDate) = :annee";
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute(array(
-                    ':annee' => $annee
-                    )
-                );
-
-                $result = $query->fetch();
-
-                if($result[0] > 0) 
-                    $returnValue = true;
-                else
-                    $returnValue = false;
-            }
-            catch(PDOException $e) { }
-        }
+        catch(PDOException $e) { }
 
         return $returnValue;
     }
@@ -428,32 +406,14 @@ class Evenements {
     function updateEvents() {
         $user = Flight::get('user');
 
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-        }
         $requestEvents = Flight::request()->data['idevenement'];
         $requestPresences = Flight::request()->data['presence'];
 
         //récupére la présence de l'utilisateur pour chaque évènements
-        $sql = "select idevenement,confirmation
-                        from choriste
-                        natural join participe
-                        where login = :login ;";
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-
-                $query->execute(array(
-                        'login' => $user['login']
-                    )
-                );
-
-                foreach($query->fetchAll() as $row) {
-                    $id =$row['idevenement'];
+        try {
+            list($status, $result) = E_Queries::getPresencesByLogin($login);
+                foreach($result as $row) {
+                    $id = $row['idevenement'];
                     $presences[$id] = $row ;
                 }
 
