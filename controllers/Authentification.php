@@ -10,8 +10,8 @@ class Authentification {
         $remember = Flight::request()->data->remember;
 
         try {
-            list($status, $result) = Queries::authenticate($login);
-            $data['success'] = $success;
+            list($status, $result) = A_Queries::authenticate($login);
+            $data['success'] = $status;
             $encryptedPassword = $result[0];
         }
         catch(PDOException $e) {
@@ -82,8 +82,8 @@ class Authentification {
         }
         else {
             try {
-                list($status, $result) = Queries::getUserDetails($login);
-                $data['success'] = $success;
+                list($status, $result) = A_Queries::getUserDetails($login);
+                $data['success'] = $status;
                 $data['content'] = $result;
                 $user['authenticated'] = true;
                 $user['login'] = $login;

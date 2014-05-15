@@ -1,5 +1,7 @@
 <?php
 
+require_once 'model/Evenements.php';
+
 class Evenements {
 
     // GET /evenements

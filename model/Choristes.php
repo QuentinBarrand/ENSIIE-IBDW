@@ -2,7 +2,7 @@
 
 require_once 'Generic.php';
 
-class Queries {
+class C_Queries {
 
     /* --- CHORISTES RELATED QUERIES --- */
 
@@ -13,10 +13,10 @@ class Queries {
         $sql = 'SELECT nom, prenom, typeVoix, ville, telephone, titre as responsabilite, SUM(participe.confirmation) as participations
                 FROM Choriste
                 LEFT JOIN participe ON Choriste.idChoriste = participe.idChoriste
-                NATURAL JOIN Voix 
-                NATURAL JOIN Utilisateur 
+                NATURAL JOIN Voix
+                NATURAL JOIN Utilisateur
                 LEFT JOIN Endosse ON Utilisateur.login = Endosse.login
-                LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id 
+                LEFT JOIN Responsabilite ON Endosse.id = Responsabilite.id
                 WHERE Endosse.id IS NULL OR Endosse.id != 1
                 GROUP BY Choriste.idChoriste, nom, prenom, typeVoix, ville, telephone, responsabilite
                 ORDER BY typeVoix;';
@@ -73,7 +73,7 @@ class Queries {
 
     }
 
-    function insertInscription($statut, $montant, $annee) {
+    function insertInscription($inscription) {
 
         $fetchall = False;
 
@@ -97,6 +97,7 @@ class Queries {
                 VALUES (' . $values . ');';
 
         list($success, $result) = Query::execute($sql, $fetchall);
+        return array(false, $sql);
         return array($success, $result);
 
     }
@@ -105,7 +106,7 @@ class Queries {
 
         $fetchall = False;
 
-        list($fields, $values) = Query::getFields($choriste);
+        list($fields, $values) = Query::getFields($user);
 
         $sql = 'UPDATE User SET';
         for($i=0; $i<count($fields); $i++) {
@@ -135,11 +136,11 @@ class Queries {
 
     }
 
-    function getasswordFromLogin($login) {
+    function getPasswordFromLogin($login) {
 
         $fetchall = False;
 
-        $sql = 'SELECT password FROM Utilisateur WHERE login =' . $login . ';';
+        $sql = "SELECT motdepasse FROM Utilisateur WHERE login = '" . $login . "';";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);

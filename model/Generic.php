@@ -4,9 +4,15 @@ class Query {
 
     /* --- GENERIC DATABASE RELATED FUNCTIONS --- */
     function getFields($data) {
+        $quote = "'";
         $separator = '';
         $fields = '';
         $values = '';
+
+        $numerics = array('montant',
+                          'date',
+                          'idVoix',
+                          'idInscription');
 
         foreach($data as $field => $value) {
             if($fields != '') {
@@ -15,7 +21,11 @@ class Query {
             $fields .= $separator;
             $fields .= $field;
             $values .= $separator;
+            if(! in_array($field, $numerics))
+                $values .= $quote;
             $values .= $data[$field];
+            if(! in_array($field, $numerics))
+                $values .= $quote;
         }
 
         return(array($fields, $values));
@@ -35,12 +45,17 @@ class Query {
         if($db) {
             try {
                 $query = $db->prepare($sql);
-                $query->execute();
-                $success = true;
-                if($fetchall) {
-                    $result = $query->fetchAll();
-                } else {
-                    $result = $query->fetch();
+                if(! $query->execute()) {
+                    $success = false;
+                    $result = $query->errorInfo()[2];
+                }
+                else {
+                    $success = true;
+                    if($fetchall) {
+                        $result = $query->fetchAll();
+                    } else {
+                        $result = $query->fetch();
+                    }
                 }
             }
             catch(PDOException $e) {

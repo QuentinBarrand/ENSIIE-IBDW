@@ -22,4 +22,5 @@ class Queries {
         return array($success, $result);
 
     }
+}
 

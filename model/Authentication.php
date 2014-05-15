@@ -2,7 +2,7 @@
 
 require_once 'Generic.php';
 
-class Queries {
+class A_Queries {
 
     /* --- AUTHENTICATION RELATED QUERIES --- */
 

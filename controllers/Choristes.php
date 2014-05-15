@@ -11,8 +11,9 @@ class Choristes {
         $data['repets_count'] = Evenements::getCount();
 
         try {
-            list($status, $result) = Queries::getChoristes();
-            $data['success'] = $success;
+            list($status, $result) = C_Queries::getChoristes();
+            $data['success'] = $status;
+            $data['content'] = $result;
         }
         catch(PDOException $e) {
             $data['success'] = false;
@@ -23,20 +24,20 @@ class Choristes {
         Flight::render('header.php',
             array(
                 'title' => 'Liste des choristes'
-                ), 
+                ),
             'header');
 
         // Navbar
         Flight::render('navbar.php',
             array(
                 'activePage' => 'choristes'
-                ), 
+                ),
             'navbar');
 
         // Footer
         Flight::render('footer.php',
-            array(), 
-            'footer');      
+            array(),
+            'footer');
 
         // Finalement on rend le layout
         if($data['success'])
@@ -59,19 +60,19 @@ class Choristes {
         Flight::render('header.php',
             array(
                 'title' => 'S\'inscrire'
-                ), 
+                ),
             'header');
 
         // Navbar
         Flight::render('navbar.php',
             array(
                 'activePage' => 'choristes'
-                ), 
+                ),
             'navbar');
 
         // Footer
         Flight::render('footer.php',
-            array(), 
+            array(),
             'footer');
 
         Flight::render('ChoristeNewLayout.php', array(
@@ -86,7 +87,7 @@ class Choristes {
         $voix = NULL;
 
         try {
-            list($status, $result) = Queries::getVoix($login);
+            list($status, $result) = C_Queries::getVoix();
             $voix = $result;
         }
         catch(PDOException $e) { }
@@ -99,8 +100,8 @@ class Choristes {
         $idVoix = null;
 
         try {
-            list($status, $result) = Queries::getIdVoixFromType($login);
-            $idVoix = $result['idvoix'];
+            list($status, $result) = C_Queries::getIdVoixFromType($type);
+            $idVoix = $result['idVoix'];
         }
         catch(PDOException $e) {}
 
@@ -115,7 +116,7 @@ class Choristes {
         // Récupération des données POST
         $login     = Flight::request()->data->login;
         $password  = Flight::request()->data->password;
-	$password1 = Flight::request()->data->password1;
+        $password1 = Flight::request()->data->password1;
         $nom       = Flight::request()->data->nom;
         $prenom    = Flight::request()->data->prenom;
         $ville     = Flight::request()->data->ville;
@@ -125,7 +126,7 @@ class Choristes {
 
         // Vérification de l'égalité des mots de passe
         try {
-            list($status, $result) = Queries::getNbChoristesFromLogin($login);
+            list($status, $result) = C_Queries::getNbChoristesFromLogin($login);
 
             // Vérification de l'existance de l'utilisateur
             if($result[0] > 0) {
@@ -149,10 +150,10 @@ class Choristes {
 
             // Création d'un utilisateur (login / mot de passe)
             $usr['login'] = $login;
-            $usr['password'] = md5($password);
+            $usr['motdepasse'] = md5($password);
             try {
-                list($status, $result) = Queries::insertUser($usr);
-                $data['success'] = true;
+                list($status, $result) = C_Queries::insertUser($usr);
+                $data['success'] = $status;
             }
             catch(PDOException $e) {
                 $data['success'] = false;
@@ -177,11 +178,11 @@ class Choristes {
             if($data['success']) {
                 $ins['statut'] = $statut;
                 $ins['montant'] = $montant;
-                $ins['date'] = $date;
+                $ins['date'] = date('Y');
                 try {
-                    list($status, $result) = Queries::insertInscription($ins);
-                    $data['success'] = true;
-                    $idInscription = $result['idinscription'];
+                    list($status, $result) = C_Queries::insertInscription($ins);
+                    $data['success'] = $status;
+                    $idInscription = $result['idInscription'];
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
@@ -200,8 +201,8 @@ class Choristes {
                 $cho['login'] = $login;
                 $cho['idInscription'] = $idInscription;
                 try {
-                    list($status, $result) = Queries::insertChoriste($cho);
-                    $data['success'] = true;
+                    list($status, $result) = C_Queries::insertChoriste($cho);
+                    $data['success'] = $status;
                     $data['message'] = "Votre compte <b>" . $login . "</b> a bien été créé.";
                 }
                 catch(PDOException $e) {
@@ -210,36 +211,39 @@ class Choristes {
                 }
             }
 
-        // Header
-        Flight::render('header.php',
-            array(
-                'title' => 'Inscription' 
-                ), 
-            'header');
+            // Header
+            Flight::render('header.php',
+                array(
+                    'title' => 'Inscription'
+                    ),
+                'header');
 
-        // Navbar
-        Flight::render('navbar.php',
-            array(
-                'activePage' => 'choristes'
-                ), 
-            'navbar');
+            // Navbar
+            Flight::render('navbar.php',
+                array(
+                    'activePage' => 'choristes'
+                    ),
+                'navbar');
 
-        // Footer
-        Flight::render('footer.php',
-            array(), 
-            'footer');      
+            // Footer
+            Flight::render('footer.php',
+                array(),
+                'footer');
 
         // Finalement on rend le layout
-        if($fail['error']) {
+        }
+        else {
             $voix = Choristes::getVoix();
 
             Flight::render('ChoristeNewLayout.php', array(
             'fail' => $fail,
             'voix' => $voix
                 )
-            );            
+            );
         }
-        elseif($data['success'])
+        if(! in_array('error', $data))
+            $data['error'] = $result;
+        if($data['success'])
             Flight::render('SuccessLayout.php', array('data' => $data));
         else
             Flight::render('ErrorLayout.php', array('data' => $data));
@@ -256,19 +260,19 @@ class Choristes {
         Flight::render('header.php',
             array(
                 'title' => 'Mon compte'
-                ), 
+                ),
             'header');
 
         // Navbar
         Flight::render('navbar.php',
             array(
                 'activePage' => 'account'
-                ), 
+                ),
             'navbar');
 
         // Footer
         Flight::render('footer.php',
-            array(), 
+            array(),
             'footer');
 
         Flight::render('ChoristeAccountLayout.php', array('voix' => $voix));
@@ -295,8 +299,9 @@ class Choristes {
 
             // On vérifie que le mot de passe actuel est le bon
             try {
-                list($status, $result) = Queries::updateUser($login);
-                $data['success'] = true;
+                list($status, $result) = C_Queries::getPasswordFromLogin($login);
+                $data['success'] = $status;
+                $oldPassword = $result[0];
             }
             catch(PDOException $e) {
                 $data['success'] = false;
@@ -309,16 +314,20 @@ class Choristes {
             } else {
                 // Modification d'un utilisateur (login / mot de passe)
                 $usr['login'] = $login;
-                $usr['password'] = md5($password);
+                $usr['password'] = md5($new_pw);
                 try {
-                    list($status, $result) = Queries::updateUser($usr);
-                    $data['success'] = true;
+                    list($status, $result) = C_Queries::updateUser($usr);
+                    $data['success'] = $status;
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
                     $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
             }
+        }
+        else {
+            $data['success'] = false;
+            $data['error'] = 'Impossible de changer le mot de passe : les mots de passe saisis sont différents.';
         }
 
         $idVoix = Choristes::getIdVoixFromType($voix);
@@ -333,7 +342,7 @@ class Choristes {
             $cho['telephone'] = $telephone;
             $cho['login'] = $login;
             try {
-                list($status, $result) = Queries::updateChoriste($cho);
+                list($status, $result) = C_Queries::updateChoriste($cho);
                 $data['success'] = true;
                 $data['message'] = "Votre compte <b>" . $login . "</b> a bien été modifié.";
             }
@@ -347,26 +356,26 @@ class Choristes {
         Flight::render('header.php',
             array(
                 'title' => 'Modification du profil'
-                ), 
+                ),
             'header');
 
         // Navbar
         Flight::render('navbar.php',
             array(
                 'activePage' => ''
-                ), 
+                ),
             'navbar');
 
         // Footer
         Flight::render('footer.php',
-            array(), 
-            'footer');      
+            array(),
+            'footer');
 
         // Finalement on rend le layout
-        if($data['success']) {
+        if($data['success'])
             Flight::render('SuccessLayout.php', array('data' => $data));
-        } else {
+        else
             Flight::render('ErrorLayout.php', array('data' => $data));
-        }
     }
+
 }
