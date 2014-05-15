@@ -1,5 +1,8 @@
 <?php
 
+require_once 'model/Evenements.php';
+require_once 'model/Programme.php';
+
 class Evenements {
 
     // GET /evenements
@@ -7,154 +10,98 @@ class Evenements {
 
         //Récupérer un utilisateur connecté s'il y en a un
         $user = Flight::get('user');
-
+        $login = null;
 
         try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
 
-        // On récupère tous les évènements
-        $sql1 = "SELECT idEvenement, heureDate, lieu, nom, idType 
-            FROM evenement
-            NATURAL JOIN TypeEvt ";
-            
-            // Si l'internaute n'est pas connecté, on affiche que les concerts
-            if (!$user['authenticated']){
-                $sql1.=" WHERE typeEvt LIKE 'Concert' ";
-            }
-
-            $sql1.=" ORDER BY heureDate DESC; ";
-
-        if($db) {
             $voix = Choristes::getVoix();
 
-            $sql2 = 'SELECT Evenement.idEvenement, heureDate, lieu, nom';
+            if ($user['authenticated'])
+                $login = $user['login'];
 
-            foreach($voix as $v)
-                $sql2 .= ', nbc_' . $v['idvoix'];
+            list($status, $result) = E_Queries::getEvenements($login);
+            $data['success'] = $status;
+            $content = $result;
 
+            if($data['success']) {
+                //$data['content']: données récupérées avec les requêtes sql
+                foreach($content as $row) {
+                    $id = $row['idevenement'];
 
-            $sql2 .= ' FROM Evenement
-                      NATURAL JOIN TypeEvt ';
+                    //Par défaut l'utilisateur ne va pas à l'évènement
+                    $row['presence'] = "absent";
+                    $data['content']["$id"] = $row ;
+                }
 
-            foreach($voix as $v)
-                $sql2 .= 'LEFT OUTER JOIN (
-                              SELECT idEvenement, count(participe.idChoriste) as nbc_' . $v['idvoix'] . '
-                              FROM participe
-                              NATURAL JOIN Choriste
-                              WHERE idVoix = ' . $v['idvoix'] . '
-                              AND confirmation = 1
-                              GROUP BY idEvenement
-                            ) as view_nbvoix_' . $v['idvoix'] . '
-                          ON Evenement.idEvenement = view_nbvoix_' . $v['idvoix'] . '.idEvenement ';
+                // Récupération des taux de présence de l'utilisateur
+                if($data['success'] && $user['authenticated']) {
+                    list($status, $result) = E_Queries::getRatesByUser($login);
+                    $data['success'] = $status;
 
-            $sql2 .= "WHERE typeEvt='Concert'
-                      ORDER BY heureDate DESC;";
-
-            // On récupère la présence/participation de l'utilisateur connecté (s'il y en a un) pour chaque évènements
-            if($user['authenticated']) {
-                $sqlPresence = "SELECT evenement.idEvenement, confirmation
-                    FROM evenement
-                    NATURAL JOIN TypeEvt
-                    INNER JOIN participe ON evenement.idevenement=participe.idevenement
-                    INNER JOIN choriste ON choriste.idchoriste=participe.idchoriste
-                    WHERE "."login='".$user['login']."' "
-                    ."ORDER BY heureDate DESC;";
-            }
-
-            if($db) {
-                try {
-                    // Traitement de SQL1
-                    $query = $db->prepare($sql1);
-                    $query->execute();
-
-                    //$content: variable contenant les données récupérées avec les requêtes sql
-                    foreach($query->fetchAll() as $row) {
-                        $id =$row['idevenement'];
-                        $content[$id] = $row ;
-                    }
-
-                    // Traitement de SqlPresence
-                    if($user['authenticated']) {
-                        $query = $db->prepare($sqlPresence);
-                        $query->execute();
-
-                        //Par défaut l'utilisateur ne va pas à l'évènement
-                        foreach($content as $row) {
-                            $row['presence'] = "absent";
-                            $content[$row['idevenement']] = $row;
-                        }
-
-                        // Traitement des résultats de SqlPresence
-                        foreach($query->fetchAll() as $row) {
-                            $id =$row['idevenement'];
-                            if ($row['confirmation'] == 0)
-                                $content[$id]['presence'] = 'indécis';
-                            else if ($row['confirmation'] == 1)
-                                $content[$id]['presence'] = 'présent';
-                        }
-                    }
-
-                    // SQL2
-                    // print_r($sql2); die;
-
-                    $query = $db->prepare($sql2);
-                    $query->execute();
-
-                    $result = $query->fetchAll();
-
-                    // Traitement résultats $sql2
+                    // Traitement des résultats
                     foreach($result as $row) {
-                        $eventValide = true;
-
-                        foreach($voix as $v) {
-                            // Deux choristes par voix au minimum
-                            if($row['nbc_' . $v['idvoix']] == NULL || $row['nbc_' . $v['idvoix']] < 2)
-                                $eventValide = false;
-                        }
-
-                        $content[$row['idevenement']]['valide'] = $eventValide;
+                        $id = $row['idevenement'];
+                        if ($row['confirmation'] == 0)
+                            $data['content']["$id"]['presence'] = 'indécis';
+                        else if ($row['confirmation'] == 1)
+                            $data['content']["$id"]['presence'] = 'présent';
                     }
-
-                    $data['success'] = true;
-                    $data['content'] = $content;
-                }
-                catch(PDOException $e) {
-                    $data['success'] = false;
-                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
             }
 
-            // Header
-            Flight::render('header.php',
-                array(
-                    'title' => 'Liste des évènements'
-                    ),
-                'header');
+            if($data['success']) {
+                // Récupération des taux de présence par voix
+                list($status, $result) = E_Queries::getRatesByVoices($voix);
+                $data['success'] = $status;
 
-            // Navbar
-            Flight::render('navbar.php',
-                array(
-                    'activePage' => 'evenements'
-                    ),
-                'navbar');
+                // Traitement des résultats
+                foreach($result as $row) {
+                    $eventValide = true;
 
-            // Footer
-            Flight::render('footer.php',
-                array(),
-                'footer');
+                    foreach($voix as $v) {
+                        // Deux choristes par voix au minimum
+                        if($row['nbc_' . $v['idvoix']] == NULL || $row['nbc_' . $v['idvoix']] < 2)
+                            $eventValide = false;
+                    }
 
-            // Finalement on rend le layout
-            if($data['success'])
-                Flight::render('EvenementsLayout.php', array('data' => $data));
-            else
-                Flight::render('ErrorLayout.php', array('data' => $data));
+                    $content[$row['idevenement']]['valide'] = $eventValide;
+
+                }
+            }
+
         }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+        }
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Liste des évènements'
+                ),
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ),
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(),
+            'footer');
+
+        // Finalement on rend le layout
+        if(! in_array('error', $data))
+            $data['error'] = $result;
+        if($data['success'])
+            Flight::render('EvenementsLayout.php', array('data' => $data));
+        else
+            Flight::render('ErrorLayout.php', array('data' => $data));
+
     }
 
     // GET /evenements/nouveau
@@ -201,30 +148,17 @@ class Evenements {
      * (par défaut 2 = répétitions) dans la base de données.
      */
     function getCount($type = 2) {
+        
         try {
-            $db = Flight::db();
+            list($status, $result) = E_Queries::getEventCountByType($type);
+            $success = $status;
         }
         catch(PDOException $e) {
-            $db = null;
+            $success = false;
         }
-
-        $sql = 'SELECT count(idEvenement) as TotalRepetitions
-                    FROM Evenement
-                    WHERE idType = ' . $type . ';';
 
         $count = NULL;
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                $query->execute();
-
-                $result = $query->fetch();
-                $count = $result[0];
-            }
-            catch(PDOException $e) { }
-        }
-
+        $count = $result[0];
         return $count;
     }
 
@@ -261,20 +195,12 @@ class Evenements {
 
     // Fonction d'ajout d'une répétition ou d'un concert
     function addEvent($nom, $lieu, $date, $type) {
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
 
-        // On insère l'évènement courant
-        $sql = "INSERT INTO Evenement(idType, heureDate, lieu, nom)
-            VALUES(:idType, :heureDate, :lieu, :nom)
-            RETURNING idEvenement;";
+        // Traitement heureDate
+        $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
+        $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
 
+        // Recuperation de l'id du type
         switch($type) {
             case 'repetition':
                 $idType = 2;
@@ -285,28 +211,19 @@ class Evenements {
                 break;
         }
 
-        // Traitement heureDate
-        $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
-        $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
+        $evt['idtype'] = $type;
+        $evt['heuredate'] = $heureDate;
+        $evt['lieu'] = $lieu;
+        $evt['nom'] = $nom;
 
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                $query->execute(array(
-                    ':idType' => $idType,
-                    ':heureDate' => $heureDate,
-                    ':lieu' => $lieu,
-                    ':nom' => $nom
-                    )
-                );
-
-                $data['success'] = true;
-                $data['message'] = "L'évènement <b>" . $nom . "</b> a bien été ajouté.";
-            }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+        try {
+            list($status, $result) = E_Queries::insertEvent($evt);
+            $data['success'] = $status;
+            $data['message'] = "L'évènement <b>" . $nom . "</b> a bien été ajouté.";
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
         // Header
@@ -378,39 +295,21 @@ class Evenements {
         $nom       = Flight::request()->data->nom;
         $annee     = Flight::request()->data->annee;
 
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
+        $oeuvre['titre']     = $titre;
+        $oeuvre['auteur']    = $auteur;
+        $oeuvre['partition'] = $partition;
+        $oeuvre['duree']     = $duree;
+        $oeuvre['style']     = $style;
 
         // On insère l'évènement courant
-        $sql = "INSERT INTO Oeuvre(titre, auteur, partition, duree, style)
-            VALUES(:titre, :auteur, :partition, :duree, :style)
-            RETURNING idOeuvre;";
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                $query->execute(array(
-                    ':titre' => $titre,
-                    ':auteur' => $auteur,
-                    ':partition' => $partition,
-                    ':duree' => $duree,
-                    ':style' => $style
-                    )
-                );
-
-                $data['success'] = true;
-                $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
-            }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+        try {
+            list($status, $result) = E_Queries::insertOeuvre($oeuvre);
+            $data['success'] = $status;
+            $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
         Evenements::displaySaisonForm($nom, $annee, $data['message']);
@@ -422,77 +321,41 @@ class Evenements {
         $annee = Flight::request()->data->annee;
         $oeuvres = Flight::request()->data->oeuvres;
 
-        // Ajout de la saison en base de données
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        $sql = "INSERT INTO Evenement(idType, heureDate, lieu, nom)
-            VALUES(3, :heureDate, '', :nom)
-            RETURNING idEvenement;";
-
         // annee en timestamp compatible postgres
         $timestamp = DateTime::createFromFormat("Y", $annee);
         $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
 
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute(array(
-                    ':heureDate' => $heureDate,
-                    ':nom' => $nom
-                    )
-                );
+        $saison['idtype'] = 3;
+        $saison['heuredate'] = $heureDate;
+        $saison['lieu'] = '';
+        $saison['nom'] = $nom;
 
-                $result = $query->fetch();
-                
-                $saisonId = $result['idevenement']; 
-            }
-            catch(PDOException $e) { }
+        // Ajout de la saison en base de données
+        try {
+            list($status, $result, $id) = E_Queries::insertSaison($saison);
+            $data['success'] = $status;
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
         // Ajout des oeuvres dans la table est_au_programme
-        if(! isset($saisonId)) {
+        if(! isset($id)) {
             $data['success'] = false;
             $data['message'] = "Impossible d'ajouter la saison " . $annee .".";
         }
         else {
             if(count($oeuvres) > 0) {   
                 try {
-                    $sql = "INSERT INTO est_au_programme";
-
-                    $query = $db->prepare($sql);
-
-                    $first = true;
-
-                    foreach($oeuvres as $oeuvreId) {
-                        if($first) {
-                            $sql .= " VALUES ";
-                            $first = false;
-                        }
-                        
-                        else
-                            $sql .= ",";
-
-                        $sql .= "(" . $oeuvreId . ", " . $saisonId . ")";
-                    }
-
-                    $sql .= ";";
-
-                    $query = $db->prepare($sql);
-                    $query->execute();
+                    
+                    list($status, $result, $id) = P_Queries::addOeuvreToProgramme($oeuvres);
+                    $data['success'] = $status;
+                    $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
                 }
                 catch(PDOException $e) { }
             }
 
-            $data['success'] = true;
-            $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
         }
 
         // Header
@@ -526,38 +389,15 @@ class Evenements {
         $returnValue = NULL;
 
         try {
-            $db = Flight::db();
+            list($status, $result) = E_Queries::countSeasonsByYear($annee);
+            $success = $status;
+
+            if($result[0] > 0) 
+                $returnValue = true;
+            else
+                $returnValue = false;
         }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        $sql = "SELECT count(*) 
-            FROM Evenement
-            NATURAL JOIN TypeEvt
-            WHERE typeEvt LIKE 'Saison'
-            AND EXTRACT(YEAR from heureDate) = :annee";
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute(array(
-                    ':annee' => $annee
-                    )
-                );
-
-                $result = $query->fetch();
-
-                if($result[0] > 0) 
-                    $returnValue = true;
-                else
-                    $returnValue = false;
-            }
-            catch(PDOException $e) { }
-        }
+        catch(PDOException $e) { }
 
         return $returnValue;
     }
@@ -566,40 +406,31 @@ class Evenements {
     function updateEvents() {
         $user = Flight::get('user');
 
+        $requestEvents = Flight::request()->data['idevenement'];
+        $requestPresences = Flight::request()->data['presence'];
+
+        // Connexion à la base de données
         try {
             $db = Flight::db();
         }
         catch(PDOException $e) {
             $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
-        $requestEvents = Flight::request()->data['idevenement'];
-        $requestPresences = Flight::request()->data['presence'];
 
         //récupére la présence de l'utilisateur pour chaque évènements
-        $sql = "select idevenement,confirmation
-                        from choriste
-                        natural join participe
-                        where login = :login ;";
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-
-                $query->execute(array(
-                        'login' => $user['login']
-                    )
-                );
-
-                foreach($query->fetchAll() as $row) {
-                    $id =$row['idevenement'];
-                    $presences[$id] = $row ;
-                }
-
+        try {
+            list($status, $result) = E_Queries::getPresencesByLogin($user['login']);
+            foreach($result as $row) {
+                $id = $row['idevenement'];
+                $presences[$id] = $row ;
             }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
         for ($i = 0; $i <= count($requestEvents)-1 && $i <= count($requestPresences)-1; $i++) {

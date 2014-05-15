@@ -1,5 +1,7 @@
 <?php 
 
+require_once 'model/Authentication.php';
+
 class Authentification {
     // POST /login
     function authenticate() {
@@ -8,36 +10,13 @@ class Authentification {
         $remember = Flight::request()->data->remember;
 
         try {
-            $db = Flight::db();
+            list($status, $result) = A_Queries::authenticate($login);
+            $data['success'] = $status;
+            $encryptedPassword = $result[0];
         }
         catch(PDOException $e) {
-            $db = null;
             $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        // TODO : remplacer par une requête préparée
-        $sql = "SELECT u.motdepasse, i.validation
-                FROM Utilisateur u
-                NATURAL JOIN Choriste c
-                NATURAL JOIN Inscription i
-                WHERE u.login LIKE '" . $login  . "'
-                AND i.validation > 0;";
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute();
-
-                $data['success'] = true;
-                $result = $query->fetch();
-                $encryptedPassword = $result[0];
-            }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
         if(! $data['success'])
@@ -103,70 +82,40 @@ class Authentification {
         }
         else {
             try {
-                $db = new PDO('pgsql:host='. Flight::get('postgres.host') .';dbname='. Flight::get('postgres.database'), 
-                    Flight::get('postgres.user'), 
-                    Flight::get('postgres.password'));
+                list($status, $result) = A_Queries::getUserDetails($login);
+                $data['success'] = $status;
+                $data['content'] = $result;
+                $user['authenticated'] = true;
+                $user['login'] = $login;
+                $user['validation'] = $data['content']['validation'];
+                $user['nom'] = $data['content']['nom'];
+                $user['prenom'] = $data['content']['prenom'];
+                $user['telephone'] = $data['content']['telephone'];
+                $user['ville'] = $data['content']['ville'];
+                $user['idChoriste'] = $data['content']['idchoriste'];
+                $user['responsabilite'] = $data['content']['id'];
+                $user['idvoix'] = $data['content']['idvoix'];
+                $user['login'] = $data['content']['login'];
+
+                // Calcul des validation en attente si webmaster ou tresorier
+                $user['inscriptions'] = 0;
+                if(in_array($user['responsabilite'], array(2, 3))) {
+                    // On détecte le type de validation (Webmaster/Tresorier)
+                    $type = 0;
+                    if($user['responsabilite'] == 2)
+                        $type = 1;
+
+                    // On effectue la requete
+                    $user['validations'] = Inscriptions::getCount($type);
+                }
+
             }
             catch(PDOException $e) {
-                $db = null;
                 $data['success'] = false;
-                $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-            }
-
-            // TODO : remplacer par une requête préparée
-            $sql = "SELECT u.login, i.validation, c.nom, c.prenom,c.telephone, c.ville, c.idChoriste, r.id, v.idVoix
-                    FROM Utilisateur u
-                    LEFT JOIN Choriste c ON u.login = c.login
-                    LEFT JOIN Voix v ON c.idVoix = v.idVoix
-                    LEFT JOIN Inscription i ON c.idInscription = i.idInscription
-                    LEFT JOIN endosse e ON u.login = e.login
-                    LEFT JOIN Responsabilite r ON e.id = r.id
-                    WHERE u.login LIKE '" . $login . "';";
-
-            if($db) {
-                try {
-                    $query = $db->prepare($sql);
-                    
-                    $query->execute();
-
-                    $data['success'] = true;
-                    $data['content'] = $query->fetch();
-
-                    $user['authenticated'] = true;
-                    $user['login'] = $login;
-                    $user['validation'] = $data['content']['validation'];
-                    $user['nom'] = $data['content']['nom'];
-                    $user['prenom'] = $data['content']['prenom'];
-                    $user['telephone'] = $data['content']['telephone'];
-                    $user['ville'] = $data['content']['ville'];
-                    $user['idChoriste'] = $data['content']['idchoriste'];
-                    $user['responsabilite'] = $data['content']['id'];
-                    $user['idvoix'] = $data['content']['idvoix'];
-                    $user['login'] = $data['content']['login'];
-
-                    // Calcul des validation en attente si webmaster ou tresorier
-                    $user['inscriptions'] = 0;
-                    if(in_array($user['responsabilite'], array(2, 3))) {
-
-                        // On détecte le type de validation (Webmaster/Tresorier)
-                        $type = 0;
-                        if($user['responsabilite'] == 2)
-                            $type = 1;
-
-                        // On effectue la requete
-                        $user['validations'] = Inscriptions::getCount($type);
-                    }
-
-                }
-                catch(PDOException $e) {
-                    $data['success'] = false;
-                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-                    
-                    $user['authenticated'] = false;
-                }
+                $user['authenticated'] = false;
+                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
             }
         }
-
         return $user;
     }
 
