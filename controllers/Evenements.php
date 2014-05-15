@@ -9,144 +9,98 @@ class Evenements {
 
         //Récupérer un utilisateur connecté s'il y en a un
         $user = Flight::get('user');
+        $login = null;
 
-        // On récupère tous les évènements
-        $sql1 = "SELECT idEvenement, heureDate, lieu, nom, idType 
-            FROM evenement
-            NATURAL JOIN TypeEvt ";
-            
-        // Si l'internaute n'est pas connecté, on affiche que les concerts
-        if (!$user['authenticated']){
-            $sql1.=" WHERE typeEvt LIKE 'Concert' ";
-        }
+        try {
 
-        $sql1.=" ORDER BY heureDate DESC; ";
-
-        if($db) {
             $voix = Choristes::getVoix();
 
-            $sql2 = 'SELECT Evenement.idEvenement, heureDate, lieu, nom';
+            if ($user['authenticated'])
+                $login = $user['login'];
 
-            foreach($voix as $v)
-                $sql2 .= ', nbc_' . $v['idvoix'];
+            list($status, $result) = E_Queries::getEvenements($login);
+            $data['success'] = $status;
+            $content = $result;
 
+            if($data['success']) {
+                //$data['content']: données récupérées avec les requêtes sql
+                foreach($content as $row) {
+                    $id = $row['idevenement'];
 
-            $sql2 .= ' FROM Evenement
-                      NATURAL JOIN TypeEvt ';
+                    //Par défaut l'utilisateur ne va pas à l'évènement
+                    $row['presence'] = "absent";
+                    $data['content']["$id"] = $row ;
+                }
 
-            foreach($voix as $v)
-                $sql2 .= 'LEFT OUTER JOIN (
-                              SELECT idEvenement, count(participe.idChoriste) as nbc_' . $v['idvoix'] . '
-                              FROM participe
-                              NATURAL JOIN Choriste
-                              WHERE idVoix = ' . $v['idvoix'] . '
-                              AND confirmation = 1
-                              GROUP BY idEvenement
-                            ) as view_nbvoix_' . $v['idvoix'] . '
-                          ON Evenement.idEvenement = view_nbvoix_' . $v['idvoix'] . '.idEvenement ';
+                // Récupération des taux de présence de l'utilisateur
+                if($data['success'] && $user['authenticated']) {
+                    list($status, $result) = E_Queries::getRatesByUser($login);
+                    $data['success'] = $status;
 
-            $sql2 .= "WHERE typeEvt='Concert'
-                      ORDER BY heureDate DESC;";
-
-            // On récupère la présence/participation de l'utilisateur connecté (s'il y en a un) pour chaque évènements
-            if($user['authenticated']) {
-                $sqlPresence = "SELECT evenement.idEvenement, confirmation
-                    FROM evenement
-                    NATURAL JOIN TypeEvt
-                    INNER JOIN participe ON evenement.idevenement=participe.idevenement
-                    INNER JOIN choriste ON choriste.idchoriste=participe.idchoriste
-                    WHERE "."login='".$user['login']."' "
-                    ."ORDER BY heureDate DESC;";
-            }
-
-            if($db) {
-                try {
-                    // Traitement de SQL1
-                    $query = $db->prepare($sql1);
-                    $query->execute();
-
-                    //$content: variable contenant les données récupérées avec les requêtes sql
-                    foreach($query->fetchAll() as $row) {
-                        $id =$row['idevenement'];
-                        $content[$id] = $row ;
-                    }
-
-                    // Traitement de SqlPresence
-                    if($user['authenticated']) {
-                        $query = $db->prepare($sqlPresence);
-                        $query->execute();
-
-                        //Par défaut l'utilisateur ne va pas à l'évènement
-                        foreach($content as $row) {
-                            $row['presence'] = "absent";
-                            $content[$row['idevenement']] = $row;
-                        }
-
-                        // Traitement des résultats de SqlPresence
-                        foreach($query->fetchAll() as $row) {
-                            $id =$row['idevenement'];
-                            if ($row['confirmation'] == 0)
-                                $content[$id]['presence'] = 'indécis';
-                            else if ($row['confirmation'] == 1)
-                                $content[$id]['presence'] = 'présent';
-                        }
-                    }
-
-                    // SQL2
-                    // print_r($sql2); die;
-
-                    $query = $db->prepare($sql2);
-                    $query->execute();
-
-                    $result = $query->fetchAll();
-
-                    // Traitement résultats $sql2
+                    // Traitement des résultats
                     foreach($result as $row) {
-                        $eventValide = true;
-
-                        foreach($voix as $v) {
-                            // Deux choristes par voix au minimum
-                            if($row['nbc_' . $v['idvoix']] == NULL || $row['nbc_' . $v['idvoix']] < 2)
-                                $eventValide = false;
-                        }
-
-                        $content[$row['idevenement']]['valide'] = $eventValide;
+                        $id = $row['idevenement'];
+                        if ($row['confirmation'] == 0)
+                            $data['content']["$id"]['presence'] = 'indécis';
+                        else if ($row['confirmation'] == 1)
+                            $data['content']["$id"]['presence'] = 'présent';
                     }
-
-                    $data['success'] = true;
-                    $data['content'] = $content;
-                }
-                catch(PDOException $e) {
-                    $data['success'] = false;
-                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
                 }
             }
 
-            // Header
-            Flight::render('header.php',
-                array(
-                    'title' => 'Liste des évènements'
-                    ),
-                'header');
+            if($data['success']) {
+                // Récupération des taux de présence par voix
+                list($status, $result) = E_Queries::getRatesByVoices($voix);
+                $data['success'] = $status;
 
-            // Navbar
-            Flight::render('navbar.php',
-                array(
-                    'activePage' => 'evenements'
-                    ),
-                'navbar');
+                // Traitement des résultats
+                foreach($result as $row) {
+                    $eventValide = true;
 
-            // Footer
-            Flight::render('footer.php',
-                array(),
-                'footer');
+                    foreach($voix as $v) {
+                        // Deux choristes par voix au minimum
+                        if($row['nbc_' . $v['idvoix']] == NULL || $row['nbc_' . $v['idvoix']] < 2)
+                            $eventValide = false;
+                    }
 
-            // Finalement on rend le layout
-            if($data['success'])
-                Flight::render('EvenementsLayout.php', array('data' => $data));
-            else
-                Flight::render('ErrorLayout.php', array('data' => $data));
+                    $content[$row['idevenement']]['valide'] = $eventValide;
+
+                }
+            }
+
         }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+        }
+
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Liste des évènements'
+                ),
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'evenements'
+                ),
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(),
+            'footer');
+
+        // Finalement on rend le layout
+        if(! in_array('error', $data))
+            $data['error'] = json_encode($data['content']);
+        if($data['success'])
+            Flight::render('EvenementsLayout.php', array('data' => $data));
+        else
+            Flight::render('ErrorLayout.php', array('data' => $data));
+
     }
 
     // GET /evenements/nouveau
@@ -193,30 +147,17 @@ class Evenements {
      * (par défaut 2 = répétitions) dans la base de données.
      */
     function getCount($type = 2) {
+        
         try {
-            $db = Flight::db();
+            list($status, $result) = E_Queries::getEventCountByType($type);
+            $success = $status;
         }
         catch(PDOException $e) {
-            $db = null;
+            $success = false;
         }
-
-        $sql = 'SELECT count(idEvenement) as TotalRepetitions
-                    FROM Evenement
-                    WHERE idType = ' . $type . ';';
 
         $count = NULL;
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                $query->execute();
-
-                $result = $query->fetch();
-                $count = $result[0];
-            }
-            catch(PDOException $e) { }
-        }
-
+        $count = $result[0];
         return $count;
     }
 

@@ -17,6 +17,9 @@ Flight::register('db', 'PDO', array('pgsql:host='. Flight::get('postgres.host') 
 // On stocke les détails de l'utilisateur dans la variables d'instance 'user' de Flight
 Flight::set('user', Authentification::getUserDetails());
 
+// On active le debug
+Flight::set('flight.log_errors', true);
+
 // Accueil
 Flight::route('/', function() {
     // Header
