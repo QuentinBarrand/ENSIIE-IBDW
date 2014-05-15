@@ -24,6 +24,8 @@ class Evenements {
             $content = $result;
 
             if($data['success']) {
+                // Initialisation (Utile lorsque la requête renvoie 0 rows)
+                $data['content'] = null;
                 //$data['content']: données récupérées avec les requêtes sql
                 foreach($content as $row) {
                     $id = $row['idevenement'];
@@ -488,8 +490,7 @@ class Evenements {
                 catch(PDOException $e) { }
             }
         }
-
-        $base = Flight::request()->base;
-        Flight::redirect($base . '/evenements');
+        //Affichage de la liste des évènements
+        Evenements::get();
     }
 }

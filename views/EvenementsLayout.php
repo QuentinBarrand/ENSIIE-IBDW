@@ -93,7 +93,7 @@
 	}
 
 
-    echo '<form role="form" action="'.$base.' /evenements" method="post">';
+    echo '<form role="form" action="'.$base.'/evenements" method="post">';
 
 	echo '<h2>Evènements à venir</h2>';
     if(count($data['content']) > 0) {

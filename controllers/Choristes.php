@@ -310,20 +310,23 @@ class Choristes {
                 $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
             }
 
-            if($oldPassword != md5($current_pw)) {
-                $data['success'] = false;
-                $data['error'] = 'Impossible de changer le mot de passe : le mot de passe actuel est incorrect.';
-            } else {
-                // Modification d'un utilisateur (login / mot de passe)
-                $usr['login'] = $login;
-                $usr['password'] = md5($new_pw);
-                try {
-                    list($status, $result) = C_Queries::updateUser($usr);
-                    $data['success'] = $status;
-                }
-                catch(PDOException $e) {
+            // Si l'utilisateur veut changer de mot de passe
+            if($current_pw != NULL) {
+                if($oldPassword != md5($current_pw)) {
                     $data['success'] = false;
-                    $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                    $data['error'] = 'Impossible de changer le mot de passe : le mot de passe actuel est incorrect.';
+                } else {
+                    // Modification d'un utilisateur (login / mot de passe)
+                    $usr['login'] = $login;
+                    $usr['password'] = md5($new_pw);
+                    try {
+                        list($status, $result) = C_Queries::updateUser($usr);
+                        $data['success'] = $status;
+                    }
+                    catch(PDOException $e) {
+                        $data['success'] = false;
+                        $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+                    }
                 }
             }
         }
