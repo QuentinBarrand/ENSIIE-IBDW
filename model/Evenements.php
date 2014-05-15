@@ -161,22 +161,5 @@ class E_Queries {
 
     }
 
-    function insertSaison($saison) {
-
-        $fetchall = False;
-
-        list($fields, $values) = Query::getFields($saison);
-
-        $sql = "INSERT INTO Evenement(' . $fields . ')
-                VALUES(' . $values . ');";
-
-        $id_sql = "SELECT currval('evenement_idevenement_seq');";
-
-        list($success, $result) = Query::execute($sql, $fetchall);
-        list($success, $id_result) = Query::execute($id_sql, $fetchall);
-        return array($success, $result, $id_result[0]);
-
-    }
-
 }
 
