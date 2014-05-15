@@ -96,7 +96,7 @@ class Evenements {
 
         // Finalement on rend le layout
         if(! in_array('error', $data))
-            $data['error'] = json_encode($data['content']);
+            $data['error'] = $result;
         if($data['success'])
             Flight::render('EvenementsLayout.php', array('data' => $data));
         else
