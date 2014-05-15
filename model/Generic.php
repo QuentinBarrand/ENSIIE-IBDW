@@ -52,7 +52,8 @@ class Query {
                 $query = $db->prepare($sql);
                 if(! $query->execute()) {
                     $success = false;
-                    $result = $query->errorInfo()[2];
+                    $errorInfo = $query->errorInfo();
+                    $result = $errorInfo[2];
                 }
                 else {
                     $success = true;
