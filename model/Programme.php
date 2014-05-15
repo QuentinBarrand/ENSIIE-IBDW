@@ -89,13 +89,14 @@ class P_Queries {
 
         $fetchall = True;
 
-        $sql = "SELECT idOeuvre,Count(est_au_programme.idEvenement) AS nbEvenements
+        $sql = "SELECT idOeuvre, count(est_au_programme.idEvenement) AS nbEvenements
                 FROM est_au_programme
                 NATURAL JOIN evenement
                 NATURAL JOIN participe
                 WHERE idType = 2
                 AND idChoriste = " . $id_choriste . "
-                AND confirmation = 1";
+                AND confirmation = 1
+                GROUP BY idOeuvre";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -110,8 +111,19 @@ class P_Queries {
                 FROM Oeuvre
                 NATURAL JOIN est_au_programme
                 NATURAL JOIN Evenement
-                AND idEevenement = " . $id_saison . "
+                WHERE idevenement = " . $id_saison . "
                 GROUP BY style, nom;";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function getOeuvresWithId($id_saison) {
+
+        $fetchall = True;
+
+        $sql = "SELECT * FROM Oeuvre;";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);

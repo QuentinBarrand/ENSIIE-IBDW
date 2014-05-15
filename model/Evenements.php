@@ -109,7 +109,7 @@ class E_Queries {
         $sql = "SELECT idevenement, confirmation
                 FROM Choriste
                 NATURAL JOIN participe
-                WHERE login = " . $login . "'";
+                WHERE login = '" . $login . "';";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);

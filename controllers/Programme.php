@@ -23,13 +23,13 @@ class Programme {
             $data['id_saison'] = $result[0];
 
             // On récupère toutes les oeuvres de la saison
-            list($status, $result) = P_Queries::getOeuvresBySeason($id_saison);
+            list($status, $result) = P_Queries::getOeuvresBySeason($data['id_saison']);
             $data['success'] = $status;
             $data['content'] = $result;
 
             if($user['authenticated'] && $user['idChoriste'] != NULL) {
             // On récupère la progression de l'utilisateur connecté sur chaque oeuvre
-                list($status, $result) = P_Queries::getProgressionByChoriste($id_choriste);
+                list($status, $result) = P_Queries::getProgressionByChoriste($user['idChoriste']);
                 $data['success'] = $status;
                 foreach($result as $r) {
                     $data['progression'][$r['idoeuvre']] = $r['nbevenements'];
@@ -37,7 +37,7 @@ class Programme {
             }
 
             // Durée par style
-            list($status, $result) = P_Queries::getDureeByStyle($id_saison);
+            list($status, $result) = P_Queries::getDureeByStyle($data['id_saison']);
             $data['styles'] = $result;
             $data['success'] = true;
 
@@ -66,6 +66,8 @@ class Programme {
             array(), 
             'footer');      
 
+        if(! in_array('error', $data))
+           $data['error'] = json_encode($result);
         // Finalement on rend le layout
         if($data['success'])
             Flight::render('ProgrammeLayout.php', array('data' => $data));
@@ -78,27 +80,12 @@ class Programme {
         $oeuvres = NULL;
 
         try {
-            $db = Flight::db();
+            list($status, $result) = P_Queries::getOeuvresWithId();
         }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        $sql = 'SELECT * FROM oeuvre;';
-
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute();
-
-                $oeuvres = $query->fetchAll();
-            }
-            catch(PDOException $e) { }
-        }
+        catch(PDOException $e) { }
         
         return $oeuvres;
+
     }
+
 }

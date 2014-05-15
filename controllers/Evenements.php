@@ -409,19 +409,29 @@ class Evenements {
         $requestEvents = Flight::request()->data['idevenement'];
         $requestPresences = Flight::request()->data['presence'];
 
+        // Connexion à la base de données
+        try {
+            $db = Flight::db();
+        }
+        catch(PDOException $e) {
+            $db = null;
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
+        }
+
         //récupére la présence de l'utilisateur pour chaque évènements
         try {
-            list($status, $result) = E_Queries::getPresencesByLogin($login);
-                foreach($result as $row) {
-                    $id = $row['idevenement'];
-                    $presences[$id] = $row ;
-                }
+            list($status, $result) = E_Queries::getPresencesByLogin($user['login']);
+            foreach($result as $row) {
+                $id = $row['idevenement'];
+                $presences[$id] = $row ;
+            }
 
-            }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
+        }
 
         for ($i = 0; $i <= count($requestEvents)-1 && $i <= count($requestPresences)-1; $i++) {
 
