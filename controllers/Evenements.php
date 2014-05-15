@@ -194,20 +194,12 @@ class Evenements {
 
     // Fonction d'ajout d'une répétition ou d'un concert
     function addEvent($nom, $lieu, $date, $type) {
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
 
-        // On insère l'évènement courant
-        $sql = "INSERT INTO Evenement(idType, heureDate, lieu, nom)
-            VALUES(:idType, :heureDate, :lieu, :nom)
-            RETURNING idEvenement;";
+        // Traitement heureDate
+        $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
+        $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
 
+        // Recuperation de l'id du type
         switch($type) {
             case 'repetition':
                 $idType = 2;
@@ -218,28 +210,19 @@ class Evenements {
                 break;
         }
 
-        // Traitement heureDate
-        $timestamp = DateTime::createFromFormat("d/m/Y H:i", $date);
-        $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
+        $evt['idtype'] = $type;
+        $evt['heuredate'] = $heureDate;
+        $evt['lieu'] = $lieu;
+        $evt['nom'] = $nom;
 
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                $query->execute(array(
-                    ':idType' => $idType,
-                    ':heureDate' => $heureDate,
-                    ':lieu' => $lieu,
-                    ':nom' => $nom
-                    )
-                );
-
-                $data['success'] = true;
-                $data['message'] = "L'évènement <b>" . $nom . "</b> a bien été ajouté.";
-            }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+        try {
+            list($status, $result) = E_Query::insertEvent($evt);
+            $data['success'] = $status;
+            $data['message'] = "L'évènement <b>" . $nom . "</b> a bien été ajouté.";
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
         // Header
@@ -311,33 +294,16 @@ class Evenements {
         $nom       = Flight::request()->data->nom;
         $annee     = Flight::request()->data->annee;
 
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
+        $oeuvre['titre']     = $titre;
+        $oeuvre['auteur']    = $auteur;
+        $oeuvre['partition'] = $partition;
+        $oeuvre['duree']     = $duree;
+        $oeuvre['style']     = $style;
 
         // On insère l'évènement courant
-        $sql = "INSERT INTO Oeuvre(titre, auteur, partition, duree, style)
-            VALUES(:titre, :auteur, :partition, :duree, :style)
-            RETURNING idOeuvre;";
-
-        if($db) {
             try {
-                $query = $db->prepare($sql);
-                $query->execute(array(
-                    ':titre' => $titre,
-                    ':auteur' => $auteur,
-                    ':partition' => $partition,
-                    ':duree' => $duree,
-                    ':style' => $style
-                    )
-                );
-
-                $data['success'] = true;
+                list($status, $result) = E_Query::insertOeuvre($oeuvre);
+                $data['success'] = $status;
                 $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
             }
             catch(PDOException $e) {
@@ -355,77 +321,41 @@ class Evenements {
         $annee = Flight::request()->data->annee;
         $oeuvres = Flight::request()->data->oeuvres;
 
-        // Ajout de la saison en base de données
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
-        $sql = "INSERT INTO Evenement(idType, heureDate, lieu, nom)
-            VALUES(3, :heureDate, '', :nom)
-            RETURNING idEvenement;";
-
         // annee en timestamp compatible postgres
         $timestamp = DateTime::createFromFormat("Y", $annee);
         $heureDate = date("Y-m-d H:i:s", $timestamp->getTimestamp());
 
-        if($db) {
-            try {
-                $query = $db->prepare($sql);
-                
-                $query->execute(array(
-                    ':heureDate' => $heureDate,
-                    ':nom' => $nom
-                    )
-                );
+        $saison['idtype'] = 3;
+        $saison['heuredate'] = $heureDate;
+        $saison['lieu'] = '';
+        $saison['nom'] = $nom;
 
-                $result = $query->fetch();
-                
-                $saisonId = $result['idevenement']; 
-            }
-            catch(PDOException $e) { }
+        // Ajout de la saison en base de données
+        try {
+            list($status, $result, $id) = E_Query::insertSaison($saison);
+            $data['success'] = $status;
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
         }
 
         // Ajout des oeuvres dans la table est_au_programme
-        if(! isset($saisonId)) {
+        if(! isset($id)) {
             $data['success'] = false;
             $data['message'] = "Impossible d'ajouter la saison " . $annee .".";
         }
         else {
             if(count($oeuvres) > 0) {   
                 try {
-                    $sql = "INSERT INTO est_au_programme";
-
-                    $query = $db->prepare($sql);
-
-                    $first = true;
-
-                    foreach($oeuvres as $oeuvreId) {
-                        if($first) {
-                            $sql .= " VALUES ";
-                            $first = false;
-                        }
-                        
-                        else
-                            $sql .= ",";
-
-                        $sql .= "(" . $oeuvreId . ", " . $saisonId . ")";
-                    }
-
-                    $sql .= ";";
-
-                    $query = $db->prepare($sql);
-                    $query->execute();
+                    
+                    list($status, $result, $id) = P_Query::addOeuvreToProgramme($oeuvres);
+                    $data['success'] = $status;
+                    $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
                 }
                 catch(PDOException $e) { }
             }
 
-            $data['success'] = true;
-            $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
         }
 
         // Header

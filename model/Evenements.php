@@ -88,5 +88,50 @@ class E_Queries {
 
     }
 
+    function insertEvent($evenement) {
+
+        $fetchall = False;
+
+        list($fields, $values) = Query::getFields($evenement);
+
+        $sql = "INSERT INTO Evenement(' . $fields . ')
+                VALUES(' . $values . ');";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function insertOeuvre($oeuvre) {
+
+        $fetchall = False;
+
+        list($fields, $values) = Query::getFields($oeuvre);
+
+        $sql = "INSERT INTO Oeuvre(' . $fields . ')
+                VALUES(' . $values . ');";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function insertSaison($saison) {
+
+        $fetchall = False;
+
+        list($fields, $values) = Query::getFields($saison);
+
+        $sql = "INSERT INTO Evenement(' . $fields . ')
+                VALUES(' . $values . ');";
+
+        $id_sql = "SELECT currval('evenement_idevenement_seq');";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        list($success, $id_result) = Query::execute($id_sql, $fetchall);
+        return array($success, $result, $id_result[0]);
+
+    }
+
 }
 

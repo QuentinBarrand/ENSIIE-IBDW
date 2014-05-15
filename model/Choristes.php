@@ -80,7 +80,6 @@ class C_Queries {
                 VALUES (' . $values . ');';
 
         list($success, $result) = Query::execute($sql, $fetchall);
-
         return array($success, $result);
 
     }
@@ -98,7 +97,6 @@ class C_Queries {
 
         list($success, $result) = Query::execute($sql, $fetchall);
         list($success, $id_result) = Query::execute($id_sql, $fetchall);
-
         return array($success, $result, $id_result[0]);
     }
 

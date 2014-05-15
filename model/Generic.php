@@ -10,8 +10,13 @@ class Query {
         $values = '';
 
         $numerics = array('montant',
+                          'id',
                           'annee',
                           'idvoix',
+                          'idtype',
+                          'idchoriste',
+                          'idoeuvre',
+                          'idevenement',
                           'idinscription');
 
         foreach($data as $field => $value) {
