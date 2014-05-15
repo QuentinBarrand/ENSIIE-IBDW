@@ -301,15 +301,14 @@ class Evenements {
         $oeuvre['style']     = $style;
 
         // On insère l'évènement courant
-            try {
-                list($status, $result) = E_Query::insertOeuvre($oeuvre);
-                $data['success'] = $status;
-                $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
-            }
-            catch(PDOException $e) {
-                $data['success'] = false;
-                $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
-            }
+        try {
+            list($status, $result) = E_Query::insertOeuvre($oeuvre);
+            $data['success'] = $status;
+            $data['message'] = "L'oeuvre <b>" . $titre . "</b> a bien été ajouté.";
+        }
+        catch(PDOException $e) {
+            $data['success'] = false;
+            $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
         Evenements::displaySaisonForm($nom, $annee, $data['message']);
