@@ -2,9 +2,9 @@
 
 require_once 'Generic.php';
 
-class E_Queries {
+class P_Queries {
 
-    /* --- EVENEMENTS RELATED QUERIES --- */
+    /* --- PROGRAMME RELATED QUERIES --- */
 
     function addOeuvreToProgramme($oeuvre) {
 
