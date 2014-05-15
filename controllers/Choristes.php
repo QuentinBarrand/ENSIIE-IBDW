@@ -39,6 +39,8 @@ class Choristes {
             array(),
             'footer');
 
+        if(! in_array('error', $data))
+            $data['error'] = $result;
         // Finalement on rend le layout
         if($data['success'])
             Flight::render('ChoristesLayout.php', array('data' => $data));
