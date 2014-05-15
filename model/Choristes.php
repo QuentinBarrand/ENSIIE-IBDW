@@ -30,7 +30,7 @@ class C_Queries {
 
         $fetchall = True;
 
-        $sql = 'SELECT idVoix, typeVoix FROM Voix;';
+        $sql = 'SELECT idvoix, typevoix FROM Voix;';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -41,7 +41,7 @@ class C_Queries {
 
         $fetchall = False;
 
-        $sql = 'SELECT idVoix FROM Voix WHERE typeVoix =' . $type . ';';
+        $sql = "SELECT idvoix FROM Voix WHERE typevoix = '" . $type . "';";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -52,7 +52,18 @@ class C_Queries {
 
         $fetchall = False;
 
-        $sql = 'SELECT COUNT(*) FROM Choriste WHERE login =' . $login . ';';
+        $sql = "SELECT COUNT(*) FROM Choriste WHERE login = '" . $login . "';";
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function getPasswordFromLogin($login) {
+
+        $fetchall = False;
+
+        $sql = "SELECT motdepasse FROM Utilisateur WHERE login = '" . $login . "';";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -69,6 +80,7 @@ class C_Queries {
                 VALUES (' . $values . ');';
 
         list($success, $result) = Query::execute($sql, $fetchall);
+
         return array($success, $result);
 
     }
@@ -82,9 +94,12 @@ class C_Queries {
         $sql = 'INSERT INTO Inscription (' . $fields . ')
                 VALUES (' . $values . ');';
 
-        list($success, $result) = Query::execute($sql, $fetchall);
-        return array($success, $result);
+        $id_sql = "SELECT currval('inscription_idinscription_seq');";
 
+        list($success, $result) = Query::execute($sql, $fetchall);
+        list($success, $id_result) = Query::execute($id_sql, $fetchall);
+
+        return array($success, $result, $id_result[0]);
     }
 
     function insertChoriste($choriste) {
@@ -97,7 +112,6 @@ class C_Queries {
                 VALUES (' . $values . ');';
 
         list($success, $result) = Query::execute($sql, $fetchall);
-        return array(false, $sql);
         return array($success, $result);
 
     }
@@ -130,17 +144,6 @@ class C_Queries {
             $sql .= $fields[$i] . ' = ' . $values[$i];
         }
         $sql .= ';';
-
-        list($success, $result) = Query::execute($sql, $fetchall);
-        return array($success, $result);
-
-    }
-
-    function getPasswordFromLogin($login) {
-
-        $fetchall = False;
-
-        $sql = "SELECT motdepasse FROM Utilisateur WHERE login = '" . $login . "';";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);

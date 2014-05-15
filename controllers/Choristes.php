@@ -101,7 +101,7 @@ class Choristes {
 
         try {
             list($status, $result) = C_Queries::getIdVoixFromType($type);
-            $idVoix = $result['idVoix'];
+            $idVoix = $result['idvoix'];
         }
         catch(PDOException $e) {}
 
@@ -176,13 +176,13 @@ class Choristes {
             // Création d'une inscription
             // On vérifie l'insertion de l'utilisateur avec $data['success']
             if($data['success']) {
-                $ins['statut'] = $statut;
+                $ins['typeinscription'] = $statut;
                 $ins['montant'] = $montant;
-                $ins['date'] = date('Y');
+                $ins['annee'] = date('Y');
                 try {
-                    list($status, $result) = C_Queries::insertInscription($ins);
+                    list($status, $result, $id) = C_Queries::insertInscription($ins);
                     $data['success'] = $status;
-                    $idInscription = $result['idInscription'];
+                    $idInscription = $id;
                 }
                 catch(PDOException $e) {
                     $data['success'] = false;
@@ -195,11 +195,11 @@ class Choristes {
             if($data['success']) {
                 $cho['nom'] = $nom;
                 $cho['prenom'] = $prenom;
-                $cho['idVoix'] = $idVoix;
+                $cho['idvoix'] = $idVoix;
                 $cho['ville'] = $ville;
                 $cho['telephone'] = $telephone;
                 $cho['login'] = $login;
-                $cho['idInscription'] = $idInscription;
+                $cho['idinscription'] = $idInscription;
                 try {
                     list($status, $result) = C_Queries::insertChoriste($cho);
                     $data['success'] = $status;

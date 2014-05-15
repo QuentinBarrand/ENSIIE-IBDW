@@ -10,9 +10,9 @@ class Query {
         $values = '';
 
         $numerics = array('montant',
-                          'date',
-                          'idVoix',
-                          'idInscription');
+                          'annee',
+                          'idvoix',
+                          'idinscription');
 
         foreach($data as $field => $value) {
             if($fields != '') {
