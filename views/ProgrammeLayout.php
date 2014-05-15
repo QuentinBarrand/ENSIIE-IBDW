@@ -7,7 +7,8 @@
 	<small>
 		<?php 
 			// Affichage de la saison
-			echo $data['content'][0]['nomsaison']; 
+            if (isset($data['content'][0]['nomsaison']))
+			    echo $data['content'][0]['nomsaison'];
 		?>
 	</small>
 </h1>
@@ -31,7 +32,7 @@
 
 		echo '<tr>';
 		echo '<th>Titre</th>';		
-		echo '<th>Aueur</th>';
+		echo '<th>Auteur</th>';
 		echo '<th>Partition</th>';
 		echo '<th>Durée</th>';
 		echo '<th>Style</th>';
@@ -79,7 +80,7 @@
 		echo '</tbody>';
 	}
 	else {
-		echo '<h3>Aucune donnée à afficher.';
+		echo '<h4>Aucune donnée à afficher.</h4>';
 	}
 ?>
 </table>
@@ -111,7 +112,7 @@
 		echo '</tbody>';
 	}
 	else {
-		echo '<h3>Aucune donnée à afficher.';
+		echo '<h4>Aucune donnée à afficher.</h4>';
 	}
 ?>
 </table>

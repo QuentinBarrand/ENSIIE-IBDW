@@ -1,4 +1,4 @@
-DELETE FROM Responsabilite;
+﻿DELETE FROM Responsabilite;
 DELETE FROM Utilisateur;
 DELETE FROM Voix;
 DELETE FROM Choriste;
@@ -126,9 +126,9 @@ VALUES ('sarboni', 'thomas', 1, 'angers', '0601020304', 'tsarboni', 1);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('sabatier', 'sébastien', NULL, 'bordeaux', '0602030405', 'ssabatier',2);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('barrand', 'quentin', NULL, 'taverny', '0604050607', 'qbarrand',3);
+VALUES ('barrand', 'quentin', 2, 'taverny', '0604050607', 'qbarrand',3);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('briquet', 'gaétan', NULL, 'amiens', '0605060708', 'gbriquet',4);
+VALUES ('briquet', 'gaétan', 1, 'amiens', '0605060708', 'gbriquet',4);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('Muller', 'Chris', 2, 'sarcelles', '0603040506', 'MullerChris',5);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
@@ -138,7 +138,7 @@ VALUES ('Dupuis', 'gaël', 1, 'grenoble', '0603040577', 'gDupuis',7);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('Datet', 'benoit', 4, 'sarcelles', '0666040506', 'bDatet',8);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
-VALUES ('Leger', 'kevin', 4, 'bordeaux', '0666040577', 'kLeger',9);
+VALUES ('Leger', 'kevin', 3, 'bordeaux', '0666040577', 'kLeger',9);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
 VALUES ('Colinne', 'Jerome', 4, 'bordeaux', '0666040577', 'jerome',10);
 INSERT INTO Choriste(nom, prenom, idVoix, ville, telephone, login, idInscription)
@@ -458,6 +458,90 @@ INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (14, 15, 1);
 INSERT INTO participe(idChoriste, idEvenement, confirmation)
 VALUES (15, 15, 1);
+-- évènement 20 (contient suffisamment de choristes)
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (1, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (2, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (3, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (4, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (5, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (6, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (7, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (8, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (9, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (10, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (11, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (12, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (13, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (14, 20, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (15, 20, 1);
+-- évènement 23 (contient suffisamment de choristes)
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (1, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (2, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (3, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (4, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (5, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (6, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (7, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (8, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (9, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (10, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (11, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (12, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (13, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (14, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (15, 23, 1);
+-- La participation du chef de choeur à certains évènements
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 17, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 18, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 23, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 24, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 15, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 4, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 7, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 9, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 11, 1);
+INSERT INTO participe(idChoriste, idEvenement, confirmation)
+VALUES (16, 12, 1);
+
 
 
 INSERT INTO oeuvre(titre, auteur, partition, duree, style)
@@ -469,7 +553,7 @@ VALUES ('Cantate de la mare', 'BACH Jérome', 'http://www.youtube.com/~theme_son
 INSERT INTO oeuvre(titre, auteur, partition, duree, style)
 VALUES ('Requiem pour un con', 'Gainsbourg Serge', 'http://www.youtube.com/~theme_song1555', '75', 'chanson à boire');
 INSERT INTO oeuvre(titre, auteur, partition, duree, style)
-VALUES ('Requiem de ouf', 'Wolfgang Amadeus', 'http://www.youtube.com/~theme_song9999', '60', 'chanson à boire');
+VALUES ('Requiem en si bémol', 'Wolfgang Amadeus', 'http://www.youtube.com/~theme_song9999', '60', 'chanson à boire');
 INSERT INTO oeuvre(titre, auteur, partition, duree, style)
 VALUES ('Column of sadness', 'Steeve Edward', 'http://www.youtube.com/~theme_song1232', '30', 'classique');
 

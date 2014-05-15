@@ -78,7 +78,7 @@ if(count($data['content']) > 0) {
 	echo '</tbody>';
 }
 else
-	echo '<h3>Aucune donnée à afficher.';
+	echo '<h3>Aucune donnée à afficher.</h3>';
 
 echo '</table>';
 

@@ -93,12 +93,16 @@
 	}
 
 
-    echo '<form role="form" action="'.$base.'/evenements" method="post">';
+    echo '<form role="form" action="'.$base.' /evenements" method="post">';
 
 	echo '<h2>Evènements à venir</h2>';
-	printTable('a_venir', $user, $data);
+    if(count($data['content']) > 0) {
+        printTable('a_venir', $user, $data);
+    }
+    else
+        echo '<h4>Aucune donnée à afficher.</h4>';
 	
-	if($user['authenticated'])
+	if($user['authenticated'] and $user['validation'] > 1)
 	    echo '<div class="button-validate">
 	            <button type="submit" class="btn btn-lg btn-primary">Mettre à jour la présence</button>
 	          </div>';
@@ -106,7 +110,11 @@
     echo '</form>';
     
 	echo '<h2>Evènements passés</h2>';
-	printTable('passes', $user, $data);
+    if(count($data['content']) > 0) {
+	    printTable('passes', $user, $data);
+    }
+    else
+        echo '<h4>Aucune donnée à afficher.</h4>';
 ?>
 
 <?php echo($footer); ?>
