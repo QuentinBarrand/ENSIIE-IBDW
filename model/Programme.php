@@ -73,13 +73,18 @@ class P_Queries {
 
         $fetchall = True;
 
-        $sql = "SELECT Oeuvre.*, nom as nomSaison
+        if($id_saison)
+            $evaluation = 'idEvenement = ' . $id_saison;
+        else
+            $evaluation = 'idEvenement IS NULL';
+
+        $sql = 'SELECT Oeuvre.*, nom as nomSaison
                 FROM Oeuvre
                 NATURAL JOIN est_au_programme
                 NATURAL JOIN Evenement
                 NATURAL JOIN TypeEvt
-                WHERE idEvenement = " . $id_saison . "
-                ORDER BY Oeuvre.style;";
+                WHERE ' . $evaluation . '
+                ORDER BY Oeuvre.style;';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -108,12 +113,17 @@ class P_Queries {
 
         $fetchall = True;
 
-        $sql = "SELECT style, SUM(duree) AS dureeStyle
+        if($id_saison)
+            $evaluation = 'idEvenement = ' . $id_saison;
+        else
+            $evaluation = 'idEvenement IS NULL';
+
+        $sql = 'SELECT style, SUM(duree) AS dureeStyle
                 FROM Oeuvre
                 NATURAL JOIN est_au_programme
                 NATURAL JOIN Evenement
-                WHERE idevenement = " . $id_saison . "
-                GROUP BY style, nom;";
+                WHERE ' . $evaluation . '
+                GROUP BY style, nom;';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
