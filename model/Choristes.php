@@ -120,9 +120,9 @@ class C_Queries {
 
         list($fields, $values) = Query::getFields($user);
 
-        $sql = 'UPDATE User SET';
+        $sql = 'UPDATE User SET ';
         for($i=0; $i<count($fields); $i++) {
-            $sql .= $fields[$i] . ' = ' . $values[$i] . ';';
+            $sql .= $fields[$i] . ' = ' . $values[$i] . ',';
         }
         $sql .= ';';
 

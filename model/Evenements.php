@@ -122,8 +122,8 @@ class E_Queries {
 
         list($fields, $values) = Query::getFields($evenement);
 
-        $sql = "INSERT INTO Evenement(' . $fields . ')
-                VALUES(' . $values . ');";
+        $sql = 'INSERT INTO Evenement(' . $fields . ')
+                VALUES(' . $values . ');';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -136,8 +136,8 @@ class E_Queries {
 
         list($fields, $values) = Query::getFields($oeuvre);
 
-        $sql = "INSERT INTO Oeuvre(' . $fields . ')
-                VALUES(' . $values . ');";
+        $sql = 'INSERT INTO Oeuvre(' . $fields . ')
+                VALUES(' . $values . ');';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -150,14 +150,55 @@ class E_Queries {
 
         list($fields, $values) = Query::getFields($saison);
 
-        $sql = "INSERT INTO Evenement(' . $fields . ')
-                VALUES(' . $values . ');";
+        $sql = 'INSERT INTO Evenement(' . $fields . ')
+                VALUES(' . $values . ');';
 
         $id_sql = "SELECT currval('evenement_idevenement_seq');";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         list($success, $id_result) = Query::execute($id_sql, $fetchall);
         return array($success, $result, $id_result[0]);
+
+    }
+
+    function insertPresence($presence) {
+
+        $fetchall = False;
+
+        list($fields, $values) = Query::getFields($presence);
+
+        $sql = 'INSERT INTO participe(' . $fields . ')
+                VALUES(' . $values . ');';
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function updatePresence($presence) {
+
+        $fetchall = False;
+
+        $sql = 'UPDATE participe
+                SET confirmation = ' . $presence['confirmation'] . '
+                WHERE idevenement = ' . $presence['idevenement'] . '
+                AND idchoriste = ' . $presence['idchoriste'] . ';';
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
+
+    }
+
+    function deletePresence($idevenement, $idchoriste) {
+
+        $fetchall = False;
+
+        $sql = 'DELETE FROM participe
+                WHERE idevenement = ' . $idevenement . '
+                AND idchoriste = ' . $idchoriste . ';';
+
+        list($success, $result) = Query::execute($sql, $fetchall);
+        return array($success, $result);
 
     }
 

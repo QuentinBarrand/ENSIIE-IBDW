@@ -411,16 +411,6 @@ class Evenements {
         $requestEvents = Flight::request()->data['idevenement'];
         $requestPresences = Flight::request()->data['presence'];
 
-        // Connexion à la base de données
-        try {
-            $db = Flight::db();
-        }
-        catch(PDOException $e) {
-            $db = null;
-            $data['success'] = false;
-            $data['error'] = 'Connexion à la base de données impossible (' . $e->getMessage() . ').';
-        }
-
         //récupére la présence de l'utilisateur pour chaque évènements
         try {
             list($status, $result) = E_Queries::getPresencesByLogin($user['login']);
@@ -435,62 +425,47 @@ class Evenements {
             $data['error'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
-        for ($i = 0; $i <= count($requestEvents)-1 && $i <= count($requestPresences)-1; $i++) {
+        //on boucle sur les présences trouvées
+        for ($i = 0; $i < min(count($requestEvents), count($requestPresences)); $i++) {
 
-            $sql = NULL;
-
-            // S'il va être présent
-            if ($requestPresences[$i] == "present"){
-
-                // S'il était absent, on fait un add
-                if (!isset($presences[$requestEvents[$i]]['confirmation'])){
-                    $sql = "INSERT INTO participe(idchoriste,idevenement,confirmation)
-                            VALUES (:idchoriste , :idevenement, 1);";
+            try {
+                // Traitement de l'absence
+                if ($requestPresences[$i] == "absent") {
+                    // Suppression de l'entrée si existante
+                    if(isset($presences[$requestEvents[$i]]['confirmation']))
+                        list($status, $result) = E_Queries::deletePresence($requestEvents[$i], $user['idChoriste']);
                 }
-                // S'il était indécis, on fait un update
-                else if ( ($presences[$requestEvents[$i]]['confirmation']) == 0){
-                    $sql = "UPDATE participe
-                            SET confirmation = 1
-                            WHERE idevenement = :idevenement AND idchoriste = :idchoriste ;";
+
+                // Traitement des autres cas
+                else {
+                    // Préparation des champs
+                    $presence = array();
+                    if ($requestPresences[$i] == "indecis")
+                    $presence['confirmation'] = 0;
+                    if ($requestPresences[$i] == "present")
+                        $presence['confirmation'] = 1;
+                    $presence['idchoriste'] = $user['idChoriste'];
+                    $presence['idevenement'] = $requestEvents[$i];
+
+                    // Mise à jour si quelque-chose a changé
+                    if(isset($presence['confirmation'])) {
+
+                        // Insertion de l'entrée si absente
+                        if (!isset($presences[$requestEvents[$i]]['confirmation']))
+                            list($status, $result) = E_Queries::insertPresence($presence);
+
+                        // Mise à jour de l'entrée si nécessaire
+                        else if ($presence['confirmation'] != $presences[$requestEvents[$i]]['confirmation']) 
+                            list($status, $result) = E_Queries::updatePresence($presence);
+
+                    }
                 }
+
             }
-            // S'il va être indécis
-            else if ($requestPresences[$i] == "indecis"){
-                // S'il était absent, on fait un add
-                if (!isset($presences[$requestEvents[$i]]['confirmation'])){
-                    $sql = "INSERT INTO participe(idchoriste,idevenement,confirmation)
-                            VALUES(:idchoriste , :idevenement , 0);";
-                }
-                // S'il était présent, on fait un update
-                else if ( ($presences[$requestEvents[$i]]['confirmation']) == 1){
-                    $sql = "UPDATE participe
-                            SET confirmation = 0
-                            WHERE idevenement = :idevenement AND idchoriste = :idchoriste ;";
-                }
-            }
-            // S'il va être absent
-            else if ($requestPresences[$i] == "absent"){
-                // S'il n'était pas déjà absent on supprime
-                if(isset($presences[$requestEvents[$i]]['confirmation']))
-                {
-                    $sql = "DELETE FROM participe
-                             WHERE idevenement = :idevenement AND idchoriste = :idchoriste ;";
-
-                }
-            }
-
-            if($db && $sql!=NULL) {
-                try {
-                    $query = $db->prepare($sql);
-                    $query->execute( array ('idevenement' => $requestEvents[$i],
-                        'idchoriste' => $user['idChoriste']));
-
-
-                }
-                catch(PDOException $e) { }
-            }
+            catch(PDOException $e) { }
         }
         //Affichage de la liste des évènements
         Evenements::get();
     }
+
 }

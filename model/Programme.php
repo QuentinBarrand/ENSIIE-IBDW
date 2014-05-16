@@ -6,20 +6,21 @@ class P_Queries {
 
     /* --- PROGRAMME RELATED QUERIES --- */
 
-    function addOeuvreToProgramme($oeuvre) {
+    function addOeuvresToProgramme($oeuvres) {
 
         $fetchall = False;
 
-        $sql = "INSERT INTO est_au_programme
-                VALUES ";
+        $sql = 'INSERT INTO est_au_programme(' . $fields . ')';
+        $sql .= ' VALUES ';
 
         $first = true;
         foreach($oeuvres as $oeuvreId) {
             if(! $first)
                 $sql .= ',';
             $first = false;
-            $sql .= "(" . $oeuvreId . ", " . $saisonId . ")";
+            $sql .= '(' . $oeuvreId . ', ' . $saisonId . ')';
         }
+
         $sql .= ';';
 
         list($success, $result) = Query::execute($sql, $fetchall);
