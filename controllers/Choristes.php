@@ -147,6 +147,25 @@ class Choristes {
             $fail['message'] = 'Erreur lors de l\'exécution de la requête (' . $e->getMessage() . ').';
         }
 
+        // Header
+        Flight::render('header.php',
+            array(
+                'title' => 'Inscription'
+                ),
+            'header');
+
+        // Navbar
+        Flight::render('navbar.php',
+            array(
+                'activePage' => 'choristes'
+                ),
+            'navbar');
+
+        // Footer
+        Flight::render('footer.php',
+            array(),
+            'footer');
+
         if(! $fail['error']) {
             $idVoix = Choristes::getIdVoixFromType($voix);
 
@@ -213,26 +232,6 @@ class Choristes {
                 }
             }
 
-            // Header
-            Flight::render('header.php',
-                array(
-                    'title' => 'Inscription'
-                    ),
-                'header');
-
-            // Navbar
-            Flight::render('navbar.php',
-                array(
-                    'activePage' => 'choristes'
-                    ),
-                'navbar');
-
-            // Footer
-            Flight::render('footer.php',
-                array(),
-                'footer');
-
-        // Finalement on rend le layout
         }
         else {
             $voix = Choristes::getVoix();
@@ -242,9 +241,12 @@ class Choristes {
             'voix' => $voix
                 )
             );
+            $data['success'] = false;
+
         }
+        // Finalement on rend le layout
         if(! in_array('error', $data))
-            $data['error'] = $result;
+            $data['error'] = json_encode($result);
         if($data['success'])
             Flight::render('SuccessLayout.php', array('data' => $data));
         else
