@@ -23,7 +23,7 @@ class I_Queries {
 
     function getInscriptionCountByType($type) {
 
-        $fetchall = True;
+        $fetchall = False;
 
         $sql = 'SELECT count(*)
                 FROM Choriste
@@ -37,7 +37,7 @@ class I_Queries {
 
     function updateInscription($type, $id) {
 
-        $fetchall = True;
+        $fetchall = False;
 
         $sql = 'UPDATE Inscription
                 SET validation = ' . $type . '
