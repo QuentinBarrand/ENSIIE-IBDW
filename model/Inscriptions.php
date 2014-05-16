@@ -14,7 +14,7 @@ class I_Queries {
                 FROM Choriste
                 NATURAL JOIN Voix
                 NATURAL JOIN Inscription
-                WHERE validation > 2;';
+                WHERE validation < 2;';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -41,7 +41,7 @@ class I_Queries {
 
         $sql = 'UPDATE Inscription
                 SET validation = ' . $type . '
-                WHERE idInscription > ' . $id . ';';
+                WHERE idInscription = ' . $id . ';';
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
