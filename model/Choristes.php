@@ -118,13 +118,9 @@ class C_Queries {
 
         $fetchall = False;
 
-        list($fields, $values) = Query::getFields($user);
-
-        $sql = 'UPDATE User SET ';
-        for($i=0; $i<count($fields); $i++) {
-            $sql .= $fields[$i] . ' = ' . $values[$i] . ',';
-        }
-        $sql .= ';';
+        $sql = "UPDATE Utilisateur
+                SET motdepasse = '" . $user['motdepasse'] . "'
+                WHERE login = '" . $user['login'] . "';";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);
@@ -137,11 +133,13 @@ class C_Queries {
 
         list($fields, $values) = Query::getFields($choriste);
 
-        $sql = 'UPDATE Choriste SET';
-        for($i=0; $i<count($fields); $i++) {
+        $sql = 'UPDATE Choriste SET ';
+        for($i=count($fields); $i > 0; $i--) {
             $sql .= $fields[$i] . ' = ' . $values[$i];
+            if($i != 1)
+                $sql .= ',';
         }
-        $sql .= ';';
+        $sql .= "WHERE login = '" . $choriste['login'] . ";";
 
         list($success, $result) = Query::execute($sql, $fetchall);
         return array($success, $result);

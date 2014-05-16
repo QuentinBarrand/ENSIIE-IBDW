@@ -318,7 +318,7 @@ class Choristes {
                 } else {
                     // Modification d'un utilisateur (login / mot de passe)
                     $usr['login'] = $login;
-                    $usr['password'] = md5($new_pw);
+                    $usr['motdepasse'] = md5($new_pw);
                     try {
                         list($status, $result) = C_Queries::updateUser($usr);
                         $data['success'] = $status;
@@ -376,6 +376,8 @@ class Choristes {
             array(),
             'footer');
 
+        if(! isset($data['error']))
+            $data['error'] = json_encode($result);
         // Finalement on rend le layout
         if($data['success'])
             Flight::render('SuccessLayout.php', array('data' => $data));
