@@ -241,16 +241,11 @@ class Choristes {
             'voix' => $voix
                 )
             );
-            $data['success'] = false;
 
         }
         // Finalement on rend le layout
-        if(! in_array('error', $data))
-            $data['error'] = json_encode($result);
-        if($data['success'])
+        if(isset($data) && $data['success'])
             Flight::render('SuccessLayout.php', array('data' => $data));
-        else
-            Flight::render('ErrorLayout.php', array('data' => $data));
     }
 
     // GET /choristes/modification du compte
