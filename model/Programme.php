@@ -6,11 +6,11 @@ class P_Queries {
 
     /* --- PROGRAMME RELATED QUERIES --- */
 
-    function addOeuvresToProgramme($oeuvres) {
+    function addOeuvresToProgramme($oeuvres, $saisonId) {
 
         $fetchall = False;
 
-        $sql = 'INSERT INTO est_au_programme(' . $fields . ')';
+        $sql = 'INSERT INTO est_au_programme(idoeuvre, idevenement)';
         $sql .= ' VALUES ';
 
         $first = true;
@@ -130,7 +130,7 @@ class P_Queries {
 
     }
 
-    function getOeuvresWithId($id_saison) {
+    function getOeuvresWithId() {
 
         $fetchall = True;
 

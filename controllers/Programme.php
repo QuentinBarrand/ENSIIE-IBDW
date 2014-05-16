@@ -77,14 +77,14 @@ class Programme {
 
 
     function getOeuvres() {
-        $oeuvres = NULL;
+        $result = NULL;
 
         try {
             list($status, $result) = P_Queries::getOeuvresWithId();
         }
         catch(PDOException $e) { }
         
-        return $oeuvres;
+        return $result;
 
     }
 

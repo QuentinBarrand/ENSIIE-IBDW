@@ -213,7 +213,7 @@ class Evenements {
                 break;
         }
 
-        $evt['idtype'] = $type;
+        $evt['idtype'] = $idType;
         $evt['heuredate'] = $heureDate;
         $evt['lieu'] = $lieu;
         $evt['nom'] = $nom;
@@ -351,8 +351,8 @@ class Evenements {
             if(count($oeuvres) > 0) {   
                 try {
                     
-                    list($status, $result, $id) = P_Queries::addOeuvreToProgramme($oeuvres);
-                    $data['success'] = $status;
+                    list($status, $result) = P_Queries::addOeuvresToProgramme($oeuvres, $id);
+                    $data['success'] = true;
                     $data['message'] = "La saison " . $nom . " (" . $annee .") a bien été ajoutée à la base de données.";
                 }
                 catch(PDOException $e) { }
